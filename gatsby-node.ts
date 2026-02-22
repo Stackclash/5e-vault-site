@@ -60,6 +60,11 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
         slug: String
       }
 
+      type MarkdownRemark implements Node {
+        fields: MarkdownRemarkFields
+        frontmatter: MarkdownRemarkFrontmatter
+      }
+
       type MarkdownRemarkFrontmatter {
         tags: [String]
         aliases: [String]
