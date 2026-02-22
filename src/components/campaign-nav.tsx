@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "gatsby";
+import { globalHistory } from "@reach/router";
 import { Menu, X, Shield } from "lucide-react";
 
 const navLinks = [
@@ -13,7 +14,12 @@ const navLinks = [
 export function CampaignNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [pathname, setPathname] = useState("");
-  useEffect(() => { setPathname(window.location.pathname); }, []);
+  useEffect(() => {
+    setPathname(globalHistory.location.pathname);
+    return globalHistory.listen(({ location }) => {
+      setPathname(location.pathname);
+    });
+  }, []);
 
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
