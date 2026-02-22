@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "gatsby";
 import { Shield, Swords } from "lucide-react";
 
 const footerLinks = [
@@ -16,7 +16,7 @@ export function CampaignFooter() {
         <div className="flex flex-col items-center gap-6 text-center">
           {/* Logo and title */}
           <Link
-            href="/"
+            to="/"
             className="flex items-center gap-2 text-primary transition-colors hover:text-primary/80"
           >
             <Shield className="h-5 w-5" />
@@ -30,7 +30,7 @@ export function CampaignFooter() {
             {footerLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 className="font-serif text-xs tracking-widest uppercase text-muted-foreground transition-colors hover:text-primary"
               >
                 {link.label}

@@ -1,8 +1,5 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { Link } from "gatsby";
 import { Menu, X, Shield } from "lucide-react";
 
 const navLinks = [
@@ -15,7 +12,8 @@ const navLinks = [
 
 export function CampaignNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const pathname = usePathname();
+  const [pathname, setPathname] = useState("");
+  useEffect(() => { setPathname(window.location.pathname); }, []);
 
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
@@ -26,7 +24,7 @@ export function CampaignNav() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link
-          href="/"
+          to="/"
           className="flex items-center gap-2 text-primary transition-colors hover:text-primary/80"
         >
           <Shield className="h-5 w-5" />
@@ -40,7 +38,7 @@ export function CampaignNav() {
           {navLinks.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              to={link.href}
               className={`font-serif text-sm tracking-widest uppercase transition-colors ${
                 isActive(link.href)
                   ? "text-primary"
@@ -73,7 +71,7 @@ export function CampaignNav() {
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 onClick={() => setMobileOpen(false)}
                 className={`rounded-md px-3 py-3 font-serif text-sm tracking-widest uppercase transition-colors ${
                   isActive(link.href)

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "gatsby";
 import { ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -47,7 +47,7 @@ export function PageHeader({
           <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
             <li>
               <Link
-                href="/"
+                to="/"
                 className="transition-colors hover:text-primary"
               >
                 Home
@@ -57,7 +57,7 @@ export function PageHeader({
               <li key={crumb.href} className="flex items-center gap-1.5">
                 <ChevronRight className="h-3.5 w-3.5" />
                 <Link
-                  href={crumb.href}
+                  to={crumb.href}
                   className="transition-colors hover:text-primary"
                 >
                   {crumb.label}
