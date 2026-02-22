@@ -1,0 +1,64 @@
+import React from "react";
+import { graphql, PageProps, Link } from "gatsby";
+import { Users } from "lucide-react";
+import { Layout } from "../components/layout";
+import { Seo } from "../components/seo";
+import { PageHeader } from "../components/page-header";
+
+export default function NpcsPage({ data }: PageProps<Queries.NpcsPageQuery>) {
+  const npcs = data.allMarkdownRemark.nodes;
+  return (
+    <Layout>
+      <PageHeader
+        breadcrumbs={[{ label: "NPCs", href: "/npcs" }]}
+        subtitle="Allies & Contacts"
+        title="Notable NPCs"
+        icon={Users}
+        description="All notable characters encountered throughout the campaign."
+      />
+      <section className="pb-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {npcs.map((npc: any) => {
+              const name = npc.parent?.name ?? "Unknown";
+              const slug = npc.fields?.slug ?? "";
+              const race = npc.frontmatter?.race ?? "";
+              const alignment = npc.frontmatter?.alignment ?? "";
+              const occupation = Array.isArray(npc.frontmatter?.occupation) ? npc.frontmatter.occupation[0] : "";
+              const displayRace = typeof race === "string" && race.includes("|") ? race.split("|")[0].replace(/\[\[.*?\//, "").trim() : race;
+              return (
+                <Link key={slug} to={`/npcs/${slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
+                  <div className="p-5">
+                    <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">
+                      {displayRace}{alignment ? ` · ${alignment}` : ""}
+                    </p>
+                    <h3 className="mb-1 font-serif text-lg font-bold tracking-wide text-foreground">{name}</h3>
+                    {occupation && <p className="font-serif text-sm italic text-primary">{occupation}</p>}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}
+
+export function Head() {
+  return <Seo title="NPCs" description="All notable characters encountered throughout the campaign." />;
+}
+
+export const query = graphql`
+  query NpcsPage {
+    allMarkdownRemark(
+      filter: { fields: { entityType: { eq: "npcs" } } }
+    ) {
+      nodes {
+        fields { slug }
+        frontmatter { race alignment occupation aliases }
+        parent { ... on File { name } }
+      }
+    }
+  }
+`;
