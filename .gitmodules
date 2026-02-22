@@ -1,0 +1,3 @@
+[submodule "vault"]
+	path = vault
+	url = https://github.com/Stackclash/5e-vault.git
