@@ -1,3 +1,4 @@
+import path from "path";
 import type { GatsbyNode } from "gatsby";
 import { entities } from "./src/entity-config";
 import type { EntityConfig } from "./src/entity-config";
@@ -58,6 +59,30 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
         entityType: String
         slug: String
       }
+
+      type MarkdownRemarkFrontmatter {
+        tags: [String]
+        aliases: [String]
+        cssclasses: [String]
+        date: Date @dateformat
+        summary: String
+        party: String
+        race: String
+        gender: String
+        alignment: String
+        condition: String
+        personality: String
+        ideal: String
+        bond: String
+        flaw: String
+        likes: String
+        dislikes: String
+        location: String
+        pronounced: String
+        terrain: String
+        government: String
+        campaign: String
+      }
     `);
   };
 
@@ -110,7 +135,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     nodes.forEach((node) => {
       createPage({
         path: `/${entityType}/${node.fields.slug}`,
-        component: require.resolve(
+        component: path.resolve(
           `./src/templates/${entityType}-detail.tsx`,
         ),
         context: {

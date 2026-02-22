@@ -22,7 +22,7 @@ export default function LorePage({ data }: PageProps<Queries.LorePageQuery>) {
             {entries.map((entry: any) => {
               const name = entry.parent?.name ?? "Unknown";
               const slug = entry.fields?.slug ?? "";
-              const description = entry.frontmatter?.description ?? entry.excerpt;
+              const description = entry.excerpt;
               return (
                 <Link key={slug} to={`/lore/${slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
                   <span className="mb-3 inline-flex self-start rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 font-serif text-xs tracking-wider uppercase text-primary">Quest</span>
@@ -49,7 +49,7 @@ export const query = graphql`
     ) {
       nodes {
         fields { slug }
-        frontmatter { description tags }
+        frontmatter { tags }
         parent { ... on File { name } }
         excerpt(pruneLength: 200)
       }

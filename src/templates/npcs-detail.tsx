@@ -13,15 +13,11 @@ export default function NpcDetail({ data }: PageProps<Queries.NpcDetailQuery>) {
   const race = fm?.race ?? "";
   const alignment = fm?.alignment ?? "";
   const displayRace = typeof race === "string" && race.includes("|") ? race.split("|")[0].replace(/\[\[.*?\//, "").trim() : race;
-  const occupation = Array.isArray(fm?.occupation) ? fm.occupation.join(", ") : fm?.occupation ?? "";
-
   const metaFields = [
     { label: "Race", value: displayRace },
     { label: "Gender", value: fm?.gender },
-    { label: "Age", value: fm?.age },
     { label: "Alignment", value: alignment },
     { label: "Condition", value: fm?.condition },
-    { label: "Occupation", value: occupation },
   ].filter((f) => f.value);
 
   const traitFields = [
@@ -71,15 +67,9 @@ export default function NpcDetail({ data }: PageProps<Queries.NpcDetailQuery>) {
             </div>
           )}
 
-          {/* Goals, Likes, Dislikes */}
-          {(fm?.goals || fm?.likes || fm?.dislikes) && (
-            <div className="mb-8 grid gap-4 sm:grid-cols-3">
-              {fm?.goals && (
-                <div className="rounded-lg border border-border/50 bg-card p-4">
-                  <span className="font-serif text-xs font-semibold tracking-wider uppercase text-muted-foreground">Goals</span>
-                  <p className="mt-1 text-sm text-foreground">{Array.isArray(fm.goals) ? fm.goals.join(", ") : fm.goals}</p>
-                </div>
-              )}
+          {/* Likes, Dislikes */}
+          {(fm?.likes || fm?.dislikes) && (
+            <div className="mb-8 grid gap-4 sm:grid-cols-2">
               {fm?.likes && (
                 <div className="rounded-lg border border-border/50 bg-card p-4">
                   <span className="font-serif text-xs font-semibold tracking-wider uppercase text-muted-foreground">Likes</span>
@@ -119,11 +109,10 @@ export const query = graphql`
       html
       fields { slug }
       frontmatter {
-        race gender age alignment condition occupation
-        groups personality ideal bond flaw
-        goals likes dislikes location
-        images relationships partyRelationships
-        aliases pronounced
+        race gender alignment condition
+        personality ideal bond flaw
+        likes dislikes location
+        pronounced
       }
       parent { ... on File { name } }
     }

@@ -28,12 +28,6 @@ export default function LocationDetail({ data }: PageProps<Queries.LocationDetai
         <div className="mx-auto max-w-4xl px-6">
           {/* Metadata */}
           <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {fm?.population && (
-              <div className="rounded-lg border border-border/50 bg-card p-4">
-                <span className="font-serif text-xs font-semibold tracking-wider uppercase text-muted-foreground">Population</span>
-                <p className="mt-1 text-foreground">{fm.population}</p>
-              </div>
-            )}
             {fm?.terrain && (
               <div className="rounded-lg border border-border/50 bg-card p-4">
                 <span className="font-serif text-xs font-semibold tracking-wider uppercase text-muted-foreground">Terrain</span>
@@ -71,7 +65,7 @@ export const query = graphql`
     markdownRemark(id: { eq: $id }) {
       html
       fields { slug }
-      frontmatter { tags population terrain government rulers aliases pronounced images location }
+      frontmatter { tags terrain government pronounced location }
       parent { ... on File { name } }
     }
   }

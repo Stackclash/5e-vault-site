@@ -24,7 +24,6 @@ export default function NpcsPage({ data }: PageProps<Queries.NpcsPageQuery>) {
               const slug = npc.fields?.slug ?? "";
               const race = npc.frontmatter?.race ?? "";
               const alignment = npc.frontmatter?.alignment ?? "";
-              const occupation = Array.isArray(npc.frontmatter?.occupation) ? npc.frontmatter.occupation[0] : "";
               const displayRace = typeof race === "string" && race.includes("|") ? race.split("|")[0].replace(/\[\[.*?\//, "").trim() : race;
               return (
                 <Link key={slug} to={`/npcs/${slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
@@ -33,7 +32,6 @@ export default function NpcsPage({ data }: PageProps<Queries.NpcsPageQuery>) {
                       {displayRace}{alignment ? ` · ${alignment}` : ""}
                     </p>
                     <h3 className="mb-1 font-serif text-lg font-bold tracking-wide text-foreground">{name}</h3>
-                    {occupation && <p className="font-serif text-sm italic text-primary">{occupation}</p>}
                   </div>
                 </Link>
               );
@@ -56,7 +54,7 @@ export const query = graphql`
     ) {
       nodes {
         fields { slug }
-        frontmatter { race alignment occupation aliases }
+        frontmatter { race alignment }
         parent { ... on File { name } }
       }
     }

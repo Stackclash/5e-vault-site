@@ -76,7 +76,6 @@ function NpcsPreview({ data }: { data: PreviewNode[] }) {
             const name = getDisplayName(npc);
             const race = npc.frontmatter?.race ?? "";
             const alignment = npc.frontmatter?.alignment ?? "";
-            const occupation = Array.isArray(npc.frontmatter?.occupation) ? npc.frontmatter.occupation[0] : "";
             return (
               <Link key={npc.fields.slug} to={`/npcs/${npc.fields.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
                 <div className="p-5">
@@ -85,7 +84,6 @@ function NpcsPreview({ data }: { data: PreviewNode[] }) {
                     {alignment ? ` · ${alignment}` : ""}
                   </p>
                   <h3 className="mb-1 font-serif text-lg font-bold tracking-wide text-foreground">{name}</h3>
-                  {occupation && <p className="font-serif text-sm italic text-primary">{occupation}</p>}
                 </div>
               </Link>
             );
@@ -160,7 +158,7 @@ function LorePreview({ data }: { data: PreviewNode[] }) {
         <div className="grid gap-6 md:grid-cols-3">
           {data.slice(0, 3).map((entry) => {
             const name = getDisplayName(entry);
-            const description = entry.frontmatter?.description ?? entry.excerpt;
+            const description = entry.excerpt;
             return (
               <Link key={entry.fields.slug} to={`/lore/${entry.fields.slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
                 <span className="mb-3 inline-flex self-start rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 font-serif text-xs tracking-wider uppercase text-primary">Quest</span>

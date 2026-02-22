@@ -54,7 +54,7 @@ export const query = graphql`
     ) {
       nodes {
         fields { slug entityType }
-        frontmatter { tags race alignment occupation aliases }
+        frontmatter { tags race alignment }
         parent { ... on File { name } }
         excerpt(pruneLength: 160)
       }
@@ -88,7 +88,7 @@ export const query = graphql`
     ) {
       nodes {
         fields { slug entityType }
-        frontmatter { tags description }
+        frontmatter { tags }
         parent { ... on File { name } }
         excerpt(pruneLength: 200)
       }
