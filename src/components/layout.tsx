@@ -4,12 +4,13 @@ import { CampaignFooter } from "./campaign-footer";
 
 interface LayoutProps {
   children: React.ReactNode;
+  campaignSlug?: string;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ children, campaignSlug }: LayoutProps) {
   return (
     <div className="bg-background font-sans antialiased">
-      <CampaignNav />
+      <CampaignNav campaignSlug={campaignSlug} />
       <main>{children}</main>
       <CampaignFooter />
     </div>

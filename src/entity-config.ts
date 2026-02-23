@@ -34,4 +34,12 @@ export const entities: Record<string, EntityConfig> = {
     includeTag: ["quest"],
     includePath: ["3. The Party/Quests/"],
   },
+  campaigns: {
+    includeTag: ["campaign"],
+    includePath: [],
+  },
+  worlds: {
+    includeTag: ["world"],
+    includePath: [],
+  },
 };
