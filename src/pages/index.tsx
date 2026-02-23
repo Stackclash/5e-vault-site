@@ -12,10 +12,14 @@ export default function IndexPage({ data }: PageProps<Queries.IndexPageQuery>) {
   const sessions = (data.sessions?.nodes ?? []) as any[];
   const items = (data.items?.nodes ?? []) as any[];
   const lore = (data.lore?.nodes ?? []) as any[];
+  const campaignMetadata = data.siteMetadata?.siteMetadata?.campaign;
 
   return (
     <Layout>
-      <HeroSection />
+      <HeroSection
+        campaignName={campaignMetadata?.name ?? ""}
+        campaignDescription={campaignMetadata?.description ?? ""}
+      />
       <CampaignOverview />
       <div className="mx-auto max-w-7xl px-6">
         <div className="h-px bg-border/30" />
@@ -91,6 +95,14 @@ export const query = graphql`
         frontmatter { tags }
         parent { ... on File { name } }
         excerpt(pruneLength: 200)
+      }
+    }
+    siteMetadata: site {
+      siteMetadata {
+        campaign {
+          name
+          description
+        }
       }
     }
   }

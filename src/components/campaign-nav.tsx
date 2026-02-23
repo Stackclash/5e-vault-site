@@ -11,7 +11,7 @@ const navLinks = [
   { label: "Lore", href: "/lore" },
 ];
 
-export function CampaignNav() {
+export function CampaignNav({campaignName}: {campaignName: string}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [pathname, setPathname] = useState("");
   useEffect(() => {
@@ -35,7 +35,7 @@ export function CampaignNav() {
         >
           <Shield className="h-5 w-5" />
           <span className="font-serif text-lg font-semibold tracking-wider uppercase">
-            Shattered Realm
+            {campaignName}
           </span>
         </Link>
 

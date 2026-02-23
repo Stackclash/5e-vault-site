@@ -5,6 +5,11 @@ const config: GatsbyConfig = {
     title: "Chronicles of the Shattered Realm | Campaign Compendium",
     description:
       "A digital compendium for a D&D 5e campaign set in the Shattered Realm.",
+    campaign: {
+      name: "The Truth of Vecna",
+      description:
+        "With Vecna now free from his ancient prison, a shadow stretches across Eldoria. Rumors spread in hushed tones, strange omens stir at the edges of understanding, and the air itself feels heavy with unseen designs. What his freedom means for Eldoria remains uncertain—but the world will not remain unchanged for long.",
+    },
     theme: {
       backgroundImage: "/images/hero-banner.jpg",
       fonts: {

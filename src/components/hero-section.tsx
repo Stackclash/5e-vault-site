@@ -7,7 +7,7 @@ const stats = [
   { icon: Swords, label: "Quests Completed", value: "8" },
 ];
 
-export function HeroSection() {
+export function HeroSection({ campaignName, campaignDescription }: { campaignName: string; campaignDescription: string }) {
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* Background image */}
@@ -27,12 +27,10 @@ export function HeroSection() {
           A Dungeons & Dragons Campaign
         </p>
         <h1 className="mb-6 max-w-4xl font-serif text-5xl font-bold leading-tight tracking-wide text-foreground md:text-7xl lg:text-8xl text-balance">
-          Chronicles of the Shattered Realm
+          {campaignName}
         </h1>
         <p className="mb-12 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl text-pretty">
-          The ancient seals are breaking. Darkness stirs beneath the Sunken
-          Citadel, and the fate of five unlikely heroes will determine whether
-          the realm endures or falls into shadow.
+          {campaignDescription}
         </p>
 
         {/* Decorative divider */}
