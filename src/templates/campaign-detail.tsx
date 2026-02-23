@@ -5,7 +5,7 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-interface CampaignIndexContext {
+interface CampaignDetailContext {
   id: string;
   campaignSlug: string;
   partyName: string;
@@ -16,10 +16,10 @@ interface CampaignIndexContext {
   questCount: number;
 }
 
-export default function CampaignIndex({
+export default function CampaignDetail({
   data,
   pageContext,
-}: PageProps<Queries.CampaignIndexQuery, CampaignIndexContext>) {
+}: PageProps<Queries.CampaignDetailQuery, CampaignDetailContext>) {
   const node = data.markdownRemark;
   const { campaignSlug, partyName, worldName, locationCount, sessionCount, npcCount, questCount } =
     pageContext;
@@ -99,13 +99,13 @@ export default function CampaignIndex({
   );
 }
 
-export function Head({ data, pageContext }: PageProps<Queries.CampaignIndexQuery, CampaignIndexContext>) {
+export function Head({ data, pageContext }: PageProps<Queries.CampaignDetailQuery, CampaignDetailContext>) {
   const name = (data.markdownRemark?.parent as any)?.name ?? pageContext.campaignSlug;
   return <Seo title={name} description={`Campaign compendium for ${name}.`} />;
 }
 
 export const query = graphql`
-  query CampaignIndex($id: String!) {
+  query CampaignDetail($id: String!) {
     markdownRemark(id: { eq: $id }) {
       html
       parent { ... on File { name } }

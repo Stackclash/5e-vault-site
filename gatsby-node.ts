@@ -381,7 +381,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     // Campaign index page
     createPage({
       path: `/${campaignSlug}/`,
-      component: path.resolve(`./src/templates/campaign-index.tsx`),
+      component: path.resolve(`./src/templates/campaign-detail.tsx`),
       context: {
         id: campaign.id,
         campaignSlug,
