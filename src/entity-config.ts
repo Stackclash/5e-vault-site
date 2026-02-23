@@ -26,9 +26,6 @@ export const entities: Record<string, EntityConfig> = {
   items: {
     includeTag: ["item"],
     includePath: ["5. Mechanics/Items/"],
-    filter: (frontmatter) =>
-      Array.isArray(frontmatter.cssclasses) &&
-      (frontmatter.cssclasses as string[]).includes("json5e-item"),
   },
   lore: {
     includeTag: ["quest"],
