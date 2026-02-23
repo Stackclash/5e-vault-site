@@ -5,21 +5,28 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-export default function SessionDetail({ data }: PageProps<Queries.SessionDetailQuery>) {
+interface SessionDetailContext {
+  id: string;
+  campaignSlug?: string;
+}
+
+export default function SessionDetail({ data, pageContext }: PageProps<Queries.SessionDetailQuery, SessionDetailContext>) {
   const node = data.markdownRemark;
   if (!node) return null;
+  const { campaignSlug } = pageContext;
   const name = (node.parent as any)?.name ?? "Unknown";
   const fm = node.frontmatter as any;
   const date = fm?.date ? new Date(fm.date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
   const summary = fm?.summary ?? "";
   const party = fm?.party ?? [];
+  const backHref = campaignSlug ? `/${campaignSlug}/sessions` : "/sessions";
 
   return (
-    <Layout>
+    <Layout campaignSlug={campaignSlug}>
       <PageHeader
         breadcrumbs={[
-          { label: "Sessions", href: "/sessions" },
-          { label: name, href: `/sessions/${node.fields?.slug}` },
+          { label: "Sessions", href: backHref },
+          { label: name, href: `${backHref}/${node.fields?.slug}` },
         ]}
         subtitle="Session Journal"
         title={name}
@@ -54,7 +61,7 @@ export default function SessionDetail({ data }: PageProps<Queries.SessionDetailQ
           {/* Content */}
           <div className="prose prose-invert max-w-none mb-12" dangerouslySetInnerHTML={{ __html: node.html ?? "" }} />
 
-          <Link to="/sessions" className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
+          <Link to={backHref} className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
             Back to All Sessions
           </Link>

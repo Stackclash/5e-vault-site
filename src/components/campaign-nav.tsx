@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 import { globalHistory } from "@reach/router";
 import { Menu, X, Shield } from "lucide-react";
 
-const navLinks = [
+const globalNavLinks = [
   { label: "Locations", href: "/locations" },
   { label: "NPCs", href: "/npcs" },
   { label: "Sessions", href: "/sessions" },
@@ -11,7 +11,11 @@ const navLinks = [
   { label: "Lore", href: "/lore" },
 ];
 
-export function CampaignNav() {
+interface CampaignNavProps {
+  campaignSlug?: string;
+}
+
+export function CampaignNav({ campaignSlug }: CampaignNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [pathname, setPathname] = useState("");
   useEffect(() => {
@@ -21,8 +25,20 @@ export function CampaignNav() {
     });
   }, []);
 
+  const prefix = campaignSlug ? `/${campaignSlug}` : "";
+  const homeHref = campaignSlug ? `/${campaignSlug}/` : "/";
+
+  const navLinks = campaignSlug
+    ? [
+        { label: "Locations", href: `/${campaignSlug}/locations` },
+        { label: "NPCs", href: `/${campaignSlug}/npcs` },
+        { label: "Sessions", href: `/${campaignSlug}/sessions` },
+        { label: "Lore", href: `/${campaignSlug}/lore` },
+      ]
+    : globalNavLinks;
+
   function isActive(href: string) {
-    if (href === "/") return pathname === "/";
+    if (href === homeHref) return pathname === homeHref || pathname === prefix;
     return pathname.startsWith(href);
   }
 
@@ -30,7 +46,7 @@ export function CampaignNav() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link
-          to="/"
+          to={homeHref}
           className="flex items-center gap-2 text-primary transition-colors hover:text-primary/80"
         >
           <Shield className="h-5 w-5" />

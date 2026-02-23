@@ -5,20 +5,27 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-export default function LocationDetail({ data }: PageProps<Queries.LocationDetailQuery>) {
+interface LocationDetailContext {
+  id: string;
+  campaignSlug?: string;
+}
+
+export default function LocationDetail({ data, pageContext }: PageProps<Queries.LocationDetailQuery, LocationDetailContext>) {
   const node = data.markdownRemark;
   if (!node) return null;
+  const { campaignSlug } = pageContext;
   const name = (node.parent as any)?.name ?? "Unknown";
   const fm = node.frontmatter as any;
   const tags = fm?.tags ?? [];
   const locType = tags.includes("settlement") ? "Settlement" : tags.includes("region") ? "Region" : "Place of Interest";
+  const backHref = campaignSlug ? `/${campaignSlug}/locations` : "/locations";
 
   return (
-    <Layout>
+    <Layout campaignSlug={campaignSlug}>
       <PageHeader
         breadcrumbs={[
-          { label: "Locations", href: "/locations" },
-          { label: name, href: `/locations/${node.fields?.slug}` },
+          { label: "Locations", href: backHref },
+          { label: name, href: `${backHref}/${node.fields?.slug}` },
         ]}
         subtitle={locType}
         title={name}
@@ -45,7 +52,7 @@ export default function LocationDetail({ data }: PageProps<Queries.LocationDetai
           {/* Content */}
           <div className="prose prose-invert max-w-none mb-12" dangerouslySetInnerHTML={{ __html: node.html ?? "" }} />
 
-          <Link to="/locations" className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
+          <Link to={backHref} className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
             Back to All Locations
           </Link>

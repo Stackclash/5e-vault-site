@@ -5,17 +5,24 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-export default function LoreDetail({ data }: PageProps<Queries.LoreDetailQuery>) {
+interface LoreDetailContext {
+  id: string;
+  campaignSlug?: string;
+}
+
+export default function LoreDetail({ data, pageContext }: PageProps<Queries.LoreDetailQuery, LoreDetailContext>) {
   const node = data.markdownRemark;
   if (!node) return null;
+  const { campaignSlug } = pageContext;
   const name = (node.parent as any)?.name ?? "Unknown";
-  const fm = node.frontmatter as any;
+  const backHref = campaignSlug ? `/${campaignSlug}/lore` : "/lore";
+
   return (
-    <Layout>
+    <Layout campaignSlug={campaignSlug}>
       <PageHeader
         breadcrumbs={[
-          { label: "Lore & Quests", href: "/lore" },
-          { label: name, href: `/lore/${node.fields?.slug}` },
+          { label: "Lore & Quests", href: backHref },
+          { label: name, href: `${backHref}/${node.fields?.slug}` },
         ]}
         subtitle="Quest"
         title={name}
@@ -26,7 +33,7 @@ export default function LoreDetail({ data }: PageProps<Queries.LoreDetailQuery>)
           {/* Content */}
           <div className="prose prose-invert max-w-none mb-12" dangerouslySetInnerHTML={{ __html: node.html ?? "" }} />
 
-          <Link to="/lore" className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
+          <Link to={backHref} className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
             Back to All Lore
           </Link>
