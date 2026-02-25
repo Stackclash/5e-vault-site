@@ -6,7 +6,7 @@ import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
 export default function SessionsPage({ data }: PageProps<Queries.SessionsPageQuery>) {
-  const sessions = data.allMarkdownRemark.nodes;
+  const sessions = data.allMdx.nodes;
   return (
     <Layout>
       <PageHeader
@@ -51,7 +51,7 @@ export function Head() {
 
 export const query = graphql`
   query SessionsPage {
-    allMarkdownRemark(
+    allMdx(
       filter: { fields: { entityType: { eq: "sessions" } } }
       sort: { frontmatter: { date: DESC } }
     ) {

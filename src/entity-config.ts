@@ -7,11 +7,11 @@ export interface EntityConfig {
 }
 
 export const entities: Record<string, EntityConfig> = {
-  npcs: {
+  npc: {
     includeTag: ["npc"],
     includePath: ["4. World Almanac/NPCs/"],
   },
-  locations: {
+  location: {
     includeTag: ["location"],
     includePath: [
       "4. World Almanac/Settlements/",
@@ -19,16 +19,13 @@ export const entities: Record<string, EntityConfig> = {
       "4. World Almanac/Regions/",
     ],
   },
-  sessions: {
+  session: {
     includeTag: ["session-journal"],
     includePath: ["1. DM Stuff/Session Journals/"],
   },
-  items: {
-    includeTag: ["item"],
-    includePath: ["5. Mechanics/Items/"],
-    filter: (frontmatter) =>
-      Array.isArray(frontmatter.cssclasses) &&
-      (frontmatter.cssclasses as string[]).includes("json5e-item"),
+  campaign: {
+    includeTag: ["campaign"],
+    includePath: ["1. DM Stuff/Campaigns/"],
   },
   lore: {
     includeTag: ["quest"],

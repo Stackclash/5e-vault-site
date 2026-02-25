@@ -6,7 +6,7 @@ import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
 export default function LorePage({ data }: PageProps<Queries.LorePageQuery>) {
-  const entries = data.allMarkdownRemark.nodes;
+  const entries = data.allMdx.nodes;
   return (
     <Layout>
       <PageHeader
@@ -44,7 +44,7 @@ export function Head() {
 
 export const query = graphql`
   query LorePage {
-    allMarkdownRemark(
+    allMdx(
       filter: { fields: { entityType: { eq: "lore" } } }
     ) {
       nodes {

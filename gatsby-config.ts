@@ -25,7 +25,6 @@ const config: GatsbyConfig = {
   },
   plugins: [
     "gatsby-plugin-postcss",
-    "gatsby-transformer-remark",
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -39,6 +38,13 @@ const config: GatsbyConfig = {
         name: "images",
         path: `${__dirname}/static/images`,
       },
+    },
+    {
+      resolve: 'gatsby-plugin-mdx',
+      options: {
+          extensions: ['.md'],
+          gatsbyRemarkPlugins: ['gatsby-remark-obsidian']
+      }
     },
   ],
 };

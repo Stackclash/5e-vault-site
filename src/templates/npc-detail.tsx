@@ -5,8 +5,8 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-export default function NpcDetail({ data }: PageProps<Queries.NpcDetailQuery>) {
-  const node = data.markdownRemark;
+export default function NpcDetail({ data, children }: PageProps<Queries.NpcDetailQuery>) {
+  const node = data.mdx;
   if (!node) return null;
   const name = (node.parent as any)?.name ?? "Unknown";
   const fm = node.frontmatter as any;
@@ -86,7 +86,7 @@ export default function NpcDetail({ data }: PageProps<Queries.NpcDetailQuery>) {
           )}
 
           {/* Content */}
-          <div className="prose prose-invert max-w-none mb-12" dangerouslySetInnerHTML={{ __html: node.html ?? "" }} />
+          <div className="prose prose-invert max-w-none mb-12">{children}</div>
 
           <Link to="/npcs" className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
@@ -99,14 +99,13 @@ export default function NpcDetail({ data }: PageProps<Queries.NpcDetailQuery>) {
 }
 
 export function Head({ data }: PageProps<Queries.NpcDetailQuery>) {
-  const name = (data.markdownRemark?.parent as any)?.name ?? "";
+  const name = (data.mdx?.parent as any)?.name ?? "";
   return <Seo title={`${name} | NPCs`} />;
 }
 
 export const query = graphql`
   query NpcDetail($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      html
+    mdx(id: { eq: $id }) {
       fields { slug }
       frontmatter {
         race gender alignment condition

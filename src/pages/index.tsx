@@ -37,7 +37,7 @@ export function Head() {
 
 export const query = graphql`
   query IndexPage {
-    locations: allMarkdownRemark(
+    locations: allMdx(
       filter: { fields: { entityType: { eq: "locations" } } }
       limit: 3
     ) {
@@ -48,7 +48,7 @@ export const query = graphql`
         excerpt(pruneLength: 160)
       }
     }
-    npcs: allMarkdownRemark(
+    npcs: allMdx(
       filter: { fields: { entityType: { eq: "npcs" } } }
       limit: 4
     ) {
@@ -59,7 +59,7 @@ export const query = graphql`
         excerpt(pruneLength: 160)
       }
     }
-    sessions: allMarkdownRemark(
+    sessions: allMdx(
       filter: { fields: { entityType: { eq: "sessions" } } }
       limit: 3
       sort: { frontmatter: { date: DESC } }
@@ -71,7 +71,7 @@ export const query = graphql`
         excerpt(pruneLength: 200)
       }
     }
-    items: allMarkdownRemark(
+    items: allMdx(
       filter: { fields: { entityType: { eq: "items" } } }
       limit: 3
     ) {
@@ -82,7 +82,7 @@ export const query = graphql`
         excerpt(pruneLength: 160)
       }
     }
-    lore: allMarkdownRemark(
+    lore: allMdx(
       filter: { fields: { entityType: { eq: "lore" } } }
       limit: 3
     ) {

@@ -6,7 +6,7 @@ import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
 export default function ItemsPage({ data }: PageProps<Queries.ItemsPageQuery>) {
-  const items = data.allMarkdownRemark.nodes;
+  const items = data.allMdx.nodes;
   return (
     <Layout>
       <PageHeader
@@ -47,7 +47,7 @@ export function Head() {
 
 export const query = graphql`
   query ItemsPage {
-    allMarkdownRemark(
+    allMdx(
       filter: { fields: { entityType: { eq: "items" } } }
     ) {
       nodes {

@@ -12,7 +12,7 @@ function getLocationType(tags: string[]): string {
 }
 
 export default function LocationsPage({ data }: PageProps<Queries.LocationsPageQuery>) {
-  const locations = data.allMarkdownRemark.nodes;
+  const locations = data.allMdx.nodes;
   return (
     <Layout>
       <PageHeader
@@ -50,7 +50,7 @@ export function Head() {
 
 export const query = graphql`
   query LocationsPage {
-    allMarkdownRemark(
+    allMdx(
       filter: { fields: { entityType: { eq: "locations" } } }
       sort: { frontmatter: { tags: ASC } }
     ) {

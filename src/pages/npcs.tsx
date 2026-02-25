@@ -6,7 +6,7 @@ import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
 export default function NpcsPage({ data }: PageProps<Queries.NpcsPageQuery>) {
-  const npcs = data.allMarkdownRemark.nodes;
+  const npcs = data.allMdx.nodes;
   return (
     <Layout>
       <PageHeader
@@ -49,7 +49,7 @@ export function Head() {
 
 export const query = graphql`
   query NpcsPage {
-    allMarkdownRemark(
+    allMdx(
       filter: { fields: { entityType: { eq: "npcs" } } }
     ) {
       nodes {

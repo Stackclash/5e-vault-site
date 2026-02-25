@@ -5,8 +5,8 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-export default function ItemDetail({ data }: PageProps<Queries.ItemDetailQuery>) {
-  const node = data.markdownRemark;
+export default function ItemDetail({ data, children }: PageProps<Queries.ItemDetailQuery>) {
+  const node = data.mdx;
   if (!node) return null;
   const fileName = (node.parent as any)?.name ?? "Unknown";
   const fm = node.frontmatter as any;
@@ -37,7 +37,7 @@ export default function ItemDetail({ data }: PageProps<Queries.ItemDetailQuery>)
           )}
 
           {/* Content */}
-          <div className="prose prose-invert max-w-none mb-12" dangerouslySetInnerHTML={{ __html: node.html ?? "" }} />
+          <div className="prose prose-invert max-w-none mb-12">{children}</div>
 
           <Link to="/items" className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
@@ -50,8 +50,8 @@ export default function ItemDetail({ data }: PageProps<Queries.ItemDetailQuery>)
 }
 
 export function Head({ data }: PageProps<Queries.ItemDetailQuery>) {
-  const fm = data.markdownRemark?.frontmatter as any;
-  const fileName = (data.markdownRemark?.parent as any)?.name ?? "";
+  const fm = data.mdx?.frontmatter as any;
+  const fileName = (data.mdx?.parent as any)?.name ?? "";
   const aliases = fm?.aliases ?? [];
   const displayName = Array.isArray(aliases) && aliases.length > 0 ? aliases[0] : fileName;
   return <Seo title={`${displayName} | Items`} />;
@@ -59,8 +59,7 @@ export function Head({ data }: PageProps<Queries.ItemDetailQuery>) {
 
 export const query = graphql`
   query ItemDetail($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      html
+    mdx(id: { eq: $id }) {
       fields { slug }
       frontmatter { cssclasses tags aliases }
       parent { ... on File { name } }

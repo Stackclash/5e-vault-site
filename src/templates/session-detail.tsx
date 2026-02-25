@@ -5,8 +5,8 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-export default function SessionDetail({ data }: PageProps<Queries.SessionDetailQuery>) {
-  const node = data.markdownRemark;
+export default function SessionDetail({ data, children }: PageProps<Queries.SessionDetailQuery>) {
+  const node = data.mdx;
   if (!node) return null;
   const name = (node.parent as any)?.name ?? "Unknown";
   const fm = node.frontmatter as any;
@@ -52,7 +52,7 @@ export default function SessionDetail({ data }: PageProps<Queries.SessionDetailQ
           )}
 
           {/* Content */}
-          <div className="prose prose-invert max-w-none mb-12" dangerouslySetInnerHTML={{ __html: node.html ?? "" }} />
+          <div className="prose prose-invert max-w-none mb-12">{children}</div>
 
           <Link to="/sessions" className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
@@ -65,14 +65,13 @@ export default function SessionDetail({ data }: PageProps<Queries.SessionDetailQ
 }
 
 export function Head({ data }: PageProps<Queries.SessionDetailQuery>) {
-  const name = (data.markdownRemark?.parent as any)?.name ?? "";
+  const name = (data.mdx?.parent as any)?.name ?? "";
   return <Seo title={`${name} | Sessions`} />;
 }
 
 export const query = graphql`
   query SessionDetail($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      html
+    mdx(id: { eq: $id }) {
       fields { slug }
       frontmatter { date summary party tags }
       parent { ... on File { name } }

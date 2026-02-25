@@ -5,8 +5,8 @@ import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
 import { PageHeader } from "../components/page-header";
 
-export default function LocationDetail({ data }: PageProps<Queries.LocationDetailQuery>) {
-  const node = data.markdownRemark;
+export default function LocationDetail({ data, children }: PageProps<Queries.LocationDetailQuery>) {
+  const node = data.mdx;
   if (!node) return null;
   const name = (node.parent as any)?.name ?? "Unknown";
   const fm = node.frontmatter as any;
@@ -43,7 +43,7 @@ export default function LocationDetail({ data }: PageProps<Queries.LocationDetai
           </div>
 
           {/* Content */}
-          <div className="prose prose-invert max-w-none mb-12" dangerouslySetInnerHTML={{ __html: node.html ?? "" }} />
+          <div className="prose prose-invert max-w-none mb-12">{children}</div>
 
           <Link to="/locations" className="inline-flex items-center gap-2 font-serif text-sm tracking-wider uppercase text-primary transition-colors hover:text-primary/80">
             <ArrowLeft className="h-4 w-4" />
@@ -56,14 +56,13 @@ export default function LocationDetail({ data }: PageProps<Queries.LocationDetai
 }
 
 export function Head({ data }: PageProps<Queries.LocationDetailQuery>) {
-  const name = (data.markdownRemark?.parent as any)?.name ?? "";
+  const name = (data.mdx?.parent as any)?.name ?? "";
   return <Seo title={`${name} | Locations`} />;
 }
 
 export const query = graphql`
   query LocationDetail($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      html
+    mdx(id: { eq: $id }) {
       fields { slug }
       frontmatter { tags terrain government pronounced location }
       parent { ... on File { name } }
