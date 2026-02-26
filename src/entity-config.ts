@@ -13,6 +13,7 @@ export const entities: Record<string, EntityConfig> = {
   },
   location: {
     includeTag: ["location"],
+    excludeTag: ["world"],
     includePath: [
       "4. World Almanac/Settlements/",
       "4. World Almanac/Places of Interest/",
@@ -31,4 +32,8 @@ export const entities: Record<string, EntityConfig> = {
     includeTag: ["quest"],
     includePath: ["3. The Party/Quests/"],
   },
+  world: {
+    includeTag: ["world"],
+    includePath: ["4. World Almanac/Worlds/"],
+  }
 };

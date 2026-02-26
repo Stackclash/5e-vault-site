@@ -3,52 +3,31 @@ import type { GatsbyNode } from "gatsby";
 import { entities } from "./src/entity-config";
 import type { EntityConfig } from "./src/entity-config";
 
-function push(
-  map: Map<string, string[]>,
-  key: string,
-  value: string
-) {
-  if (!map.has(key)) map.set(key, [])
-  map.get(key)!.push(value)
-}
-
-function attachReverse(
-  node: any,
-  map: Map<string, string[]>,
-  fieldName: string,
-  createNodeField: any
-) {
-  const values = map.get(node.fields.name)
-  if (!values?.length) return
-
-  createNodeField({
-    node,
-    name: `${fieldName}___NODE`,
-    value: values,
-  })
-}
-
-function findWorldRoot(node: any, nodeByName: Map<string, any>) {
-  let current = node
-
-  while (current?.fields?.locationRef) {
-    current = nodeByName.get(current.fields.locationRef)
-  }
-
-  if (current?.fields?.entityType === "world") {
-    return current.fields.name
-  }
-
-  return null
-}
-
-function extractWikilinkName(raw: string | undefined | null): string | null {
+function extractWikilinkName(
+  raw: string | undefined | null
+): string | null {
   if (!raw) return null;
-  const match = raw.match(/\[\[([^\]|]+)(?:\|[^\]]+)?\]\]/);
-  if (!match) return null;
-  const fullPath = match[1].trim();
-  const parts = fullPath.split("/");
-  return parts[parts.length - 1].trim();
+
+  let value = raw.trim();
+
+  // Remove surrounding [[ ]] if present
+  if (value.startsWith("[[") && value.endsWith("]]")) {
+    value = value.slice(2, -2);
+  }
+
+  // Remove alias portion (after |)
+  if (value.includes("|")) {
+    value = value.split("|")[0];
+  }
+
+  value = value.trim();
+
+  // Remove folder path
+  const fileName = value.split("/").pop();
+  if (!fileName) return null;
+
+  // Remove extension safely (.md, .markdown, etc.)
+  return path.parse(fileName).name;
 }
 
 function matchesEntity(
@@ -132,12 +111,10 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
     if (!matchesEntity(node, config)) continue;
 
     createNodeField({ node, name: "entityType", value: entityType })
-    return;
   }
 
   // Normalize relationships
   const fm = node.frontmatter as Record<string, unknown> | undefined
-  if (matchesEntity(node, entities['campaign'])) console.log(fm)
 
   // World Relationships (for Campaigns)
   if (fm?.world) {
@@ -157,19 +134,19 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
     })
   }
 
-  // Party Relationships (for Quests, NPCs, Players)
+  // Party Relationships (for Quests, NPCs, Players, and Campaigns)
   if (fm?.party || fm?.partyRelationships) {
     if (fm?.party) {
       createNodeField({
         node,
         name: "partyRef",
-        value: extractWikilinkName(fm.party as string),
+        value: [extractWikilinkName(fm.party as string)],
       })
     } else if (fm?.partyRelationships) {
       const partyRefs = typeof fm.partyRelationships === 'object' ? Object.keys(fm.partyRelationships) : []
       createNodeField({
         node,
-        name: "partyRefs",
+        name: "partyRef",
         value: partyRefs,
       })
     }
@@ -220,9 +197,14 @@ interface MdxQueryResult {
     nodes: Array<{
       id: string;
       fields: {
+        name: string;
         entityType: string;
         slug: string;
+        worldRef?: string;
+        partyRef?: string[];
+        locationRef?: string;
       }
+      frontmatter: Record<string, unknown>;
       internal: {
         contentFilePath: string;
       }
@@ -230,131 +212,161 @@ interface MdxQueryResult {
   };
 }
 
+export const createResolvers: GatsbyNode["createResolvers"] = ({
+  createResolvers,
+}) => {
+  createResolvers({
+    Mdx: {
+      // Reverse: World → Campaigns that reference this world
+      campaigns: {
+        type: "[Mdx]",
+        resolve: async (source: any, _args: any, context: any) => {
+          if (source.fields?.entityType !== "world" && source.fields?.entityType !== "party") {
+            return null
+          }
+          const { entries } = await context.nodeModel.findAll({
+            type: "Mdx",
+            query: {
+              filter: {
+                fields: { entityType: { eq: "campaign" } },
+              },
+            },
+          })
+          const allCampaigns = Array.from(entries)
+          return allCampaigns.filter((campaign: any) => {
+            if (source.fields?.entityType === "world") {
+              return campaign.fields?.worldRef === source.fields?.name
+            }
+            if (source.fields?.entityType === "party") {
+              return campaign.fields?.partyRef?.includes(source.fields?.name)
+            }
+            return false
+          })
+        },
+      },
+      // Reverse: World → Top-level locations
+      locations: {
+        type: "[Mdx]",
+        resolve: async (source: any, _args: any, context: any) => {
+          if (source.fields?.entityType !== "world") return null
+          
+          // Fetch all locations
+          const { entries: locationEntries } = await context.nodeModel.findAll({
+            type: "Mdx",
+            query: {
+              filter: {
+                fields: { entityType: { eq: "location" } },
+              },
+            },
+          })
+          const allLocations = Array.from(locationEntries)
+          
+          // Fetch all worlds to include in the lookup map
+          const { entries: worldEntries } = await context.nodeModel.findAll({
+            type: "Mdx",
+            query: {
+              filter: {
+                fields: { entityType: { eq: "world" } },
+              },
+            },
+          })
+          const allWorlds = Array.from(worldEntries)
+          
+          // Combine locations and worlds for parent lookup
+          const allNodes = [...allLocations, ...allWorlds]
+          
+          // Find locations that belong to this world
+          return allLocations.filter((loc: any) => {
+            return findWorldRootFromNode(loc, allNodes) === source.fields?.name
+          })
+        },
+      },
+      // Reverse: Location → Child locations
+      children: {
+        type: "[Mdx]",
+        resolve: async (source: any, _args: any, context: any) => {
+          if (source.fields?.entityType !== "location") return null
+          const { entries } = await context.nodeModel.findAll({
+            type: "Mdx",
+            query: {
+              filter: {
+                fields: {
+                  entityType: { eq: "location" },
+                  locationRef: { eq: source.fields?.name },
+                },
+              },
+            },
+          })
+          return Array.from(entries)
+        },
+      },
+      // Reverse: Location → NPCs at this location
+      npcs: {
+        type: "[Mdx]",
+        resolve: async (source: any, _args: any, context: any) => {
+          if (source.fields?.entityType !== "location") return null
+          const { entries } = await context.nodeModel.findAll({
+            type: "Mdx",
+            query: {
+              filter: {
+                fields: {
+                  entityType: { eq: "npc" },
+                  locationRef: { eq: source.fields?.name },
+                },
+              },
+            },
+          })
+          return Array.from(entries)
+        },
+      },
+      // Reverse: Party → Sessions
+      sessions: {
+        type: "[Mdx]",
+        resolve: async (source: any, _args: any, context: any) => {
+          if (source.fields?.entityType !== "party") return null
+          const { entries } = await context.nodeModel.findAll({
+            type: "Mdx",
+            query: {
+              filter: {
+                fields: { entityType: { eq: "session" } },
+              },
+            },
+          })
+          const allSessions = Array.from(entries)
+          return allSessions.filter((session: any) =>
+            session.fields?.partyRef?.includes(source.fields?.name)
+          )
+        },
+      },
+    },
+  })
+}
+
+function findWorldRootFromNode(node: any, allNodes: any[]): string | null {
+  let current = node
+  const nodeByName = new Map(allNodes.map((n: any) => [n.fields?.name, n]))
+
+  // Walk up the location hierarchy via locationRef
+  while (current?.fields?.locationRef) {
+    const parent = nodeByName.get(current.fields.locationRef)
+    if (!parent) break
+    current = parent
+  }
+
+  // Check if the final node is a world
+  if (current?.fields?.entityType === "world") {
+    return current.fields.name
+  }
+
+  return null
+}
+
 export const createPages: GatsbyNode["createPages"] = async ({
   graphql,
   actions,
 }) => {
-  const { createPage, createNodeField } = actions
+  const { createPage } = actions
 
-  const result = await graphql<{
-    allMdx: {
-      nodes: any[]
-    }
-  }>(`
-    {
-      allMdx {
-        nodes {
-          id
-          fields {
-            name
-            entityType
-            worldRef
-            partyRef
-            locationRef
-          }
-          frontmatter
-        }
-      }
-    }
-  `)
-
-  const nodes = result.data?.allMdx.nodes ?? []
-
-  const nodeByName = new Map(
-    nodes.map(n => [n.fields.name, n])
-  )
-
-  /*
-    Reverse relationship accumulators
-  */
-
-  const worldToCampaigns = new Map<string, string[]>()
-  const worldToLocations = new Map<string, string[]>()
-  const locationToChildren = new Map<string, string[]>()
-  const locationToNpcs = new Map<string, string[]>()
-  const partyToCampaigns = new Map<string, string[]>()
-  const partyToSessions = new Map<string, string[]>()
-  const partyToQuestsActive = new Map<string, string[]>()
-  const partyToQuestsCompleted = new Map<string, string[]>()
-
-  /*
-    WALK ALL NODES
-  */
-
-  for (const node of nodes) {
-    const name = node.fields.name
-
-    // Campaign → World + Party
-    if (node.fields.entityType === "campaign") {
-      if (node.fields.worldRef) {
-        push(worldToCampaigns, node.fields.worldRef, node.id)
-      }
-
-      if (node.fields.partyRef) {
-        push(partyToCampaigns, node.fields.partyRef, node.id)
-      }
-    }
-
-    // Location hierarchy
-    if (node.fields.entityType === "locations") {
-      if (node.fields.locationRef) {
-        push(locationToChildren, node.fields.locationRef, node.id)
-      } else {
-        // Top level location → likely child of World
-        const worldName = findWorldRoot(node, nodeByName)
-        if (worldName) {
-          push(worldToLocations, worldName, node.id)
-        }
-      }
-    }
-
-    // NPC → Location
-    if (node.fields.entityType === "npcs") {
-      if (node.fields.locationRef) {
-        push(locationToNpcs, node.fields.locationRef, node.id)
-      }
-    }
-
-    // Sessions → Party
-    if (node.fields.entityType === "sessions") {
-      if (node.fields.partyRef) {
-        push(partyToSessions, node.fields.partyRef, node.id)
-      }
-    }
-
-    // Quests → Party via object maps
-    if (node.fields.entityType === "lore") {
-      const active = node.frontmatter?.active ?? {}
-      const completed = node.frontmatter?.completed ?? {}
-
-      for (const [party, value] of Object.entries(active)) {
-        if (value === true) {
-          push(partyToQuestsActive, party, node.id)
-        }
-      }
-
-      for (const [party, value] of Object.entries(completed)) {
-        if (value === true) {
-          push(partyToQuestsCompleted, party, node.id)
-        }
-      }
-    }
-  }
-
-  /*
-    ATTACH REVERSE FIELDS
-  */
-
-  for (const node of nodes) {
-    const name = node.fields.name
-
-    attachReverse(node, worldToCampaigns, "campaigns", createNodeField)
-    attachReverse(node, worldToLocations, "locations", createNodeField)
-    attachReverse(node, locationToChildren, "children", createNodeField)
-    attachReverse(node, locationToNpcs, "npcs", createNodeField)
-    attachReverse(node, partyToCampaigns, "campaigns", createNodeField)
-    attachReverse(node, partyToSessions, "sessions", createNodeField)
-    attachReverse(node, partyToQuestsActive, "activeQuests", createNodeField)
-    attachReverse(node, partyToQuestsCompleted, "completedQuests", createNodeField)
-  }
+  // Pages can be created here if needed
+  // Reverse relationships are now handled by createResolvers above
 }

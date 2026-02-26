@@ -30,6 +30,12 @@ const config: GatsbyConfig = {
       options: {
         name: "vault",
         path: `${__dirname}/vault`,
+        ignore: [
+          "**/z_Templates/**",
+          "**/z_Extra/**",
+          "**/z_Scripts/**",
+          "**/5. Mechanics/**"
+        ]
       },
     },
     {
