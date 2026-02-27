@@ -1,6 +1,7 @@
 import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
+  graphqlTypegen: true,
   siteMetadata: {
     title: "Chronicles of the Shattered Realm | Campaign Compendium",
     description:
@@ -30,6 +31,7 @@ const config: GatsbyConfig = {
       options: {
         name: "vault",
         path: `${__dirname}/vault`,
+        fastHash: true,
         ignore: [
           "**/z_Templates/**",
           "**/z_Extra/**",

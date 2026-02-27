@@ -16,6 +16,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "gatsby-config.ts", "gatsby-node.ts", "gatsby-browser.tsx", "gatsby-ssr.tsx"],
+  "include": ["src/**/*", "gatsby/**/*", "gatsby-config.ts", "gatsby-browser.tsx", "gatsby-ssr.tsx"],
   "exclude": ["node_modules", "public", ".cache", "vault"]
 }
