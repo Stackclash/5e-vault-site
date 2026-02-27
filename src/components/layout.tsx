@@ -4,6 +4,7 @@ import { CampaignFooter } from "./campaign-footer";
 
 interface LayoutProps {
   children: React.ReactNode;
+  campaignSlug?: string;
 }
 
 export function Layout({ children }: LayoutProps) {

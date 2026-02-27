@@ -1,111 +1,108 @@
 import React from "react";
-import { graphql, PageProps, Link } from "gatsby";
-import { Shield, MapPin, Users, Scroll, BookOpen } from "lucide-react";
+import { graphql, PageProps } from "gatsby";
 import { Layout } from "../components/layout";
 import { Seo } from "../components/seo";
-import { PageHeader } from "../components/page-header";
+import { HeroSection } from "../components/hero-section";
+import { CampaignOverview } from "../components/campaign-overview";
+import { HomePreviewSections } from "../components/home-preview-sections";
 
-interface CampaignDetailContext {
-  id: string;
-  campaignSlug: string;
-  partyName: string;
-  worldName: string | null;
-  locationCount: number;
-  sessionCount: number;
-  npcCount: number;
-  questCount: number;
-}
-
-export default function CampaignDetail({
-  data,
-  pageContext,
-  children,
-}: PageProps<Queries.CampaignDetailQuery, CampaignDetailContext>) {
-  const node = data.mdx;
-  const { campaignSlug, partyName, worldName, locationCount, sessionCount, npcCount, questCount } =
-    pageContext;
-  const name = (node?.parent as any)?.name ?? campaignSlug;
-
-  const sections = [
-    {
-      label: "Locations",
-      href: `/${campaignSlug}/locations`,
-      icon: MapPin,
-      count: locationCount,
-      description: "Explore all known regions and landmarks in this world.",
-    },
-    {
-      label: "NPCs",
-      href: `/${campaignSlug}/npcs`,
-      icon: Users,
-      count: npcCount,
-      description: "Notable characters encountered by the party.",
-    },
-    {
-      label: "Sessions",
-      href: `/${campaignSlug}/sessions`,
-      icon: Scroll,
-      count: sessionCount,
-      description: "A chronological record of every session played.",
-    },
-    {
-      label: "Lore & Quests",
-      href: `/${campaignSlug}/lore`,
-      icon: BookOpen,
-      count: questCount,
-      description: "Quests and world lore discovered by the party.",
-    },
-  ];
+export default function IndexPage({ data }: PageProps<Queries.CampaignDetailQuery>) {
+  const locations = (data.locations?.nodes ?? []) as any[];
+  const npcs = (data.npcs?.nodes ?? []) as any[];
+  const sessions = (data.sessions?.nodes ?? []) as any[];
+  const quests = (data.quests?.nodes ?? []) as any[];
 
   return (
-    <Layout campaignSlug={campaignSlug}>
-      <PageHeader
-        breadcrumbs={[{ label: name, href: `/${campaignSlug}/` }]}
-        subtitle="Campaign Compendium"
-        title={name}
-        icon={Shield}
-        description={
-          [partyName && `Party: ${partyName}`, worldName && `World: ${worldName}`]
-            .filter(Boolean)
-            .join(" · ") || undefined
-        }
+    <Layout>
+      <HeroSection />
+      <CampaignOverview />
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="h-px bg-border/30" />
+      </div>
+      <HomePreviewSections
+        locations={locations}
+        npcs={npcs}
+        sessions={sessions}
+        quests={quests}
       />
-      <section className="py-16">
-        <div className="mx-auto max-w-7xl px-6">
-          <div
-              className="prose prose-invert mx-auto mb-16 max-w-3xl"
-          >{children}</div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {sections.map(({ label, href, icon: Icon, count, description }) => (
-              <Link
-                key={href}
-                to={href}
-                className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30"
-              >
-                <Icon className="mb-4 h-6 w-6 text-accent" />
-                <h3 className="mb-1 font-serif text-xl font-bold tracking-wide text-foreground">
-                  {label}
-                </h3>
-                <p className="mb-3 text-xs text-muted-foreground">{count} entries</p>
-                <p className="text-sm leading-relaxed text-muted-foreground">{description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
     </Layout>
   );
 }
 
-export function Head({ data, pageContext }: PageProps<Queries.CampaignDetailQuery, CampaignDetailContext>) {
-  const name = (data.mdx?.parent as any)?.name ?? pageContext.campaignSlug;
-  return <Seo title={name} description={`Campaign compendium for ${name}.`} />;
+export function Head() {
+  return <Seo />;
 }
 
 export const query = graphql`
   query CampaignDetail($id: String!) {
-    mdx(id: { eq: $id }) {
-      parent { ... on File { name } }
+    locations: allMdx(
+      filter: {
+        fields: {
+          entityType: { eq: "location" }
+          campaigns: { in: [$id] }
+        }
+      }
+      limit: 3
+    ) {
+      nodes {
+        fields { slug entityType }
+        campaigns
+        frontmatter { tags }
+        parent { ... on File { name } }
+        excerpt(pruneLength: 160)
+      }
+    }
+    npcs: allMdx(
+      filter: {
+        fields: {
+          entityType: { eq: "npc" }
+          campaigns: { in: [$id] }
+        }
+      }
+      limit: 4
+    ) {
+      nodes {
+        fields { slug entityType }
+        campaigns
+        frontmatter { tags race alignment }
+        parent { ... on File { name } }
+        excerpt(pruneLength: 160)
+      }
+    }
+    sessions: allMdx(
+      filter: {
+        fields: {
+          entityType: { eq: "session" }
+          campaigns: { in: [$id] }
+        }
+      }
+      limit: 3
+      sort: { frontmatter: { date: DESC } }
+    ) {
+      nodes {
+        fields { slug entityType }
+        campaigns
+        frontmatter { tags date summary }
+        parent { ... on File { name } }
+        excerpt(pruneLength: 200)
+      }
+    }
+    quests: allMdx(
+      filter: {
+        fields: {
+          entityType: { eq: "quest" }
+          campaigns: { in: [$id] }
+        }
+      }
+      limit: 3
+    ) {
+      nodes {
+        fields { slug entityType }
+        campaigns
+        frontmatter { tags }
+        parent { ... on File { name } }
+        excerpt(pruneLength: 200)
+      }
     }
   }
 `;
