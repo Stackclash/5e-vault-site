@@ -2,7 +2,7 @@ import path from "path"
 import type { EntityConfig } from "../src/entity-config"
 
 export function extractWikilinkName(
-  raw: string | undefined | null | unknown
+  raw: string | undefined | null
 ): string | null {
   if (!raw) return null;
 
@@ -81,16 +81,16 @@ export function slugify(str: string) {
     .replace(/ +/g, "-")
 }
 
-export function findWorldRootFromNode(node: any, allNodes: any[]): string | null {
+export function getWorldFromLocation(node: any, allNodes: any[]): string | null {
   let current = node
   const nodeByName = new Map(allNodes.map((n: any) => [n.fields?.name, n]))
 
-  // Walk up the location hierarchy via locationRef
+  // Walk up the location hierarchy via location
   do {
-    const parent = nodeByName.get(current.fields.locationRef)
+    const parent = nodeByName.get(current.fields.location)
     if (!parent) break
     current = parent
-  } while (current.fields?.locationRef)
+  } while (current.fields?.location)
 
   // Check if the final node is a world
   if (current?.fields?.entityType === "world") {
@@ -98,4 +98,28 @@ export function findWorldRootFromNode(node: any, allNodes: any[]): string | null
   }
 
   return null
+}
+
+export function getCampaignFromParty(party: string, allCampaigns: any[]): any[] {
+  return allCampaigns.filter((campaign: any) =>
+    campaign.fields?.party?.some((p: string) => p === party)
+  )
+}
+
+export function getCampaignFromWorld(world: string, allCampaigns: any[]): any[] {
+  return allCampaigns.filter((campaign: any) =>
+    campaign.fields?.world === world
+  )
+}
+
+export function getAllNodes(context: any, type: string): any[] {
+  const { entries } = context.nodeModel.findAll({
+    type: type[0].toUpperCase() + type.slice(1),
+    query: {
+      filter: {
+        fields: { entityType: { eq: type.toLowerCase() } },
+      },
+    },
+  })
+  return Array.from(entries)
 }

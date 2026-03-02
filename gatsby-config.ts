@@ -1,7 +1,9 @@
 import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
-  graphqlTypegen: true,
+  graphqlTypegen: {
+    typesOutputPath: "src/types/gatsby-types.d.ts",
+  },
   siteMetadata: {
     title: "Chronicles of the Shattered Realm | Campaign Compendium",
     description:

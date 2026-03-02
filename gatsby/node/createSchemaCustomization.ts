@@ -56,26 +56,32 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
 
       type Party implements Node {
         fields: PartyFields
+        campaigns: [Campaign]
       }
 
       type Session implements Node {
         fields: SessionFields
+        campaign: Campaign
       }
 
       type World implements Node {
         fields: WorldFields
+        campaigns: [Campaign]
       }
 
       type NPC implements Node {
         fields: NPCFields
+        campaigns: [Campaign]
       }
 
       type Location implements Node {
         fields: LocationFields
+        campaigns: [Campaign]
       }
 
       type Quest implements Node {
         fields: QuestFields
+        campaigns: [Campaign]
       }
     `);
   };

@@ -33,13 +33,13 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       createNodeField({
         node,
         name: "world",
-        value: extractWikilinkName(fm?.world),
+        value: typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null,
       })
 
       createNodeField({
         node,
         name: "party",
-        value: extractWikilinkName(fm?.party),
+        value: typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null,
       })
     } else if (entityType === "party") {
       // Handle party-specific logic
@@ -49,7 +49,7 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       createNodeField({
         node,
         name: "party",
-        value: extractWikilinkName(fm?.party),
+        value: typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null,
       })
 
       createNodeField({
@@ -61,7 +61,7 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       createNodeField({
         node,
         name: "locations",
-        value: Array.isArray(fm?.locations) ? fm.locations.map(extractWikilinkName) : [extractWikilinkName(fm?.location)]
+        value: Array.isArray(fm?.locations) ? fm.locations.map((loc) => typeof loc === "string" ? extractWikilinkName(loc) : null) : [typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null]
       })
     } else if (entityType === "world") {
       // Handle world-specific logic
@@ -71,7 +71,7 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       createNodeField({
         node,
         name: "location",
-        value: extractWikilinkName(fm?.location),
+        value: typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null,
       })
 
       const partyRefs = typeof fm?.partyRelationships === 'object' ? Object.keys(fm.partyRelationships ?? {}) : []
@@ -92,7 +92,7 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       createNodeField({
         node,
         name: "parentLocation",
-        value: extractWikilinkName(fm?.location),
+        value: typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null,
       })
     } else if (entityType === "quest") {
       // Handle quest-specific logic
@@ -100,19 +100,19 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       createNodeField({
         node,
         name: "world",
-        value: extractWikilinkName(fm?.world),
+        value: typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null,
       })
 
       createNodeField({
         node,
         name: "activeMap",
-        value: extractWikilinkName(fm?.active),
+        value: typeof fm?.active === "string" ? extractWikilinkName(fm?.active) : null,
       })
 
       createNodeField({
         node,
         name: "completedMap",
-        value: extractWikilinkName(fm?.completed),
+        value: typeof fm?.completed === "string" ? extractWikilinkName(fm?.completed) : null,
       })
     }
   }
