@@ -2,119 +2,75 @@ import type { GatsbyNode } from "gatsby";
 import { extractWikilinkName, matchesEntity, getFileName } from "../utils"
 import { entities } from "../../src/entity-config";
 
+const typeNameMap: Record<string, string> = {
+  campaign: "Campaign",
+  party: "Party",
+  session: "Session",
+  world: "World",
+  npc: "NPC",
+  location: "Location",
+  quest: "Quest",
+};
+
 const onCreateNode: GatsbyNode["onCreateNode"] = ({
   node,
   actions,
-  getNode,
+  createNodeId,
+  createContentDigest,
 }) => {
-  const { createNodeField } = actions;
+  const { createNode, createParentChildLink } = actions;
 
   if (node.internal.type !== "Mdx") return;
 
   const fileName = getFileName(node)
 
-  createNodeField({
-    node,
-    name: "name",
-    value: fileName,
-  })
-
-  // Classify entity type
   for (const [entityType, config] of Object.entries(entities)) {
     if (!matchesEntity(node, config)) continue;
 
-    createNodeField({ node, name: "entityType", value: entityType })
-
     const fm = node.frontmatter as Record<string, unknown> | undefined
+    const typeName = typeNameMap[entityType] || entityType[0].toUpperCase() + entityType.slice(1)
+
+    const entityData: Record<string, unknown> = {
+      name: fileName,
+      entityType: entityType,
+    };
 
     if (entityType === "campaign") {
-      // Handle campaign-specific logic
-
-      createNodeField({
-        node,
-        name: "world",
-        value: typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null,
-      })
-
-      createNodeField({
-        node,
-        name: "party",
-        value: typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null,
-      })
-    } else if (entityType === "party") {
-      // Handle party-specific logic
+      entityData.world = typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null
+      entityData.party = typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null
     } else if (entityType === "session") {
-      // Handle session-specific logic
-
-      createNodeField({
-        node,
-        name: "party",
-        value: typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null,
-      })
-
-      createNodeField({
-        node,
-        name: "sessionDate",
-        value: fm?.date || null,
-      })
-
-      createNodeField({
-        node,
-        name: "locations",
-        value: Array.isArray(fm?.locations) ? fm.locations.map((loc) => typeof loc === "string" ? extractWikilinkName(loc) : null) : [typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null]
-      })
-    } else if (entityType === "world") {
-      // Handle world-specific logic
+      entityData.party = typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null
+      entityData.sessionDate = fm?.date || null
+      entityData.locations = Array.isArray(fm?.locations)
+        ? fm.locations.map((loc) => typeof loc === "string" ? extractWikilinkName(loc) : null)
+        : [typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null]
     } else if (entityType === "npc") {
-      // Handle npc-specific logic
-
-      createNodeField({
-        node,
-        name: "location",
-        value: typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null,
-      })
-
+      entityData.location = typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null
       const partyRefs = typeof fm?.partyRelationships === 'object' ? Object.keys(fm.partyRelationships ?? {}) : []
-      createNodeField({
-        node,
-        name: "partyRelationships",
-        value: fm?.partyRelationships ? partyRefs : null,
-      })
-
-      createNodeField({
-        node,
-        name: "partyRefs",
-        value: partyRefs
-      })
+      entityData.partyRelationships = fm?.partyRelationships ? partyRefs : null
+      entityData.partyRefs = partyRefs
     } else if (entityType === "location") {
-      // Handle location-specific logic
-
-      createNodeField({
-        node,
-        name: "parentLocation",
-        value: typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null,
-      })
+      entityData.parentLocation = typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null
     } else if (entityType === "quest") {
-      // Handle quest-specific logic
-
-      createNodeField({
-        node,
-        name: "world",
-        value: typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null,
-      })
-
-      createNodeField({
-        node,
-        name: "activeMap",
-        value: typeof fm?.active === "string" ? extractWikilinkName(fm?.active) : null,
-      })
-
-      createNodeField({
-        node,
-        name: "completedMap",
-        value: typeof fm?.completed === "string" ? extractWikilinkName(fm?.completed) : null,
-      })
+      entityData.world = typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null
+      entityData.activeMap = typeof fm?.active === "string" ? extractWikilinkName(fm?.active) : null
+      entityData.completedMap = typeof fm?.completed === "string" ? extractWikilinkName(fm?.completed) : null
     }
+
+    const newNode = {
+      ...entityData,
+      id: createNodeId(`${entityType}-${fileName}`),
+      parent: node.id,
+      children: [],
+      internal: {
+        type: typeName,
+        contentDigest: createContentDigest(entityData),
+      },
+    };
+
+    createNode(newNode);
+    createParentChildLink({ parent: node, child: newNode as any });
+    break;
   }
 };
 
