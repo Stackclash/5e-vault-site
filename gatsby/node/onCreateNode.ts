@@ -24,43 +24,95 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
     if (!matchesEntity(node, config)) continue;
 
     createNodeField({ node, name: "entityType", value: entityType })
-  }
 
-  // Normalize relationships
-  const fm = node.frontmatter as Record<string, unknown> | undefined
+    const fm = node.frontmatter as Record<string, unknown> | undefined
 
-  // World Relationships (for Campaigns)
-  if (fm?.world) {
-    createNodeField({
-      node,
-      name: "worldRef",
-      value: extractWikilinkName(fm.world as string),
-    })
-  }
+    if (entityType === "campaign") {
+      // Handle campaign-specific logic
 
-  // Location Relationships (for NPCs and Child Locations)
-  if (fm?.location) {
-    createNodeField({
-      node,
-      name: "locationRef",
-      value: extractWikilinkName(fm.location as string),
-    })
-  }
-
-  // Party Relationships (for Quests, Sessions, NPCs, Players, and Campaigns)
-  if (fm?.party || fm?.partyRelationships) {
-    if (fm?.party) {
       createNodeField({
         node,
-        name: "partyRef",
-        value: [extractWikilinkName(fm.party as string)],
+        name: "world",
+        value: extractWikilinkName(fm?.world),
       })
-    } else if (fm?.partyRelationships) {
-      const partyRefs = typeof fm.partyRelationships === 'object' ? Object.keys(fm.partyRelationships) : []
+
       createNodeField({
         node,
-        name: "partyRef",
-        value: partyRefs,
+        name: "party",
+        value: extractWikilinkName(fm?.party),
+      })
+    } else if (entityType === "party") {
+      // Handle party-specific logic
+    } else if (entityType === "session") {
+      // Handle session-specific logic
+
+      createNodeField({
+        node,
+        name: "party",
+        value: extractWikilinkName(fm?.party),
+      })
+
+      createNodeField({
+        node,
+        name: "sessionDate",
+        value: fm?.date || null,
+      })
+
+      createNodeField({
+        node,
+        name: "locations",
+        value: Array.isArray(fm?.locations) ? fm.locations.map(extractWikilinkName) : [extractWikilinkName(fm?.location)]
+      })
+    } else if (entityType === "world") {
+      // Handle world-specific logic
+    } else if (entityType === "npc") {
+      // Handle npc-specific logic
+
+      createNodeField({
+        node,
+        name: "location",
+        value: extractWikilinkName(fm?.location),
+      })
+
+      const partyRefs = typeof fm?.partyRelationships === 'object' ? Object.keys(fm.partyRelationships ?? {}) : []
+      createNodeField({
+        node,
+        name: "partyRelationships",
+        value: fm?.partyRelationships ? partyRefs : null,
+      })
+
+      createNodeField({
+        node,
+        name: "partyRefs",
+        value: partyRefs
+      })
+    } else if (entityType === "location") {
+      // Handle location-specific logic
+
+      createNodeField({
+        node,
+        name: "parentLocation",
+        value: extractWikilinkName(fm?.location),
+      })
+    } else if (entityType === "quest") {
+      // Handle quest-specific logic
+
+      createNodeField({
+        node,
+        name: "world",
+        value: extractWikilinkName(fm?.world),
+      })
+
+      createNodeField({
+        node,
+        name: "activeMap",
+        value: extractWikilinkName(fm?.active),
+      })
+
+      createNodeField({
+        node,
+        name: "completedMap",
+        value: extractWikilinkName(fm?.completed),
       })
     }
   }

@@ -2,7 +2,7 @@ import path from "path"
 import type { EntityConfig } from "../src/entity-config"
 
 export function extractWikilinkName(
-  raw: string | undefined | null
+  raw: string | undefined | null | unknown
 ): string | null {
   if (!raw) return null;
 

@@ -29,15 +29,61 @@ const config: GatsbyConfig = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "vault",
-        path: `${__dirname}/vault`,
+        name: "campaign",
+        path: `${__dirname}/vault/1. DM Stuff/Campaigns`,
         fastHash: true,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "party",
+        path: `${__dirname}/vault/3. The Party/Parties`,
+        fastHash: true,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "session",
+        path: `${__dirname}/vault/1. DM Stuff/Session Journals`,
+        fastHash: true,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "world",
+        path: `${__dirname}/vault/4. World Almanac/Worlds`,
+        fastHash: true,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "npc",
+        path: `${__dirname}/vault/4. World Almanac/NPCs`,
+        fastHash: true,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "location",
+        path: `${__dirname}/vault/4. World Almanac`,
         ignore: [
-          "**/z_Templates/**",
-          "**/z_Extra/**",
-          "**/z_Scripts/**",
-          "**/5. Mechanics/**"
-        ]
+          "**/Worlds/**",
+          "**/NPCs/**",
+        ],
+        fastHash: true,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "quest",
+        path: `${__dirname}/vault/3. The Party/Quests`,
+        fastHash: true,
       },
     },
     {

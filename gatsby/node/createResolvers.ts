@@ -8,10 +8,10 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
     Mdx: {
       // Reverse: World → Campaigns that reference this world
       campaigns: {
-        type: "[Mdx]",
+        type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
           const { entries: campaignEntries } = await context.nodeModel.findAll({
-            type: "Mdx",
+            type: "Campaign",
             query: {
               filter: {
                 fields: { entityType: { eq: "campaign" } },
@@ -23,7 +23,7 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
 
           if (source.fields?.entityType === "location") {
             const { entries: locationEntries } = await context.nodeModel.findAll({
-              type: "Mdx",
+              type: "Location",
               query: {
                 filter: {
                   fields: {
@@ -35,7 +35,7 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
             const allLocations = Array.from(locationEntries)
 
             const { entries: worldEntries } = await context.nodeModel.findAll({
-              type: "Mdx",
+              type: "World",
               query: {
                 filter: {
                   fields: { entityType: { eq: "world" } },
@@ -47,19 +47,19 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
             const parentWorldName = findWorldRootFromNode(source, [...allLocations, ...allWorlds])
             if (!parentWorldName) return null
             relatedCampaigns = allCampaigns.filter((campaign: any) =>
-              campaign.fields?.worldRef === parentWorldName
+              campaign.fields?.world === parentWorldName
             )
           } else {
             relatedCampaigns = allCampaigns.filter((campaign: any) => {
-              if (source.fields?.partyRef) {
-                return campaign.fields?.partyRef?.some((party: string) =>
-                  source.fields?.partyRef?.includes(party)
+              if (source.fields?.party) {
+                return campaign.fields?.party?.some((party: string) =>
+                  source.fields?.party?.includes(party)
                 )
               }
-              if (source.fields?.worldRef) {
-                return campaign.fields?.worldRef === source.fields?.worldRef
+              if (source.fields?.world) {
+                return campaign.fields?.world === source.fields?.world
               }
-              if (campaign.fields?.worldRef === source.fields?.name || campaign.fields?.partyRef?.includes(source.fields?.name)) {
+              if (campaign.fields?.world === source.fields?.name || campaign.fields?.party?.includes(source.fields?.name)) {
                 return true
               }
               return false
@@ -71,13 +71,13 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       },
       // Reverse: World → Top-level locations
       locations: {
-        type: "[Mdx]",
+        type: "[Location]",
         resolve: async (source: any, _args: any, context: any) => {
           if (source.fields?.entityType !== "world") return null
           
           // Fetch all locations
           const { entries: locationEntries } = await context.nodeModel.findAll({
-            type: "Mdx",
+            type: "Location",
             query: {
               filter: {
                 fields: { entityType: { eq: "location" } },
@@ -88,7 +88,7 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
           
           // Fetch all worlds to include in the lookup map
           const { entries: worldEntries } = await context.nodeModel.findAll({
-            type: "Mdx",
+            type: "World",
             query: {
               filter: {
                 fields: { entityType: { eq: "world" } },
@@ -108,11 +108,11 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       },
       // Reverse: Location → Child locations
       children: {
-        type: "[Mdx]",
+        type: "[Location]",
         resolve: async (source: any, _args: any, context: any) => {
           if (source.fields?.entityType !== "location") return null
           const { entries } = await context.nodeModel.findAll({
-            type: "Mdx",
+            type: "Location",
             query: {
               filter: {
                 fields: {
@@ -127,11 +127,11 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       },
       // Reverse: Location → NPCs at this location
       npcs: {
-        type: "[Mdx]",
+        type: "[NPC]",
         resolve: async (source: any, _args: any, context: any) => {
           if (source.fields?.entityType !== "location") return null
           const { entries } = await context.nodeModel.findAll({
-            type: "Mdx",
+            type: "NPC",
             query: {
               filter: {
                 fields: {
@@ -146,11 +146,11 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       },
       // Reverse: Party → Sessions
       sessions: {
-        type: "[Mdx]",
+        type: "[Session]",
         resolve: async (source: any, _args: any, context: any) => {
           if (source.fields?.entityType !== "party") return null
           const { entries } = await context.nodeModel.findAll({
-            type: "Mdx",
+            type: "Session",
             query: {
               filter: {
                 fields: { entityType: { eq: "session" } },
