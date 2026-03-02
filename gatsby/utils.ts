@@ -113,9 +113,9 @@ export function getCampaignFromWorld(world: string, allCampaigns: any[]): any[] 
   )
 }
 
-export async function getAllNodes(context: any, type: string): Promise<any[]> {
+export async function getAllNodes(context: any, nodeType: string): Promise<any[]> {
   const { entries } = await context.nodeModel.findAll({
-    type: type,
+    type: nodeType,
   })
   return Array.from(entries)
 }
