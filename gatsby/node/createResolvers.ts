@@ -9,9 +9,9 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       campaigns: {
         type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
-          const allCampaigns = getAllNodes(context, "Campaign")
+          const allCampaigns = await getAllNodes(context, "Campaign")
 
-          return getCampaignFromParty(source.fields?.name, allCampaigns)
+          return getCampaignFromParty(source.name, allCampaigns)
         },
       }
     },
@@ -19,8 +19,8 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       campaign: {
         type: "Campaign",
         resolve: async (source: any, args: any, context: any) => {
-          const allCampaigns = getAllNodes(context, "Campaign")
-          return getCampaignFromParty(source.fields?.party, allCampaigns)[0] || null
+          const allCampaigns = await getAllNodes(context, "Campaign")
+          return getCampaignFromParty(source.party, allCampaigns)[0] || null
         }
       }
     },
@@ -28,8 +28,8 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       campaigns: {
         type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
-          const allCampaigns = getAllNodes(context, "Campaign")
-          return allCampaigns.filter((campaign: any) => campaign.fields?.world === source.fields?.name)
+          const allCampaigns = await getAllNodes(context, "Campaign")
+          return allCampaigns.filter((campaign: any) => campaign.world === source.name)
         }
       }
     },
@@ -37,13 +37,13 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       campaigns: {
         type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
-          const allCampaigns = getAllNodes(context, "Campaign")
-          const allWorlds = getAllNodes(context, "World")
-          const allLocations = getAllNodes(context, "Location")
+          const allCampaigns = await getAllNodes(context, "Campaign")
+          const allWorlds = await getAllNodes(context, "World")
+          const allLocations = await getAllNodes(context, "Location")
           const world = getWorldFromLocation(source, [...allWorlds, ...allLocations])
-          const partyRefs = source.fields?.partyRefs || []
+          const partyRefs = source.partyRefs || []
           if (!world && partyRefs.length === 0) return []
-          return allCampaigns.filter((campaign: any) => campaign.fields?.world === world || partyRefs.some((pr: string) => campaign.fields?.party === pr))
+          return allCampaigns.filter((campaign: any) => campaign.world === world || partyRefs.some((pr: string) => campaign.party === pr))
         }
       }
     },
@@ -51,12 +51,12 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       campaigns: {
         type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
-          const allCampaigns = getAllNodes(context, "Campaign")
-          const allWorlds = getAllNodes(context, "World")
-          const allLocations = getAllNodes(context, "Location")
+          const allCampaigns = await getAllNodes(context, "Campaign")
+          const allWorlds = await getAllNodes(context, "World")
+          const allLocations = await getAllNodes(context, "Location")
           const world = getWorldFromLocation(source, [...allWorlds, ...allLocations])
           if (!world) return []
-          return allCampaigns.filter((campaign: any) => campaign.fields?.world === world)
+          return allCampaigns.filter((campaign: any) => campaign.world === world)
         }
       }
     },
@@ -64,8 +64,8 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       campaigns: {
         type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
-          const allCampaigns = getAllNodes(context, "Campaign")
-          return allCampaigns.filter((campaign: any) => campaign.fields?.world === source.fields?.world)
+          const allCampaigns = await getAllNodes(context, "Campaign")
+          return allCampaigns.filter((campaign: any) => campaign.world === source.world)
         }
       }
     }

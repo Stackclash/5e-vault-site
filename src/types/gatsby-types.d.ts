@@ -38,10 +38,13 @@ type BooleanQueryOperatorInput = {
 
 type Campaign = Node & {
   readonly children: ReadonlyArray<Node>;
-  readonly fields: Maybe<CampaignFields>;
+  readonly entityType: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly name: Maybe<Scalars['String']>;
   readonly parent: Maybe<Node>;
+  readonly party: Maybe<Scalars['String']>;
+  readonly world: Maybe<Scalars['String']>;
 };
 
 type CampaignConnection = {
@@ -91,46 +94,24 @@ type CampaignEdge = {
 
 type CampaignFieldSelector = {
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly fields: InputMaybe<CampaignFieldsFieldSelector>;
+  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-};
-
-type CampaignFields = {
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly name: Maybe<Scalars['String']>;
-  readonly party: Maybe<Scalars['String']>;
-  readonly world: Maybe<Scalars['String']>;
-};
-
-type CampaignFieldsFieldSelector = {
-  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly name: InputMaybe<FieldSelectorEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
   readonly party: InputMaybe<FieldSelectorEnum>;
   readonly world: InputMaybe<FieldSelectorEnum>;
 };
 
-type CampaignFieldsFilterInput = {
-  readonly entityType: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-  readonly party: InputMaybe<StringQueryOperatorInput>;
-  readonly world: InputMaybe<StringQueryOperatorInput>;
-};
-
-type CampaignFieldsSortInput = {
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
-  readonly party: InputMaybe<SortOrderEnum>;
-  readonly world: InputMaybe<SortOrderEnum>;
-};
-
 type CampaignFilterInput = {
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly fields: InputMaybe<CampaignFieldsFilterInput>;
+  readonly entityType: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
+  readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
+  readonly party: InputMaybe<StringQueryOperatorInput>;
+  readonly world: InputMaybe<StringQueryOperatorInput>;
 };
 
 type CampaignFilterListInput = {
@@ -180,10 +161,13 @@ type CampaignGroupConnection_sumArgs = {
 
 type CampaignSortInput = {
   readonly children: InputMaybe<NodeSortInput>;
-  readonly fields: InputMaybe<CampaignFieldsSortInput>;
+  readonly entityType: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
+  readonly party: InputMaybe<SortOrderEnum>;
+  readonly world: InputMaybe<SortOrderEnum>;
 };
 
 type DateQueryOperatorInput = {
@@ -897,10 +881,12 @@ type JSONQueryOperatorInput = {
 type Location = Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
-  readonly fields: Maybe<LocationFields>;
+  readonly entityType: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly name: Maybe<Scalars['String']>;
   readonly parent: Maybe<Node>;
+  readonly parentLocation: Maybe<Scalars['String']>;
 };
 
 type LocationConnection = {
@@ -951,43 +937,27 @@ type LocationEdge = {
 type LocationFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly fields: InputMaybe<LocationFieldsFieldSelector>;
+  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-};
-
-type LocationFields = {
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly name: Maybe<Scalars['String']>;
-  readonly parentLocation: Maybe<Scalars['String']>;
-};
-
-type LocationFieldsFieldSelector = {
-  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly name: InputMaybe<FieldSelectorEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
   readonly parentLocation: InputMaybe<FieldSelectorEnum>;
-};
-
-type LocationFieldsFilterInput = {
-  readonly entityType: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-  readonly parentLocation: InputMaybe<StringQueryOperatorInput>;
-};
-
-type LocationFieldsSortInput = {
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
-  readonly parentLocation: InputMaybe<SortOrderEnum>;
 };
 
 type LocationFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly fields: InputMaybe<LocationFieldsFilterInput>;
+  readonly entityType: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
+  readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
+  readonly parentLocation: InputMaybe<StringQueryOperatorInput>;
+};
+
+type LocationFilterListInput = {
+  readonly elemMatch: InputMaybe<LocationFilterInput>;
 };
 
 type LocationGroupConnection = {
@@ -1034,17 +1004,46 @@ type LocationGroupConnection_sumArgs = {
 type LocationSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly fields: InputMaybe<LocationFieldsSortInput>;
+  readonly entityType: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
+  readonly parentLocation: InputMaybe<SortOrderEnum>;
 };
 
 type Mdx = Node & {
   readonly body: Maybe<Scalars['String']>;
+  /** Returns the first child node of type Campaign or null if there are no children of given type on this node */
+  readonly childCampaign: Maybe<Campaign>;
+  /** Returns the first child node of type Location or null if there are no children of given type on this node */
+  readonly childLocation: Maybe<Location>;
+  /** Returns the first child node of type NPC or null if there are no children of given type on this node */
+  readonly childNpc: Maybe<NPC>;
+  /** Returns the first child node of type Party or null if there are no children of given type on this node */
+  readonly childParty: Maybe<Party>;
+  /** Returns the first child node of type Quest or null if there are no children of given type on this node */
+  readonly childQuest: Maybe<Quest>;
+  /** Returns the first child node of type Session or null if there are no children of given type on this node */
+  readonly childSession: Maybe<Session>;
+  /** Returns the first child node of type World or null if there are no children of given type on this node */
+  readonly childWorld: Maybe<World>;
   readonly children: ReadonlyArray<Node>;
+  /** Returns all children nodes filtered by type Campaign */
+  readonly childrenCampaign: Maybe<ReadonlyArray<Maybe<Campaign>>>;
+  /** Returns all children nodes filtered by type Location */
+  readonly childrenLocation: Maybe<ReadonlyArray<Maybe<Location>>>;
+  /** Returns all children nodes filtered by type NPC */
+  readonly childrenNpc: Maybe<ReadonlyArray<Maybe<NPC>>>;
+  /** Returns all children nodes filtered by type Party */
+  readonly childrenParty: Maybe<ReadonlyArray<Maybe<Party>>>;
+  /** Returns all children nodes filtered by type Quest */
+  readonly childrenQuest: Maybe<ReadonlyArray<Maybe<Quest>>>;
+  /** Returns all children nodes filtered by type Session */
+  readonly childrenSession: Maybe<ReadonlyArray<Maybe<Session>>>;
+  /** Returns all children nodes filtered by type World */
+  readonly childrenWorld: Maybe<ReadonlyArray<Maybe<World>>>;
   readonly excerpt: Maybe<Scalars['String']>;
-  readonly fields: Maybe<MdxFields>;
   readonly frontmatter: Maybe<MdxFrontmatter>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
@@ -1109,9 +1108,22 @@ type MdxEdge = {
 
 type MdxFieldSelector = {
   readonly body: InputMaybe<FieldSelectorEnum>;
+  readonly childCampaign: InputMaybe<CampaignFieldSelector>;
+  readonly childLocation: InputMaybe<LocationFieldSelector>;
+  readonly childNpc: InputMaybe<NPCFieldSelector>;
+  readonly childParty: InputMaybe<PartyFieldSelector>;
+  readonly childQuest: InputMaybe<QuestFieldSelector>;
+  readonly childSession: InputMaybe<SessionFieldSelector>;
+  readonly childWorld: InputMaybe<WorldFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly childrenCampaign: InputMaybe<CampaignFieldSelector>;
+  readonly childrenLocation: InputMaybe<LocationFieldSelector>;
+  readonly childrenNpc: InputMaybe<NPCFieldSelector>;
+  readonly childrenParty: InputMaybe<PartyFieldSelector>;
+  readonly childrenQuest: InputMaybe<QuestFieldSelector>;
+  readonly childrenSession: InputMaybe<SessionFieldSelector>;
+  readonly childrenWorld: InputMaybe<WorldFieldSelector>;
   readonly excerpt: InputMaybe<FieldSelectorEnum>;
-  readonly fields: InputMaybe<MdxFieldsFieldSelector>;
   readonly frontmatter: InputMaybe<MdxFrontmatterFieldSelector>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
@@ -1119,71 +1131,24 @@ type MdxFieldSelector = {
   readonly tableOfContents: InputMaybe<FieldSelectorEnum>;
 };
 
-type MdxFields = {
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly location: Maybe<Scalars['String']>;
-  readonly locations: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly name: Maybe<Scalars['String']>;
-  readonly parentLocation: Maybe<Scalars['String']>;
-  readonly party: Maybe<Scalars['String']>;
-  readonly partyRefs: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly partyRelationships: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly sessionDate: Maybe<Scalars['Date']>;
-  readonly world: Maybe<Scalars['String']>;
-};
-
-
-type MdxFields_sessionDateArgs = {
-  difference: InputMaybe<Scalars['String']>;
-  formatString: InputMaybe<Scalars['String']>;
-  fromNow: InputMaybe<Scalars['Boolean']>;
-  locale: InputMaybe<Scalars['String']>;
-};
-
-type MdxFieldsFieldSelector = {
-  readonly entityType: InputMaybe<FieldSelectorEnum>;
-  readonly location: InputMaybe<FieldSelectorEnum>;
-  readonly locations: InputMaybe<FieldSelectorEnum>;
-  readonly name: InputMaybe<FieldSelectorEnum>;
-  readonly parentLocation: InputMaybe<FieldSelectorEnum>;
-  readonly party: InputMaybe<FieldSelectorEnum>;
-  readonly partyRefs: InputMaybe<FieldSelectorEnum>;
-  readonly partyRelationships: InputMaybe<FieldSelectorEnum>;
-  readonly sessionDate: InputMaybe<FieldSelectorEnum>;
-  readonly world: InputMaybe<FieldSelectorEnum>;
-};
-
-type MdxFieldsFilterInput = {
-  readonly entityType: InputMaybe<StringQueryOperatorInput>;
-  readonly location: InputMaybe<StringQueryOperatorInput>;
-  readonly locations: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-  readonly parentLocation: InputMaybe<StringQueryOperatorInput>;
-  readonly party: InputMaybe<StringQueryOperatorInput>;
-  readonly partyRefs: InputMaybe<StringQueryOperatorInput>;
-  readonly partyRelationships: InputMaybe<StringQueryOperatorInput>;
-  readonly sessionDate: InputMaybe<DateQueryOperatorInput>;
-  readonly world: InputMaybe<StringQueryOperatorInput>;
-};
-
-type MdxFieldsSortInput = {
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly location: InputMaybe<SortOrderEnum>;
-  readonly locations: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
-  readonly parentLocation: InputMaybe<SortOrderEnum>;
-  readonly party: InputMaybe<SortOrderEnum>;
-  readonly partyRefs: InputMaybe<SortOrderEnum>;
-  readonly partyRelationships: InputMaybe<SortOrderEnum>;
-  readonly sessionDate: InputMaybe<SortOrderEnum>;
-  readonly world: InputMaybe<SortOrderEnum>;
-};
-
 type MdxFilterInput = {
   readonly body: InputMaybe<StringQueryOperatorInput>;
+  readonly childCampaign: InputMaybe<CampaignFilterInput>;
+  readonly childLocation: InputMaybe<LocationFilterInput>;
+  readonly childNpc: InputMaybe<NPCFilterInput>;
+  readonly childParty: InputMaybe<PartyFilterInput>;
+  readonly childQuest: InputMaybe<QuestFilterInput>;
+  readonly childSession: InputMaybe<SessionFilterInput>;
+  readonly childWorld: InputMaybe<WorldFilterInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly childrenCampaign: InputMaybe<CampaignFilterListInput>;
+  readonly childrenLocation: InputMaybe<LocationFilterListInput>;
+  readonly childrenNpc: InputMaybe<NPCFilterListInput>;
+  readonly childrenParty: InputMaybe<PartyFilterListInput>;
+  readonly childrenQuest: InputMaybe<QuestFilterListInput>;
+  readonly childrenSession: InputMaybe<SessionFilterListInput>;
+  readonly childrenWorld: InputMaybe<WorldFilterListInput>;
   readonly excerpt: InputMaybe<StringQueryOperatorInput>;
-  readonly fields: InputMaybe<MdxFieldsFilterInput>;
   readonly frontmatter: InputMaybe<MdxFrontmatterFilterInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
@@ -1196,68 +1161,11 @@ type MdxFilterListInput = {
 };
 
 type MdxFrontmatter = {
-  readonly aat_render_enabled: Maybe<Scalars['Boolean']>;
-  readonly active: Maybe<MdxFrontmatterActive>;
-  readonly age: Maybe<Scalars['Int']>;
-  readonly aliases: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly alignment: Maybe<Scalars['String']>;
-  readonly banner_y: Maybe<Scalars['Int']>;
-  readonly bond: Maybe<Scalars['String']>;
-  readonly calendar: Maybe<Scalars['String']>;
-  readonly completed: Maybe<MdxFrontmatterCompleted>;
-  readonly condition: Maybe<Scalars['String']>;
-  readonly cost_modifier: Maybe<Scalars['Int']>;
-  readonly cssclasses: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
   readonly date: Maybe<Scalars['Date']>;
-  readonly description: Maybe<Scalars['String']>;
-  readonly dislikes: Maybe<Scalars['String']>;
-  readonly economic_scale: Maybe<Scalars['Float']>;
-  readonly encumbered: Maybe<Scalars['Boolean']>;
-  readonly exhaustion_level: Maybe<Scalars['Int']>;
-  readonly exports: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly fc_category: Maybe<Scalars['String']>;
-  readonly fc_date: Maybe<Scalars['String']>;
-  readonly fc_end: Maybe<Scalars['String']>;
-  readonly flaw: Maybe<Scalars['String']>;
-  readonly gender: Maybe<Scalars['String']>;
-  readonly government: Maybe<Scalars['String']>;
-  readonly groups: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly hours_per_day: Maybe<Scalars['Int']>;
-  readonly ideal: Maybe<Scalars['String']>;
-  readonly images: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly items: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly likes: Maybe<Scalars['String']>;
   readonly location: Maybe<Scalars['String']>;
   readonly locations: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly movement: Maybe<Scalars['String']>;
-  readonly npcs: Maybe<ReadonlyArray<Maybe<MdxFrontmatterNpcs>>>;
-  readonly obsidianUIMode: Maybe<Scalars['String']>;
-  readonly occupation: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly owners: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
   readonly party: Maybe<Scalars['String']>;
-  readonly partyRelationships: Maybe<MdxFrontmatterPartyRelationships>;
-  readonly personality: Maybe<Scalars['String']>;
-  readonly population: Maybe<Scalars['Int']>;
-  readonly prep_notes: Maybe<Scalars['String']>;
-  readonly pronounced: Maybe<Scalars['String']>;
-  readonly race: Maybe<Scalars['String']>;
-  readonly relationships: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly resources: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly rulers: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly speed: Maybe<Scalars['String']>;
-  readonly staff: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly statblock: Maybe<Scalars['String']>;
-  readonly steps: Maybe<ReadonlyArray<Maybe<MdxFrontmatterSteps>>>;
-  readonly summary: Maybe<Scalars['String']>;
   readonly tags: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly terrain: Maybe<Scalars['String']>;
-  readonly timelines: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly travel_bonus: Maybe<Scalars['Int']>;
-  readonly travel_calc: Maybe<Scalars['Float']>;
-  readonly travel_hours_per_day: Maybe<Scalars['Int']>;
-  readonly travel_multiplier: Maybe<Scalars['Int']>;
-  readonly travel_speed: Maybe<Scalars['Float']>;
-  readonly var_mins: Maybe<Scalars['Int']>;
   readonly world: Maybe<Scalars['String']>;
 };
 
@@ -1269,294 +1177,31 @@ type MdxFrontmatter_dateArgs = {
   locale: InputMaybe<Scalars['String']>;
 };
 
-type MdxFrontmatterActive = {
-  readonly Midnight_Covenant: Maybe<Scalars['Boolean']>;
-};
-
-type MdxFrontmatterActiveFieldSelector = {
-  readonly Midnight_Covenant: InputMaybe<FieldSelectorEnum>;
-};
-
-type MdxFrontmatterActiveFilterInput = {
-  readonly Midnight_Covenant: InputMaybe<BooleanQueryOperatorInput>;
-};
-
-type MdxFrontmatterActiveSortInput = {
-  readonly Midnight_Covenant: InputMaybe<SortOrderEnum>;
-};
-
-type MdxFrontmatterCompleted = {
-  readonly Midnight_Covenant: Maybe<Scalars['Boolean']>;
-};
-
-type MdxFrontmatterCompletedFieldSelector = {
-  readonly Midnight_Covenant: InputMaybe<FieldSelectorEnum>;
-};
-
-type MdxFrontmatterCompletedFilterInput = {
-  readonly Midnight_Covenant: InputMaybe<BooleanQueryOperatorInput>;
-};
-
-type MdxFrontmatterCompletedSortInput = {
-  readonly Midnight_Covenant: InputMaybe<SortOrderEnum>;
-};
-
 type MdxFrontmatterFieldSelector = {
-  readonly aat_render_enabled: InputMaybe<FieldSelectorEnum>;
-  readonly active: InputMaybe<MdxFrontmatterActiveFieldSelector>;
-  readonly age: InputMaybe<FieldSelectorEnum>;
-  readonly aliases: InputMaybe<FieldSelectorEnum>;
-  readonly alignment: InputMaybe<FieldSelectorEnum>;
-  readonly banner_y: InputMaybe<FieldSelectorEnum>;
-  readonly bond: InputMaybe<FieldSelectorEnum>;
-  readonly calendar: InputMaybe<FieldSelectorEnum>;
-  readonly completed: InputMaybe<MdxFrontmatterCompletedFieldSelector>;
-  readonly condition: InputMaybe<FieldSelectorEnum>;
-  readonly cost_modifier: InputMaybe<FieldSelectorEnum>;
-  readonly cssclasses: InputMaybe<FieldSelectorEnum>;
   readonly date: InputMaybe<FieldSelectorEnum>;
-  readonly description: InputMaybe<FieldSelectorEnum>;
-  readonly dislikes: InputMaybe<FieldSelectorEnum>;
-  readonly economic_scale: InputMaybe<FieldSelectorEnum>;
-  readonly encumbered: InputMaybe<FieldSelectorEnum>;
-  readonly exhaustion_level: InputMaybe<FieldSelectorEnum>;
-  readonly exports: InputMaybe<FieldSelectorEnum>;
-  readonly fc_category: InputMaybe<FieldSelectorEnum>;
-  readonly fc_date: InputMaybe<FieldSelectorEnum>;
-  readonly fc_end: InputMaybe<FieldSelectorEnum>;
-  readonly flaw: InputMaybe<FieldSelectorEnum>;
-  readonly gender: InputMaybe<FieldSelectorEnum>;
-  readonly government: InputMaybe<FieldSelectorEnum>;
-  readonly groups: InputMaybe<FieldSelectorEnum>;
-  readonly hours_per_day: InputMaybe<FieldSelectorEnum>;
-  readonly ideal: InputMaybe<FieldSelectorEnum>;
-  readonly images: InputMaybe<FieldSelectorEnum>;
-  readonly items: InputMaybe<FieldSelectorEnum>;
-  readonly likes: InputMaybe<FieldSelectorEnum>;
   readonly location: InputMaybe<FieldSelectorEnum>;
   readonly locations: InputMaybe<FieldSelectorEnum>;
-  readonly movement: InputMaybe<FieldSelectorEnum>;
-  readonly npcs: InputMaybe<MdxFrontmatterNpcsFieldSelector>;
-  readonly obsidianUIMode: InputMaybe<FieldSelectorEnum>;
-  readonly occupation: InputMaybe<FieldSelectorEnum>;
-  readonly owners: InputMaybe<FieldSelectorEnum>;
   readonly party: InputMaybe<FieldSelectorEnum>;
-  readonly partyRelationships: InputMaybe<MdxFrontmatterPartyRelationshipsFieldSelector>;
-  readonly personality: InputMaybe<FieldSelectorEnum>;
-  readonly population: InputMaybe<FieldSelectorEnum>;
-  readonly prep_notes: InputMaybe<FieldSelectorEnum>;
-  readonly pronounced: InputMaybe<FieldSelectorEnum>;
-  readonly race: InputMaybe<FieldSelectorEnum>;
-  readonly relationships: InputMaybe<FieldSelectorEnum>;
-  readonly resources: InputMaybe<FieldSelectorEnum>;
-  readonly rulers: InputMaybe<FieldSelectorEnum>;
-  readonly speed: InputMaybe<FieldSelectorEnum>;
-  readonly staff: InputMaybe<FieldSelectorEnum>;
-  readonly statblock: InputMaybe<FieldSelectorEnum>;
-  readonly steps: InputMaybe<MdxFrontmatterStepsFieldSelector>;
-  readonly summary: InputMaybe<FieldSelectorEnum>;
   readonly tags: InputMaybe<FieldSelectorEnum>;
-  readonly terrain: InputMaybe<FieldSelectorEnum>;
-  readonly timelines: InputMaybe<FieldSelectorEnum>;
-  readonly travel_bonus: InputMaybe<FieldSelectorEnum>;
-  readonly travel_calc: InputMaybe<FieldSelectorEnum>;
-  readonly travel_hours_per_day: InputMaybe<FieldSelectorEnum>;
-  readonly travel_multiplier: InputMaybe<FieldSelectorEnum>;
-  readonly travel_speed: InputMaybe<FieldSelectorEnum>;
-  readonly var_mins: InputMaybe<FieldSelectorEnum>;
   readonly world: InputMaybe<FieldSelectorEnum>;
 };
 
 type MdxFrontmatterFilterInput = {
-  readonly aat_render_enabled: InputMaybe<BooleanQueryOperatorInput>;
-  readonly active: InputMaybe<MdxFrontmatterActiveFilterInput>;
-  readonly age: InputMaybe<IntQueryOperatorInput>;
-  readonly aliases: InputMaybe<StringQueryOperatorInput>;
-  readonly alignment: InputMaybe<StringQueryOperatorInput>;
-  readonly banner_y: InputMaybe<IntQueryOperatorInput>;
-  readonly bond: InputMaybe<StringQueryOperatorInput>;
-  readonly calendar: InputMaybe<StringQueryOperatorInput>;
-  readonly completed: InputMaybe<MdxFrontmatterCompletedFilterInput>;
-  readonly condition: InputMaybe<StringQueryOperatorInput>;
-  readonly cost_modifier: InputMaybe<IntQueryOperatorInput>;
-  readonly cssclasses: InputMaybe<StringQueryOperatorInput>;
   readonly date: InputMaybe<DateQueryOperatorInput>;
-  readonly description: InputMaybe<StringQueryOperatorInput>;
-  readonly dislikes: InputMaybe<StringQueryOperatorInput>;
-  readonly economic_scale: InputMaybe<FloatQueryOperatorInput>;
-  readonly encumbered: InputMaybe<BooleanQueryOperatorInput>;
-  readonly exhaustion_level: InputMaybe<IntQueryOperatorInput>;
-  readonly exports: InputMaybe<StringQueryOperatorInput>;
-  readonly fc_category: InputMaybe<StringQueryOperatorInput>;
-  readonly fc_date: InputMaybe<StringQueryOperatorInput>;
-  readonly fc_end: InputMaybe<StringQueryOperatorInput>;
-  readonly flaw: InputMaybe<StringQueryOperatorInput>;
-  readonly gender: InputMaybe<StringQueryOperatorInput>;
-  readonly government: InputMaybe<StringQueryOperatorInput>;
-  readonly groups: InputMaybe<StringQueryOperatorInput>;
-  readonly hours_per_day: InputMaybe<IntQueryOperatorInput>;
-  readonly ideal: InputMaybe<StringQueryOperatorInput>;
-  readonly images: InputMaybe<StringQueryOperatorInput>;
-  readonly items: InputMaybe<StringQueryOperatorInput>;
-  readonly likes: InputMaybe<StringQueryOperatorInput>;
   readonly location: InputMaybe<StringQueryOperatorInput>;
   readonly locations: InputMaybe<StringQueryOperatorInput>;
-  readonly movement: InputMaybe<StringQueryOperatorInput>;
-  readonly npcs: InputMaybe<MdxFrontmatterNpcsFilterListInput>;
-  readonly obsidianUIMode: InputMaybe<StringQueryOperatorInput>;
-  readonly occupation: InputMaybe<StringQueryOperatorInput>;
-  readonly owners: InputMaybe<StringQueryOperatorInput>;
   readonly party: InputMaybe<StringQueryOperatorInput>;
-  readonly partyRelationships: InputMaybe<MdxFrontmatterPartyRelationshipsFilterInput>;
-  readonly personality: InputMaybe<StringQueryOperatorInput>;
-  readonly population: InputMaybe<IntQueryOperatorInput>;
-  readonly prep_notes: InputMaybe<StringQueryOperatorInput>;
-  readonly pronounced: InputMaybe<StringQueryOperatorInput>;
-  readonly race: InputMaybe<StringQueryOperatorInput>;
-  readonly relationships: InputMaybe<StringQueryOperatorInput>;
-  readonly resources: InputMaybe<StringQueryOperatorInput>;
-  readonly rulers: InputMaybe<StringQueryOperatorInput>;
-  readonly speed: InputMaybe<StringQueryOperatorInput>;
-  readonly staff: InputMaybe<StringQueryOperatorInput>;
-  readonly statblock: InputMaybe<StringQueryOperatorInput>;
-  readonly steps: InputMaybe<MdxFrontmatterStepsFilterListInput>;
-  readonly summary: InputMaybe<StringQueryOperatorInput>;
   readonly tags: InputMaybe<StringQueryOperatorInput>;
-  readonly terrain: InputMaybe<StringQueryOperatorInput>;
-  readonly timelines: InputMaybe<StringQueryOperatorInput>;
-  readonly travel_bonus: InputMaybe<IntQueryOperatorInput>;
-  readonly travel_calc: InputMaybe<FloatQueryOperatorInput>;
-  readonly travel_hours_per_day: InputMaybe<IntQueryOperatorInput>;
-  readonly travel_multiplier: InputMaybe<IntQueryOperatorInput>;
-  readonly travel_speed: InputMaybe<FloatQueryOperatorInput>;
-  readonly var_mins: InputMaybe<IntQueryOperatorInput>;
   readonly world: InputMaybe<StringQueryOperatorInput>;
 };
 
-type MdxFrontmatterNpcs = {
-  readonly description: Maybe<Scalars['String']>;
-  readonly name: Maybe<Scalars['String']>;
-};
-
-type MdxFrontmatterNpcsFieldSelector = {
-  readonly description: InputMaybe<FieldSelectorEnum>;
-  readonly name: InputMaybe<FieldSelectorEnum>;
-};
-
-type MdxFrontmatterNpcsFilterInput = {
-  readonly description: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-};
-
-type MdxFrontmatterNpcsFilterListInput = {
-  readonly elemMatch: InputMaybe<MdxFrontmatterNpcsFilterInput>;
-};
-
-type MdxFrontmatterNpcsSortInput = {
-  readonly description: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
-};
-
-type MdxFrontmatterPartyRelationships = {
-  readonly Midnight_Covenant: Maybe<Scalars['String']>;
-};
-
-type MdxFrontmatterPartyRelationshipsFieldSelector = {
-  readonly Midnight_Covenant: InputMaybe<FieldSelectorEnum>;
-};
-
-type MdxFrontmatterPartyRelationshipsFilterInput = {
-  readonly Midnight_Covenant: InputMaybe<StringQueryOperatorInput>;
-};
-
-type MdxFrontmatterPartyRelationshipsSortInput = {
-  readonly Midnight_Covenant: InputMaybe<SortOrderEnum>;
-};
-
 type MdxFrontmatterSortInput = {
-  readonly aat_render_enabled: InputMaybe<SortOrderEnum>;
-  readonly active: InputMaybe<MdxFrontmatterActiveSortInput>;
-  readonly age: InputMaybe<SortOrderEnum>;
-  readonly aliases: InputMaybe<SortOrderEnum>;
-  readonly alignment: InputMaybe<SortOrderEnum>;
-  readonly banner_y: InputMaybe<SortOrderEnum>;
-  readonly bond: InputMaybe<SortOrderEnum>;
-  readonly calendar: InputMaybe<SortOrderEnum>;
-  readonly completed: InputMaybe<MdxFrontmatterCompletedSortInput>;
-  readonly condition: InputMaybe<SortOrderEnum>;
-  readonly cost_modifier: InputMaybe<SortOrderEnum>;
-  readonly cssclasses: InputMaybe<SortOrderEnum>;
   readonly date: InputMaybe<SortOrderEnum>;
-  readonly description: InputMaybe<SortOrderEnum>;
-  readonly dislikes: InputMaybe<SortOrderEnum>;
-  readonly economic_scale: InputMaybe<SortOrderEnum>;
-  readonly encumbered: InputMaybe<SortOrderEnum>;
-  readonly exhaustion_level: InputMaybe<SortOrderEnum>;
-  readonly exports: InputMaybe<SortOrderEnum>;
-  readonly fc_category: InputMaybe<SortOrderEnum>;
-  readonly fc_date: InputMaybe<SortOrderEnum>;
-  readonly fc_end: InputMaybe<SortOrderEnum>;
-  readonly flaw: InputMaybe<SortOrderEnum>;
-  readonly gender: InputMaybe<SortOrderEnum>;
-  readonly government: InputMaybe<SortOrderEnum>;
-  readonly groups: InputMaybe<SortOrderEnum>;
-  readonly hours_per_day: InputMaybe<SortOrderEnum>;
-  readonly ideal: InputMaybe<SortOrderEnum>;
-  readonly images: InputMaybe<SortOrderEnum>;
-  readonly items: InputMaybe<SortOrderEnum>;
-  readonly likes: InputMaybe<SortOrderEnum>;
   readonly location: InputMaybe<SortOrderEnum>;
   readonly locations: InputMaybe<SortOrderEnum>;
-  readonly movement: InputMaybe<SortOrderEnum>;
-  readonly npcs: InputMaybe<MdxFrontmatterNpcsSortInput>;
-  readonly obsidianUIMode: InputMaybe<SortOrderEnum>;
-  readonly occupation: InputMaybe<SortOrderEnum>;
-  readonly owners: InputMaybe<SortOrderEnum>;
   readonly party: InputMaybe<SortOrderEnum>;
-  readonly partyRelationships: InputMaybe<MdxFrontmatterPartyRelationshipsSortInput>;
-  readonly personality: InputMaybe<SortOrderEnum>;
-  readonly population: InputMaybe<SortOrderEnum>;
-  readonly prep_notes: InputMaybe<SortOrderEnum>;
-  readonly pronounced: InputMaybe<SortOrderEnum>;
-  readonly race: InputMaybe<SortOrderEnum>;
-  readonly relationships: InputMaybe<SortOrderEnum>;
-  readonly resources: InputMaybe<SortOrderEnum>;
-  readonly rulers: InputMaybe<SortOrderEnum>;
-  readonly speed: InputMaybe<SortOrderEnum>;
-  readonly staff: InputMaybe<SortOrderEnum>;
-  readonly statblock: InputMaybe<SortOrderEnum>;
-  readonly steps: InputMaybe<MdxFrontmatterStepsSortInput>;
-  readonly summary: InputMaybe<SortOrderEnum>;
   readonly tags: InputMaybe<SortOrderEnum>;
-  readonly terrain: InputMaybe<SortOrderEnum>;
-  readonly timelines: InputMaybe<SortOrderEnum>;
-  readonly travel_bonus: InputMaybe<SortOrderEnum>;
-  readonly travel_calc: InputMaybe<SortOrderEnum>;
-  readonly travel_hours_per_day: InputMaybe<SortOrderEnum>;
-  readonly travel_multiplier: InputMaybe<SortOrderEnum>;
-  readonly travel_speed: InputMaybe<SortOrderEnum>;
-  readonly var_mins: InputMaybe<SortOrderEnum>;
   readonly world: InputMaybe<SortOrderEnum>;
-};
-
-type MdxFrontmatterSteps = {
-  readonly text: Maybe<Scalars['String']>;
-};
-
-type MdxFrontmatterStepsFieldSelector = {
-  readonly text: InputMaybe<FieldSelectorEnum>;
-};
-
-type MdxFrontmatterStepsFilterInput = {
-  readonly text: InputMaybe<StringQueryOperatorInput>;
-};
-
-type MdxFrontmatterStepsFilterListInput = {
-  readonly elemMatch: InputMaybe<MdxFrontmatterStepsFilterInput>;
-};
-
-type MdxFrontmatterStepsSortInput = {
-  readonly text: InputMaybe<SortOrderEnum>;
 };
 
 type MdxGroupConnection = {
@@ -1602,9 +1247,22 @@ type MdxGroupConnection_sumArgs = {
 
 type MdxSortInput = {
   readonly body: InputMaybe<SortOrderEnum>;
+  readonly childCampaign: InputMaybe<CampaignSortInput>;
+  readonly childLocation: InputMaybe<LocationSortInput>;
+  readonly childNpc: InputMaybe<NPCSortInput>;
+  readonly childParty: InputMaybe<PartySortInput>;
+  readonly childQuest: InputMaybe<QuestSortInput>;
+  readonly childSession: InputMaybe<SessionSortInput>;
+  readonly childWorld: InputMaybe<WorldSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly childrenCampaign: InputMaybe<CampaignSortInput>;
+  readonly childrenLocation: InputMaybe<LocationSortInput>;
+  readonly childrenNpc: InputMaybe<NPCSortInput>;
+  readonly childrenParty: InputMaybe<PartySortInput>;
+  readonly childrenQuest: InputMaybe<QuestSortInput>;
+  readonly childrenSession: InputMaybe<SessionSortInput>;
+  readonly childrenWorld: InputMaybe<WorldSortInput>;
   readonly excerpt: InputMaybe<SortOrderEnum>;
-  readonly fields: InputMaybe<MdxFieldsSortInput>;
   readonly frontmatter: InputMaybe<MdxFrontmatterSortInput>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
@@ -1615,10 +1273,14 @@ type MdxSortInput = {
 type NPC = Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
-  readonly fields: Maybe<NPCFields>;
+  readonly entityType: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly location: Maybe<Scalars['String']>;
+  readonly name: Maybe<Scalars['String']>;
   readonly parent: Maybe<Node>;
+  readonly partyRefs: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
+  readonly partyRelationships: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
 };
 
 type NPCConnection = {
@@ -1669,51 +1331,31 @@ type NPCEdge = {
 type NPCFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly fields: InputMaybe<NPCFieldsFieldSelector>;
+  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-};
-
-type NPCFields = {
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly location: Maybe<Scalars['String']>;
-  readonly name: Maybe<Scalars['String']>;
-  readonly partyRefs: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly partyRelationships: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-};
-
-type NPCFieldsFieldSelector = {
-  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly location: InputMaybe<FieldSelectorEnum>;
   readonly name: InputMaybe<FieldSelectorEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
   readonly partyRefs: InputMaybe<FieldSelectorEnum>;
   readonly partyRelationships: InputMaybe<FieldSelectorEnum>;
-};
-
-type NPCFieldsFilterInput = {
-  readonly entityType: InputMaybe<StringQueryOperatorInput>;
-  readonly location: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-  readonly partyRefs: InputMaybe<StringQueryOperatorInput>;
-  readonly partyRelationships: InputMaybe<StringQueryOperatorInput>;
-};
-
-type NPCFieldsSortInput = {
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly location: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
-  readonly partyRefs: InputMaybe<SortOrderEnum>;
-  readonly partyRelationships: InputMaybe<SortOrderEnum>;
 };
 
 type NPCFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly fields: InputMaybe<NPCFieldsFilterInput>;
+  readonly entityType: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
+  readonly location: InputMaybe<StringQueryOperatorInput>;
+  readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
+  readonly partyRefs: InputMaybe<StringQueryOperatorInput>;
+  readonly partyRelationships: InputMaybe<StringQueryOperatorInput>;
+};
+
+type NPCFilterListInput = {
+  readonly elemMatch: InputMaybe<NPCFilterInput>;
 };
 
 type NPCGroupConnection = {
@@ -1760,10 +1402,14 @@ type NPCGroupConnection_sumArgs = {
 type NPCSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly fields: InputMaybe<NPCFieldsSortInput>;
+  readonly entityType: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly location: InputMaybe<SortOrderEnum>;
+  readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
+  readonly partyRefs: InputMaybe<SortOrderEnum>;
+  readonly partyRelationships: InputMaybe<SortOrderEnum>;
 };
 
 /** Node Interface */
@@ -1812,9 +1458,10 @@ type PageInfo = {
 type Party = Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
-  readonly fields: Maybe<PartyFields>;
+  readonly entityType: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly name: Maybe<Scalars['String']>;
   readonly parent: Maybe<Node>;
 };
 
@@ -1866,39 +1513,25 @@ type PartyEdge = {
 type PartyFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly fields: InputMaybe<PartyFieldsFieldSelector>;
+  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-};
-
-type PartyFields = {
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly name: Maybe<Scalars['String']>;
-};
-
-type PartyFieldsFieldSelector = {
-  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly name: InputMaybe<FieldSelectorEnum>;
-};
-
-type PartyFieldsFilterInput = {
-  readonly entityType: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-};
-
-type PartyFieldsSortInput = {
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
 };
 
 type PartyFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly fields: InputMaybe<PartyFieldsFilterInput>;
+  readonly entityType: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
+  readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
+};
+
+type PartyFilterListInput = {
+  readonly elemMatch: InputMaybe<PartyFilterInput>;
 };
 
 type PartyGroupConnection = {
@@ -1945,9 +1578,10 @@ type PartyGroupConnection_sumArgs = {
 type PartySortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly fields: InputMaybe<PartyFieldsSortInput>;
+  readonly entityType: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
 };
 
@@ -2107,10 +1741,13 @@ type Query_allWorldArgs = {
 
 type Query_campaignArgs = {
   children: InputMaybe<NodeFilterListInput>;
-  fields: InputMaybe<CampaignFieldsFilterInput>;
+  entityType: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
+  party: InputMaybe<StringQueryOperatorInput>;
+  world: InputMaybe<StringQueryOperatorInput>;
 };
 
 
@@ -2200,18 +1837,33 @@ type Query_fileArgs = {
 type Query_locationArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
-  fields: InputMaybe<LocationFieldsFilterInput>;
+  entityType: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
+  parentLocation: InputMaybe<StringQueryOperatorInput>;
 };
 
 
 type Query_mdxArgs = {
   body: InputMaybe<StringQueryOperatorInput>;
+  childCampaign: InputMaybe<CampaignFilterInput>;
+  childLocation: InputMaybe<LocationFilterInput>;
+  childNpc: InputMaybe<NPCFilterInput>;
+  childParty: InputMaybe<PartyFilterInput>;
+  childQuest: InputMaybe<QuestFilterInput>;
+  childSession: InputMaybe<SessionFilterInput>;
+  childWorld: InputMaybe<WorldFilterInput>;
   children: InputMaybe<NodeFilterListInput>;
+  childrenCampaign: InputMaybe<CampaignFilterListInput>;
+  childrenLocation: InputMaybe<LocationFilterListInput>;
+  childrenNpc: InputMaybe<NPCFilterListInput>;
+  childrenParty: InputMaybe<PartyFilterListInput>;
+  childrenQuest: InputMaybe<QuestFilterListInput>;
+  childrenSession: InputMaybe<SessionFilterListInput>;
+  childrenWorld: InputMaybe<WorldFilterListInput>;
   excerpt: InputMaybe<StringQueryOperatorInput>;
-  fields: InputMaybe<MdxFieldsFilterInput>;
   frontmatter: InputMaybe<MdxFrontmatterFilterInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
@@ -2223,40 +1875,53 @@ type Query_mdxArgs = {
 type Query_npcArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
-  fields: InputMaybe<NPCFieldsFilterInput>;
+  entityType: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  location: InputMaybe<StringQueryOperatorInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
+  partyRefs: InputMaybe<StringQueryOperatorInput>;
+  partyRelationships: InputMaybe<StringQueryOperatorInput>;
 };
 
 
 type Query_partyArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
-  fields: InputMaybe<PartyFieldsFilterInput>;
+  entityType: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
 };
 
 
 type Query_questArgs = {
+  activeMap: InputMaybe<StringQueryOperatorInput>;
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
-  fields: InputMaybe<QuestFieldsFilterInput>;
+  completedMap: InputMaybe<StringQueryOperatorInput>;
+  entityType: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
+  world: InputMaybe<StringQueryOperatorInput>;
 };
 
 
 type Query_sessionArgs = {
   campaign: InputMaybe<CampaignFilterInput>;
   children: InputMaybe<NodeFilterListInput>;
-  fields: InputMaybe<SessionFieldsFilterInput>;
+  entityType: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  locations: InputMaybe<StringQueryOperatorInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
+  party: InputMaybe<StringQueryOperatorInput>;
+  sessionDate: InputMaybe<DateQueryOperatorInput>;
 };
 
 
@@ -2336,19 +2001,24 @@ type Query_sitePluginArgs = {
 type Query_worldArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
-  fields: InputMaybe<WorldFieldsFilterInput>;
+  entityType: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
 };
 
 type Quest = Node & {
+  readonly activeMap: Maybe<Scalars['String']>;
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
-  readonly fields: Maybe<QuestFields>;
+  readonly completedMap: Maybe<Scalars['String']>;
+  readonly entityType: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly name: Maybe<Scalars['String']>;
   readonly parent: Maybe<Node>;
+  readonly world: Maybe<Scalars['String']>;
 };
 
 type QuestConnection = {
@@ -2397,53 +2067,33 @@ type QuestEdge = {
 };
 
 type QuestFieldSelector = {
+  readonly activeMap: InputMaybe<FieldSelectorEnum>;
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly fields: InputMaybe<QuestFieldsFieldSelector>;
-  readonly id: InputMaybe<FieldSelectorEnum>;
-  readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-};
-
-type QuestFields = {
-  readonly activeMap: Maybe<Scalars['String']>;
-  readonly completedMap: Maybe<Scalars['String']>;
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly name: Maybe<Scalars['String']>;
-  readonly world: Maybe<Scalars['String']>;
-};
-
-type QuestFieldsFieldSelector = {
-  readonly activeMap: InputMaybe<FieldSelectorEnum>;
   readonly completedMap: InputMaybe<FieldSelectorEnum>;
   readonly entityType: InputMaybe<FieldSelectorEnum>;
+  readonly id: InputMaybe<FieldSelectorEnum>;
+  readonly internal: InputMaybe<InternalFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
   readonly world: InputMaybe<FieldSelectorEnum>;
 };
 
-type QuestFieldsFilterInput = {
+type QuestFilterInput = {
   readonly activeMap: InputMaybe<StringQueryOperatorInput>;
+  readonly campaigns: InputMaybe<CampaignFilterListInput>;
+  readonly children: InputMaybe<NodeFilterListInput>;
   readonly completedMap: InputMaybe<StringQueryOperatorInput>;
   readonly entityType: InputMaybe<StringQueryOperatorInput>;
+  readonly id: InputMaybe<StringQueryOperatorInput>;
+  readonly internal: InputMaybe<InternalFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
+  readonly parent: InputMaybe<NodeFilterInput>;
   readonly world: InputMaybe<StringQueryOperatorInput>;
 };
 
-type QuestFieldsSortInput = {
-  readonly activeMap: InputMaybe<SortOrderEnum>;
-  readonly completedMap: InputMaybe<SortOrderEnum>;
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
-  readonly world: InputMaybe<SortOrderEnum>;
-};
-
-type QuestFilterInput = {
-  readonly campaigns: InputMaybe<CampaignFilterListInput>;
-  readonly children: InputMaybe<NodeFilterListInput>;
-  readonly fields: InputMaybe<QuestFieldsFilterInput>;
-  readonly id: InputMaybe<StringQueryOperatorInput>;
-  readonly internal: InputMaybe<InternalFilterInput>;
-  readonly parent: InputMaybe<NodeFilterInput>;
+type QuestFilterListInput = {
+  readonly elemMatch: InputMaybe<QuestFilterInput>;
 };
 
 type QuestGroupConnection = {
@@ -2488,21 +2138,37 @@ type QuestGroupConnection_sumArgs = {
 };
 
 type QuestSortInput = {
+  readonly activeMap: InputMaybe<SortOrderEnum>;
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly fields: InputMaybe<QuestFieldsSortInput>;
+  readonly completedMap: InputMaybe<SortOrderEnum>;
+  readonly entityType: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
+  readonly world: InputMaybe<SortOrderEnum>;
 };
 
 type Session = Node & {
   readonly campaign: Maybe<Campaign>;
   readonly children: ReadonlyArray<Node>;
-  readonly fields: Maybe<SessionFields>;
+  readonly entityType: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly locations: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
+  readonly name: Maybe<Scalars['String']>;
   readonly parent: Maybe<Node>;
+  readonly party: Maybe<Scalars['String']>;
+  readonly sessionDate: Maybe<Scalars['Date']>;
+};
+
+
+type Session_sessionDateArgs = {
+  difference: InputMaybe<Scalars['String']>;
+  formatString: InputMaybe<Scalars['String']>;
+  fromNow: InputMaybe<Scalars['Boolean']>;
+  locale: InputMaybe<Scalars['String']>;
 };
 
 type SessionConnection = {
@@ -2553,59 +2219,31 @@ type SessionEdge = {
 type SessionFieldSelector = {
   readonly campaign: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly fields: InputMaybe<SessionFieldsFieldSelector>;
+  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-};
-
-type SessionFields = {
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly locations: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
-  readonly name: Maybe<Scalars['String']>;
-  readonly party: Maybe<Scalars['String']>;
-  readonly sessionDate: Maybe<Scalars['Date']>;
-};
-
-
-type SessionFields_sessionDateArgs = {
-  difference: InputMaybe<Scalars['String']>;
-  formatString: InputMaybe<Scalars['String']>;
-  fromNow: InputMaybe<Scalars['Boolean']>;
-  locale: InputMaybe<Scalars['String']>;
-};
-
-type SessionFieldsFieldSelector = {
-  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly locations: InputMaybe<FieldSelectorEnum>;
   readonly name: InputMaybe<FieldSelectorEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
   readonly party: InputMaybe<FieldSelectorEnum>;
   readonly sessionDate: InputMaybe<FieldSelectorEnum>;
-};
-
-type SessionFieldsFilterInput = {
-  readonly entityType: InputMaybe<StringQueryOperatorInput>;
-  readonly locations: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-  readonly party: InputMaybe<StringQueryOperatorInput>;
-  readonly sessionDate: InputMaybe<DateQueryOperatorInput>;
-};
-
-type SessionFieldsSortInput = {
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly locations: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
-  readonly party: InputMaybe<SortOrderEnum>;
-  readonly sessionDate: InputMaybe<SortOrderEnum>;
 };
 
 type SessionFilterInput = {
   readonly campaign: InputMaybe<CampaignFilterInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly fields: InputMaybe<SessionFieldsFilterInput>;
+  readonly entityType: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
+  readonly locations: InputMaybe<StringQueryOperatorInput>;
+  readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
+  readonly party: InputMaybe<StringQueryOperatorInput>;
+  readonly sessionDate: InputMaybe<DateQueryOperatorInput>;
+};
+
+type SessionFilterListInput = {
+  readonly elemMatch: InputMaybe<SessionFilterInput>;
 };
 
 type SessionGroupConnection = {
@@ -2652,10 +2290,14 @@ type SessionGroupConnection_sumArgs = {
 type SessionSortInput = {
   readonly campaign: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly fields: InputMaybe<SessionFieldsSortInput>;
+  readonly entityType: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly locations: InputMaybe<SortOrderEnum>;
+  readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
+  readonly party: InputMaybe<SortOrderEnum>;
+  readonly sessionDate: InputMaybe<SortOrderEnum>;
 };
 
 type Site = Node & {
@@ -3528,9 +3170,10 @@ type StringQueryOperatorInput = {
 type World = Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
-  readonly fields: Maybe<WorldFields>;
+  readonly entityType: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly name: Maybe<Scalars['String']>;
   readonly parent: Maybe<Node>;
 };
 
@@ -3582,39 +3225,25 @@ type WorldEdge = {
 type WorldFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly fields: InputMaybe<WorldFieldsFieldSelector>;
+  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-};
-
-type WorldFields = {
-  readonly entityType: Maybe<Scalars['String']>;
-  readonly name: Maybe<Scalars['String']>;
-};
-
-type WorldFieldsFieldSelector = {
-  readonly entityType: InputMaybe<FieldSelectorEnum>;
   readonly name: InputMaybe<FieldSelectorEnum>;
-};
-
-type WorldFieldsFilterInput = {
-  readonly entityType: InputMaybe<StringQueryOperatorInput>;
-  readonly name: InputMaybe<StringQueryOperatorInput>;
-};
-
-type WorldFieldsSortInput = {
-  readonly entityType: InputMaybe<SortOrderEnum>;
-  readonly name: InputMaybe<SortOrderEnum>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
 };
 
 type WorldFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly fields: InputMaybe<WorldFieldsFilterInput>;
+  readonly entityType: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
+  readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
+};
+
+type WorldFilterListInput = {
+  readonly elemMatch: InputMaybe<WorldFilterInput>;
 };
 
 type WorldGroupConnection = {
@@ -3661,9 +3290,10 @@ type WorldGroupConnection_sumArgs = {
 type WorldSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly fields: InputMaybe<WorldFieldsSortInput>;
+  readonly entityType: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
 };
 

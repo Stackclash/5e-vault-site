@@ -83,18 +83,19 @@ export function slugify(str: string) {
 
 export function getWorldFromLocation(node: any, allNodes: any[]): string | null {
   let current = node
-  const nodeByName = new Map(allNodes.map((n: any) => [n.fields?.name, n]))
+  const nodeByName = new Map(allNodes.map((n: any) => [n.name, n]))
 
-  // Walk up the location hierarchy via location
+  // Walk up the location hierarchy via location or parentLocation
   do {
-    const parent = nodeByName.get(current.fields.location)
+    const parentRef = current.location || current.parentLocation
+    const parent = nodeByName.get(parentRef)
     if (!parent) break
     current = parent
-  } while (current.fields?.location)
+  } while (current.location || current.parentLocation)
 
   // Check if the final node is a world
-  if (current?.fields?.entityType === "world") {
-    return current.fields.name
+  if (current?.entityType === "world") {
+    return current.name
   }
 
   return null
@@ -102,24 +103,19 @@ export function getWorldFromLocation(node: any, allNodes: any[]): string | null 
 
 export function getCampaignFromParty(party: string, allCampaigns: any[]): any[] {
   return allCampaigns.filter((campaign: any) =>
-    campaign.fields?.party?.some((p: string) => p === party)
+    campaign.party === party
   )
 }
 
 export function getCampaignFromWorld(world: string, allCampaigns: any[]): any[] {
   return allCampaigns.filter((campaign: any) =>
-    campaign.fields?.world === world
+    campaign.world === world
   )
 }
 
-export function getAllNodes(context: any, type: string): any[] {
-  const { entries } = context.nodeModel.findAll({
-    type: type[0].toUpperCase() + type.slice(1),
-    query: {
-      filter: {
-        fields: { entityType: { eq: type.toLowerCase() } },
-      },
-    },
+export async function getAllNodes(context: any, nodeType: string): Promise<any[]> {
+  const { entries } = await context.nodeModel.findAll({
+    type: nodeType,
   })
   return Array.from(entries)
 }
