@@ -81,36 +81,50 @@ export function slugify(str: string) {
     .replace(/ +/g, "-")
 }
 
-export function getWorldFromLocation(node: any, allNodes: any[]): string | null {
+async function asyncFilter(arr: any[], predicate: (item: any) => Promise<boolean>): Promise<any[]> {
+  // 1. Run all async predicates in parallel and get an array of boolean Promises.
+  const results = await Promise.all(arr.map(predicate));
+
+  // 2. Synchronously filter the original array based on the results.
+  return arr.filter((_v, index) => results[index]);
+}
+
+// FIXME: Doesn't properly walk up location hierarchy
+export async function getWorldFromLocation(context: any, node: any, allNodes: any[]): Promise<any | null> {
   let current = node
   const nodeByName = new Map(allNodes.map((n: any) => [n.name, n]))
 
   // Walk up the location hierarchy via location or parentLocation
   do {
-    const parentRef = current.location || current.parentLocation
+    const mdxParent = await getParentNode(context, current)
+    const parentRef = extractWikilinkName(mdxParent?.frontmatter?.location) || extractWikilinkName(mdxParent?.frontmatter?.parentLocation)
     const parent = nodeByName.get(parentRef)
     if (!parent) break
     current = parent
   } while (current.location || current.parentLocation)
 
   // Check if the final node is a world
-  if (current?.entityType === "world") {
-    return current.name
+  if (current?.internal?.type === "World") {
+    return current
   }
 
   return null
 }
 
-export function getCampaignFromParty(party: string, allCampaigns: any[]): any[] {
-  return allCampaigns.filter((campaign: any) =>
-    campaign.party === party
-  )
+export async function getCampaignFromParty(context: any, party: string | null, allCampaigns: any[]): Promise<any[]> {
+  if (!party) return []
+  return await asyncFilter(allCampaigns, async (campaign: any) => {
+    const campaignMdxParent = await getParentNode(context, campaign)
+    return extractWikilinkName(campaignMdxParent?.frontmatter?.party) === party
+  })
 }
 
-export function getCampaignFromWorld(world: string, allCampaigns: any[]): any[] {
-  return allCampaigns.filter((campaign: any) =>
-    campaign.world === world
-  )
+export async function getCampaignFromWorld(context: any, world: string | null, allCampaigns: any[]): Promise<any[]> {
+  if (!world) return []
+  return await asyncFilter(allCampaigns, async (campaign: any) => {
+    const campaignMdxParent = await getParentNode(context, campaign)
+    return extractWikilinkName(campaignMdxParent?.frontmatter?.world) === world
+  })
 }
 
 export async function getAllNodes(context: any, nodeType: string): Promise<any[]> {
@@ -118,4 +132,13 @@ export async function getAllNodes(context: any, nodeType: string): Promise<any[]
     type: nodeType,
   })
   return Array.from(entries)
+}
+
+export async function getParentNode(context: any, node: any): Promise<any | null> {
+  if (!node.parent) return null
+  const parentNode = await context.nodeModel.getNodeById({ id: node.parent })
+  if (parentNode && parentNode.internal && parentNode.internal.type === "Mdx") {
+    return parentNode
+  }
+  return null
 }

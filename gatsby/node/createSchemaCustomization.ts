@@ -5,20 +5,17 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
     actions.createTypes(`
       type Campaign implements Node {
         name: String
-        entityType: String
-        world: String
-        party: String
+        world: World
+        party: Party
       }
 
       type Party implements Node {
         name: String
-        entityType: String
         campaigns: [Campaign]
       }
 
       type Session implements Node {
         name: String
-        entityType: String
         party: String
         sessionDate: Date @dateformat
         locations: [String]
@@ -27,29 +24,30 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
 
       type World implements Node {
         name: String
-        entityType: String
         campaigns: [Campaign]
+      }
+
+      type PartyRelationship {
+        party: String
+        relationship: String
       }
 
       type NPC implements Node {
         name: String
-        entityType: String
-        location: String
-        partyRelationships: [String]
-        partyRefs: [String]
+        location: Location
+        partyRelationships: [PartyRelationship]
+        parties: [Party]
         campaigns: [Campaign]
       }
 
       type Location implements Node {
         name: String
-        entityType: String
         parentLocation: String
         campaigns: [Campaign]
       }
 
       type Quest implements Node {
         name: String
-        entityType: String
         world: String
         activeMap: String
         completedMap: String

@@ -2,16 +2,6 @@ import type { GatsbyNode } from "gatsby";
 import { extractWikilinkName, matchesEntity, getFileName } from "../utils"
 import { entities } from "../../src/entity-config";
 
-const typeNameMap: Record<string, string> = {
-  campaign: "Campaign",
-  party: "Party",
-  session: "Session",
-  world: "World",
-  npc: "NPC",
-  location: "Location",
-  quest: "Quest",
-};
-
 const onCreateNode: GatsbyNode["onCreateNode"] = ({
   node,
   actions,
@@ -28,17 +18,13 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
     if (!matchesEntity(node, config)) continue;
 
     const fm = node.frontmatter as Record<string, unknown> | undefined
-    const typeName = typeNameMap[entityType] || entityType[0].toUpperCase() + entityType.slice(1)
+    const typeName = entityType[0].toUpperCase() + entityType.slice(1)
 
     const entityData: Record<string, unknown> = {
       name: fileName,
-      entityType: entityType,
     };
 
-    if (entityType === "campaign") {
-      entityData.world = typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null
-      entityData.party = typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null
-    } else if (entityType === "session") {
+    if (entityType === "session") {
       entityData.party = typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null
       entityData.sessionDate = fm?.date || null
       entityData.locations = Array.isArray(fm?.locations)
