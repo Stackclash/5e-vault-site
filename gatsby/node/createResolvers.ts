@@ -13,6 +13,14 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
           const mdxParent = await getParentNode(context, source);
           return allParties.find((party: any) => party.name === extractWikilinkName(mdxParent?.frontmatter?.party)) || null;
         }
+      },
+      world: {
+        type: "World",
+        resolve: async (source: any, args: any, context: any) => {
+          const allWorlds = await getAllNodes(context, "World");
+          const mdxParent = await getParentNode(context, source);
+          return allWorlds.find((world: any) => world.name === extractWikilinkName(mdxParent?.frontmatter?.world)) || null;
+        }
       }
     },
     Party: {
@@ -44,7 +52,7 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
         }
       }
     },
-    NPC: {
+    Npc: {
       campaigns: {
         type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
@@ -53,13 +61,18 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
           const allWorlds = await getAllNodes(context, "World")
           const allLocations = await getAllNodes(context, "Location")
           const world = await getWorldFromLocation(context, source, [...allWorlds, ...allLocations])
-          console.log('World:', world)
           const foundCampaign = await getCampaignFromWorld(context, world?.name, allCampaigns)
-          console.log('Found Campaign from World:', foundCampaign)
           const partyRefs: string[] = source.partyRefs || []
-          console.log('Party Refs:', partyRefs)
           if (!world && partyRefs.length === 0) return []
           return allCampaigns.filter((campaign: any) => campaign.name === foundCampaign[0]?.name || partyRefs.some((pr: string) => campaign.party === pr))
+        }
+      },
+      location: {
+        type: "Location",
+        resolve: async (source: any, args: any, context: any) => {
+          const allLocations = await getAllNodes(context, "Location")
+          const mdxParent = await getParentNode(context, source)
+          return allLocations.find((location: any) => location.name === extractWikilinkName(mdxParent?.frontmatter?.location)) || null
         }
       }
     },
@@ -73,6 +86,14 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
           const world = await getWorldFromLocation(context, source, [...allWorlds, ...allLocations])
           if (!world) return []
           return await getCampaignFromWorld(context, world.name, allCampaigns)
+        }
+      },
+      parentLocation: {
+        type: "Location",
+        resolve: async (source: any, args: any, context: any) => {
+          const allLocations = await getAllNodes(context, "Location")
+          const mdxParent = await getParentNode(context, source)
+          return allLocations.find((location: any) => location.name === extractWikilinkName(mdxParent?.frontmatter?.location)) || null
         }
       }
     },

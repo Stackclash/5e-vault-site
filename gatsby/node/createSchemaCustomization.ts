@@ -32,7 +32,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         relationship: String
       }
 
-      type NPC implements Node {
+      type Npc implements Node {
         name: String
         location: Location
         partyRelationships: [PartyRelationship]
@@ -42,7 +42,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
 
       type Location implements Node {
         name: String
-        parentLocation: String
+        parentLocation: Location
         campaigns: [Campaign]
       }
 
