@@ -27,18 +27,13 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
     };
 
     if (entityType === "session") {
-      entityData.party = typeof fm?.party === "string" ? extractWikilinkName(fm?.party) : null
       entityData.sessionDate = fm?.date || null
-      entityData.locations = Array.isArray(fm?.locations)
-        ? fm.locations.map((loc) => typeof loc === "string" ? extractWikilinkName(loc) : null)
-        : [typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null]
-    } else if (entityType === "npc") {
-      entityData.location = typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null
-      const partyRefs = typeof fm?.partyRelationships === 'object' ? Object.keys(fm.partyRelationships ?? {}) : []
-      entityData.partyRelationships = fm?.partyRelationships ? partyRefs : null
-      entityData.partyRefs = partyRefs
+      const match = /S(\d+) ([\w\s]+)/.exec(fileName)
+      if (match) {
+        entityData.sessionNumber = parseInt(match[1], 10)
+        entityData.name = match[2]
+      }
     } else if (locationTypes.has(entityType)) {
-      entityData.parentLocation = typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null
       if (entityType === "settlement") {
         entityData.population = typeof fm?.population === "number" ? fm.population : null
         entityData.government = typeof fm?.government === "string" ? fm.government : null
@@ -46,10 +41,6 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
         entityData.terrain = typeof fm?.terrain === "string" ? fm.terrain : null
         entityData.climate = typeof fm?.climate === "string" ? fm.climate : null
       }
-    } else if (entityType === "quest") {
-      entityData.world = typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null
-      entityData.activeMap = typeof fm?.active === "string" ? extractWikilinkName(fm?.active) : null
-      entityData.completedMap = typeof fm?.completed === "string" ? extractWikilinkName(fm?.completed) : null
     }
 
     const newNode = {

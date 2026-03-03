@@ -42,8 +42,10 @@ type Campaign = Node & {
   readonly internal: Internal;
   readonly locations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly name: Scalars['String'];
+  readonly npcs: Maybe<ReadonlyArray<Maybe<Npc>>>;
   readonly parent: Maybe<Node>;
   readonly party: Maybe<Party>;
+  readonly quests: Maybe<ReadonlyArray<Maybe<Quest>>>;
   readonly sessions: Maybe<ReadonlyArray<Maybe<Session>>>;
   readonly slug: Scalars['String'];
   readonly world: Maybe<World>;
@@ -889,6 +891,7 @@ type JSONQueryOperatorInput = {
 type Location = {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
+  readonly childrenLocations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
   readonly name: Scalars['String'];
@@ -945,6 +948,7 @@ type LocationEdge = {
 type LocationFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly childrenLocations: InputMaybe<LocationFieldSelector>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
@@ -956,6 +960,7 @@ type LocationFieldSelector = {
 type LocationFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly childrenLocations: InputMaybe<LocationFilterListInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
@@ -1012,6 +1017,7 @@ type LocationGroupConnection_sumArgs = {
 type LocationSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly childrenLocations: InputMaybe<LocationSortInput>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
@@ -1669,8 +1675,6 @@ type Npc = Node & {
   readonly location: Maybe<Location>;
   readonly name: Scalars['String'];
   readonly parent: Maybe<Node>;
-  readonly parties: Maybe<ReadonlyArray<Maybe<Party>>>;
-  readonly partyRefs: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
   readonly partyRelationships: Maybe<ReadonlyArray<Maybe<PartyRelationship>>>;
   readonly slug: Scalars['String'];
 };
@@ -1728,8 +1732,6 @@ type NpcFieldSelector = {
   readonly location: InputMaybe<LocationFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
   readonly parent: InputMaybe<NodeFieldSelector>;
-  readonly parties: InputMaybe<PartyFieldSelector>;
-  readonly partyRefs: InputMaybe<FieldSelectorEnum>;
   readonly partyRelationships: InputMaybe<PartyRelationshipFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
 };
@@ -1742,8 +1744,6 @@ type NpcFilterInput = {
   readonly location: InputMaybe<LocationFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
-  readonly parties: InputMaybe<PartyFilterListInput>;
-  readonly partyRefs: InputMaybe<StringQueryOperatorInput>;
   readonly partyRelationships: InputMaybe<PartyRelationshipFilterListInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
 };
@@ -1801,8 +1801,6 @@ type NpcSortInput = {
   readonly location: InputMaybe<LocationSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
-  readonly parties: InputMaybe<PartySortInput>;
-  readonly partyRefs: InputMaybe<SortOrderEnum>;
   readonly partyRelationships: InputMaybe<PartyRelationshipSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
 };
@@ -1938,17 +1936,17 @@ type PartyGroupConnection_sumArgs = {
 };
 
 type PartyRelationship = {
-  readonly party: Maybe<Scalars['String']>;
+  readonly party: Maybe<Party>;
   readonly relationship: Maybe<Scalars['String']>;
 };
 
 type PartyRelationshipFieldSelector = {
-  readonly party: InputMaybe<FieldSelectorEnum>;
+  readonly party: InputMaybe<PartyFieldSelector>;
   readonly relationship: InputMaybe<FieldSelectorEnum>;
 };
 
 type PartyRelationshipFilterInput = {
-  readonly party: InputMaybe<StringQueryOperatorInput>;
+  readonly party: InputMaybe<PartyFilterInput>;
   readonly relationship: InputMaybe<StringQueryOperatorInput>;
 };
 
@@ -1957,7 +1955,7 @@ type PartyRelationshipFilterListInput = {
 };
 
 type PartyRelationshipSortInput = {
-  readonly party: InputMaybe<SortOrderEnum>;
+  readonly party: InputMaybe<PartySortInput>;
   readonly relationship: InputMaybe<SortOrderEnum>;
 };
 
@@ -1974,6 +1972,7 @@ type PartySortInput = {
 type PointOfInterest = Location & Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
+  readonly childrenLocations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
   readonly name: Scalars['String'];
@@ -2030,6 +2029,7 @@ type PointOfInterestEdge = {
 type PointOfInterestFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly childrenLocations: InputMaybe<LocationFieldSelector>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
@@ -2041,6 +2041,7 @@ type PointOfInterestFieldSelector = {
 type PointOfInterestFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly childrenLocations: InputMaybe<LocationFilterListInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
@@ -2097,6 +2098,7 @@ type PointOfInterestGroupConnection_sumArgs = {
 type PointOfInterestSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly childrenLocations: InputMaybe<LocationSortInput>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
@@ -2399,6 +2401,7 @@ type Query_fileArgs = {
 type Query_locationArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
+  childrenLocations: InputMaybe<LocationFilterListInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
   name: InputMaybe<StringQueryOperatorInput>;
@@ -2448,8 +2451,6 @@ type Query_npcArgs = {
   location: InputMaybe<LocationFilterInput>;
   name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
-  parties: InputMaybe<PartyFilterListInput>;
-  partyRefs: InputMaybe<StringQueryOperatorInput>;
   partyRelationships: InputMaybe<PartyRelationshipFilterListInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
 };
@@ -2469,6 +2470,7 @@ type Query_partyArgs = {
 type Query_pointOfInterestArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
+  childrenLocations: InputMaybe<LocationFilterListInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
   name: InputMaybe<StringQueryOperatorInput>;
@@ -2479,22 +2481,22 @@ type Query_pointOfInterestArgs = {
 
 
 type Query_questArgs = {
-  activeMap: InputMaybe<StringQueryOperatorInput>;
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
-  completedMap: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
   name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
+  parties: InputMaybe<QuestPartiesFilterListInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
-  world: InputMaybe<StringQueryOperatorInput>;
+  world: InputMaybe<WorldFilterInput>;
 };
 
 
 type Query_regionArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
+  childrenLocations: InputMaybe<LocationFilterListInput>;
   climate: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
@@ -2511,11 +2513,12 @@ type Query_sessionArgs = {
   children: InputMaybe<NodeFilterListInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
-  locations: InputMaybe<StringQueryOperatorInput>;
+  locations: InputMaybe<LocationFilterListInput>;
   name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
-  party: InputMaybe<StringQueryOperatorInput>;
+  party: InputMaybe<PartyFilterInput>;
   sessionDate: InputMaybe<DateQueryOperatorInput>;
+  sessionNumber: InputMaybe<IntQueryOperatorInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
 };
 
@@ -2523,6 +2526,7 @@ type Query_sessionArgs = {
 type Query_settlementArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
+  childrenLocations: InputMaybe<LocationFilterListInput>;
   government: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
@@ -2537,6 +2541,7 @@ type Query_settlementArgs = {
 type Query_shopArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
+  childrenLocations: InputMaybe<LocationFilterListInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
   name: InputMaybe<StringQueryOperatorInput>;
@@ -2622,6 +2627,7 @@ type Query_sitePluginArgs = {
 type Query_worldArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
+  childrenLocations: InputMaybe<LocationFilterListInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
   name: InputMaybe<StringQueryOperatorInput>;
@@ -2631,16 +2637,15 @@ type Query_worldArgs = {
 };
 
 type Quest = Node & {
-  readonly activeMap: Maybe<Scalars['String']>;
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
-  readonly completedMap: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
   readonly name: Scalars['String'];
   readonly parent: Maybe<Node>;
+  readonly parties: Maybe<ReadonlyArray<Maybe<QuestParties>>>;
   readonly slug: Scalars['String'];
-  readonly world: Maybe<Scalars['String']>;
+  readonly world: Maybe<World>;
 };
 
 type QuestConnection = {
@@ -2689,29 +2694,27 @@ type QuestEdge = {
 };
 
 type QuestFieldSelector = {
-  readonly activeMap: InputMaybe<FieldSelectorEnum>;
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly completedMap: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
   readonly parent: InputMaybe<NodeFieldSelector>;
+  readonly parties: InputMaybe<QuestPartiesFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
-  readonly world: InputMaybe<FieldSelectorEnum>;
+  readonly world: InputMaybe<WorldFieldSelector>;
 };
 
 type QuestFilterInput = {
-  readonly activeMap: InputMaybe<StringQueryOperatorInput>;
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly completedMap: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
+  readonly parties: InputMaybe<QuestPartiesFilterListInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
-  readonly world: InputMaybe<StringQueryOperatorInput>;
+  readonly world: InputMaybe<WorldFilterInput>;
 };
 
 type QuestFilterListInput = {
@@ -2759,22 +2762,50 @@ type QuestGroupConnection_sumArgs = {
   field: QuestFieldSelector;
 };
 
+type QuestParties = {
+  readonly active: Maybe<Scalars['Boolean']>;
+  readonly completed: Maybe<Scalars['Boolean']>;
+  readonly party: Maybe<Party>;
+};
+
+type QuestPartiesFieldSelector = {
+  readonly active: InputMaybe<FieldSelectorEnum>;
+  readonly completed: InputMaybe<FieldSelectorEnum>;
+  readonly party: InputMaybe<PartyFieldSelector>;
+};
+
+type QuestPartiesFilterInput = {
+  readonly active: InputMaybe<BooleanQueryOperatorInput>;
+  readonly completed: InputMaybe<BooleanQueryOperatorInput>;
+  readonly party: InputMaybe<PartyFilterInput>;
+};
+
+type QuestPartiesFilterListInput = {
+  readonly elemMatch: InputMaybe<QuestPartiesFilterInput>;
+};
+
+type QuestPartiesSortInput = {
+  readonly active: InputMaybe<SortOrderEnum>;
+  readonly completed: InputMaybe<SortOrderEnum>;
+  readonly party: InputMaybe<PartySortInput>;
+};
+
 type QuestSortInput = {
-  readonly activeMap: InputMaybe<SortOrderEnum>;
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly completedMap: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
+  readonly parties: InputMaybe<QuestPartiesSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
-  readonly world: InputMaybe<SortOrderEnum>;
+  readonly world: InputMaybe<WorldSortInput>;
 };
 
 type Region = Location & Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
+  readonly childrenLocations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly climate: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
@@ -2833,6 +2864,7 @@ type RegionEdge = {
 type RegionFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly childrenLocations: InputMaybe<LocationFieldSelector>;
   readonly climate: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
@@ -2846,6 +2878,7 @@ type RegionFieldSelector = {
 type RegionFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly childrenLocations: InputMaybe<LocationFilterListInput>;
   readonly climate: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
@@ -2904,6 +2937,7 @@ type RegionGroupConnection_sumArgs = {
 type RegionSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly childrenLocations: InputMaybe<LocationSortInput>;
   readonly climate: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
@@ -2919,11 +2953,12 @@ type Session = Node & {
   readonly children: ReadonlyArray<Node>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
-  readonly locations: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
+  readonly locations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly name: Scalars['String'];
   readonly parent: Maybe<Node>;
-  readonly party: Maybe<Scalars['String']>;
+  readonly party: Maybe<Party>;
   readonly sessionDate: Maybe<Scalars['Date']>;
+  readonly sessionNumber: Maybe<Scalars['Int']>;
   readonly slug: Scalars['String'];
 };
 
@@ -2985,11 +3020,12 @@ type SessionFieldSelector = {
   readonly children: InputMaybe<NodeFieldSelector>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly locations: InputMaybe<FieldSelectorEnum>;
+  readonly locations: InputMaybe<LocationFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
   readonly parent: InputMaybe<NodeFieldSelector>;
-  readonly party: InputMaybe<FieldSelectorEnum>;
+  readonly party: InputMaybe<PartyFieldSelector>;
   readonly sessionDate: InputMaybe<FieldSelectorEnum>;
+  readonly sessionNumber: InputMaybe<FieldSelectorEnum>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
 };
 
@@ -2998,11 +3034,12 @@ type SessionFilterInput = {
   readonly children: InputMaybe<NodeFilterListInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
-  readonly locations: InputMaybe<StringQueryOperatorInput>;
+  readonly locations: InputMaybe<LocationFilterListInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
-  readonly party: InputMaybe<StringQueryOperatorInput>;
+  readonly party: InputMaybe<PartyFilterInput>;
   readonly sessionDate: InputMaybe<DateQueryOperatorInput>;
+  readonly sessionNumber: InputMaybe<IntQueryOperatorInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
 };
 
@@ -3056,17 +3093,19 @@ type SessionSortInput = {
   readonly children: InputMaybe<NodeSortInput>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
-  readonly locations: InputMaybe<SortOrderEnum>;
+  readonly locations: InputMaybe<LocationSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
-  readonly party: InputMaybe<SortOrderEnum>;
+  readonly party: InputMaybe<PartySortInput>;
   readonly sessionDate: InputMaybe<SortOrderEnum>;
+  readonly sessionNumber: InputMaybe<SortOrderEnum>;
   readonly slug: InputMaybe<SortOrderEnum>;
 };
 
 type Settlement = Location & Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
+  readonly childrenLocations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly government: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
@@ -3125,6 +3164,7 @@ type SettlementEdge = {
 type SettlementFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly childrenLocations: InputMaybe<LocationFieldSelector>;
   readonly government: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
@@ -3138,6 +3178,7 @@ type SettlementFieldSelector = {
 type SettlementFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly childrenLocations: InputMaybe<LocationFilterListInput>;
   readonly government: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
@@ -3196,6 +3237,7 @@ type SettlementGroupConnection_sumArgs = {
 type SettlementSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly childrenLocations: InputMaybe<LocationSortInput>;
   readonly government: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
@@ -3209,6 +3251,7 @@ type SettlementSortInput = {
 type Shop = Location & Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
+  readonly childrenLocations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
   readonly name: Scalars['String'];
@@ -3265,6 +3308,7 @@ type ShopEdge = {
 type ShopFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly childrenLocations: InputMaybe<LocationFieldSelector>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
@@ -3276,6 +3320,7 @@ type ShopFieldSelector = {
 type ShopFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly childrenLocations: InputMaybe<LocationFilterListInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
@@ -3332,6 +3377,7 @@ type ShopGroupConnection_sumArgs = {
 type ShopSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly childrenLocations: InputMaybe<LocationSortInput>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
@@ -4210,6 +4256,7 @@ type StringQueryOperatorInput = {
 type World = Location & Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
+  readonly childrenLocations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
   readonly name: Scalars['String'];
@@ -4266,6 +4313,7 @@ type WorldEdge = {
 type WorldFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly childrenLocations: InputMaybe<LocationFieldSelector>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
@@ -4277,6 +4325,7 @@ type WorldFieldSelector = {
 type WorldFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly childrenLocations: InputMaybe<LocationFilterListInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
@@ -4333,6 +4382,7 @@ type WorldGroupConnection_sumArgs = {
 type WorldSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly childrenLocations: InputMaybe<LocationSortInput>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;

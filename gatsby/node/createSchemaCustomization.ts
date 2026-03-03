@@ -21,9 +21,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
       type Session implements Node {
         name: String!
         slug: String!
-        party: String
+        party: Party
         sessionDate: Date @dateformat
-        locations: [String]
+        sessionNumber: Int
+        locations: [Location]
         campaign: Campaign
       }
 
@@ -32,6 +33,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         name: String!
         slug: String!
         parentLocation: Location
+        childrenLocations: [Location]
         campaigns: [Campaign]
       }
 
@@ -39,6 +41,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         name: String!
         slug: String!
         parentLocation: Location
+        childrenLocations: [Location]
         campaigns: [Campaign]
       }
 
@@ -46,6 +49,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         name: String!
         slug: String!
         parentLocation: Location
+        childrenLocations: [Location]
         campaigns: [Campaign]
       }
 
@@ -53,6 +57,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         name: String!
         slug: String!
         parentLocation: Location
+        childrenLocations: [Location]
         campaigns: [Campaign]
         population: Int
         government: String
@@ -62,6 +67,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         name: String!
         slug: String!
         parentLocation: Location
+        childrenLocations: [Location]
         campaigns: [Campaign]
       }
 
@@ -69,13 +75,14 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         name: String!
         slug: String!
         parentLocation: Location
+        childrenLocations: [Location]
         campaigns: [Campaign]
         terrain: String
         climate: String
       }
 
       type PartyRelationship {
-        party: String
+        party: Party
         relationship: String
       }
 
@@ -84,17 +91,21 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         slug: String!
         location: Location
         partyRelationships: [PartyRelationship]
-        parties: [Party]
         campaigns: [Campaign]
+      }
+
+      type QuestParties {
+        party: Party
+        active: Boolean
+        completed: Boolean
       }
 
       type Quest implements Node {
         name: String!
         slug: String!
-        world: String
-        activeMap: String
-        completedMap: String
+        world: World
         campaigns: [Campaign]
+        parties: [QuestParties]
       }
     `);
   };

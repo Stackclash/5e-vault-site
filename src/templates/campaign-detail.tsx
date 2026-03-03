@@ -34,7 +34,7 @@ export function Head() {
 }
 
 export const query = graphql`
-  query CampaignDetail($id: String!) {
+query CampaignDetail($id: String!) {
   locations: allLocation(
     filter: {campaigns: {elemMatch: {id: {eq: $id}}}}
     limit: 3

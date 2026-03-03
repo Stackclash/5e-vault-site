@@ -92,15 +92,16 @@ export async function asyncFilter(arr: any[], predicate: (item: any) => Promise<
 export async function getWorldFromLocation(context: any, node: any, allNodes: any[]): Promise<any | null> {
   let current = node
   const nodeByName = new Map(allNodes.map((n: any) => [n.name, n]))
+  let mdxParent = await getParentNode(context, current)
 
   // Walk up the location hierarchy via location or parentLocation
   do {
-    const mdxParent = await getParentNode(context, current)
     const parentRef = extractWikilinkName(mdxParent?.frontmatter?.location) || extractWikilinkName(mdxParent?.frontmatter?.parentLocation)
     const parent = nodeByName.get(parentRef)
     if (!parent) break
     current = parent
-  } while (current.location || current.parentLocation)
+    mdxParent = await getParentNode(context, current)
+  } while (mdxParent?.frontmatter?.location || mdxParent?.frontmatter?.parentLocation)
 
   // Check if the final node is a world
   if (current?.internal?.type === "World") {
@@ -108,6 +109,20 @@ export async function getWorldFromLocation(context: any, node: any, allNodes: an
   }
 
   return null
+}
+
+export async function getAllDescendantLocations(context: any, parentName: string, locations: any[]): Promise<any[]> {
+  // Find direct children
+  const children = await asyncFilter(locations, async (loc: any) => {
+    const mdxParent = await getParentNode(context, loc)
+    return extractWikilinkName(mdxParent?.frontmatter?.location) === parentName
+  })
+  // Recursively get descendants for each child
+  const descendantsArrays = await Promise.all(
+    children.map(child => getAllDescendantLocations(context, child.name, locations))
+  )
+  // Flatten the array: direct children + all descendants
+  return [...children, ...descendantsArrays.flat()]
 }
 
 export async function getCampaignFromParty(context: any, party: string | null, allCampaigns: any[]): Promise<any[]> {
