@@ -81,7 +81,7 @@ export function slugify(str: string) {
     .replace(/ +/g, "-")
 }
 
-async function asyncFilter(arr: any[], predicate: (item: any) => Promise<boolean>): Promise<any[]> {
+export async function asyncFilter(arr: any[], predicate: (item: any) => Promise<boolean>): Promise<any[]> {
   // 1. Run all async predicates in parallel and get an array of boolean Promises.
   const results = await Promise.all(arr.map(predicate));
 
@@ -89,7 +89,6 @@ async function asyncFilter(arr: any[], predicate: (item: any) => Promise<boolean
   return arr.filter((_v, index) => results[index]);
 }
 
-// FIXME: Doesn't properly walk up location hierarchy
 export async function getWorldFromLocation(context: any, node: any, allNodes: any[]): Promise<any | null> {
   let current = node
   const nodeByName = new Map(allNodes.map((n: any) => [n.name, n]))

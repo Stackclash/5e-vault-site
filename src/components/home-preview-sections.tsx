@@ -26,9 +26,8 @@ function ViewAllLink({ href, label }: { href: string; label: string }) {
 }
 
 interface PreviewNode {
-  fields: { slug: string; entityType: string };
-  frontmatter: Record<string, any>;
-  parent: { name: string } | null;
+  name: string;
+  slug: string;
   excerpt: string;
 }
 
@@ -36,8 +35,7 @@ interface HomePreviewSectionsProps {
   locations: PreviewNode[];
   npcs: PreviewNode[];
   sessions: PreviewNode[];
-  items: PreviewNode[];
-  lore: PreviewNode[];
+  quests: PreviewNode[];
 }
 
 function LocationsPreview({ data }: { data: PreviewNode[] }) {
@@ -50,7 +48,7 @@ function LocationsPreview({ data }: { data: PreviewNode[] }) {
             const name = getDisplayName(loc);
             const tags = loc.frontmatter?.tags ?? [];
             return (
-              <Link key={loc.fields.slug} to={`/locations/${loc.fields.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
+              <Link key={loc.slug} to={`/locations/${loc.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
                 <div className="flex flex-1 flex-col p-5">
                   <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">{getLocationType(tags)}</p>
                   <h3 className="mb-2 font-serif text-lg font-bold tracking-wide text-foreground">{name}</h3>
@@ -77,7 +75,7 @@ function NpcsPreview({ data }: { data: PreviewNode[] }) {
             const race = npc.frontmatter?.race ?? "";
             const alignment = npc.frontmatter?.alignment ?? "";
             return (
-              <Link key={npc.fields.slug} to={`/npcs/${npc.fields.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
+              <Link key={npc.slug} to={`/npcs/${npc.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
                 <div className="p-5">
                   <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">
                     {typeof race === 'string' && race.includes('|') ? race.split('|')[0].replace(/\[\[.*?\//, '').trim() : race}
@@ -106,7 +104,7 @@ function SessionsPreview({ data }: { data: PreviewNode[] }) {
             const date = session.frontmatter?.date ? new Date(session.frontmatter.date).toLocaleDateString() : "";
             const summary = session.frontmatter?.summary ?? session.excerpt;
             return (
-              <Link key={session.fields.slug} to={`/sessions/${session.fields.slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
+              <Link key={session.slug} to={`/sessions/${session.slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                   <span className="flex items-center gap-1.5 rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 font-serif text-xs tracking-wider uppercase text-primary">Session</span>
                 </div>
@@ -134,7 +132,7 @@ function ItemsPreview({ data }: { data: PreviewNode[] }) {
             const aliases = item.frontmatter?.aliases;
             const displayName = Array.isArray(aliases) && aliases.length > 0 ? aliases[0] : name;
             return (
-              <Link key={item.fields.slug} to={`/items/${item.fields.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
+              <Link key={item.slug} to={`/items/${item.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
                 <div className="p-5">
                   <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">Item</p>
                   <h3 className="mb-2 font-serif text-lg font-bold tracking-wide text-foreground">{displayName}</h3>
@@ -160,7 +158,7 @@ function LorePreview({ data }: { data: PreviewNode[] }) {
             const name = getDisplayName(entry);
             const description = entry.excerpt;
             return (
-              <Link key={entry.fields.slug} to={`/lore/${entry.fields.slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
+              <Link key={entry.slug} to={`/lore/${entry.slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
                 <span className="mb-3 inline-flex self-start rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 font-serif text-xs tracking-wider uppercase text-primary">Quest</span>
                 <h3 className="mb-3 font-serif text-lg font-bold tracking-wide text-foreground">{name}</h3>
                 <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">{typeof description === 'string' ? description : ''}</p>
@@ -182,7 +180,7 @@ function SectionDivider() {
   );
 }
 
-export function HomePreviewSections({ locations, npcs, sessions, items, lore }: HomePreviewSectionsProps) {
+export function HomePreviewSections({ locations, npcs, sessions, quests }: HomePreviewSectionsProps) {
   return (
     <>
       {locations.length > 0 && <LocationsPreview data={locations} />}
@@ -191,9 +189,7 @@ export function HomePreviewSections({ locations, npcs, sessions, items, lore }: 
       <SectionDivider />
       {sessions.length > 0 && <SessionsPreview data={sessions} />}
       <SectionDivider />
-      {items.length > 0 && <ItemsPreview data={items} />}
-      <SectionDivider />
-      {lore.length > 0 && <LorePreview data={lore} />}
+      {quests.length > 0 && <LorePreview data={quests} />}
     </>
   );
 }

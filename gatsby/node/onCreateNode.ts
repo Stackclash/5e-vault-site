@@ -1,5 +1,5 @@
 import type { GatsbyNode } from "gatsby";
-import { extractWikilinkName, matchesEntity, getFileName } from "../utils"
+import { extractWikilinkName, matchesEntity, getFileName, slugify } from "../utils"
 import { entities } from "../../src/entity-config";
 
 const locationTypes = new Set(["shop", "settlement", "pointOfInterest", "region", "world"]);
@@ -56,6 +56,7 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       ...entityData,
       id: createNodeId(`${entityType}-${fileName}`),
       parent: node.id,
+      slug: slugify(fileName),
       children: [],
       internal: {
         type: typeName,
