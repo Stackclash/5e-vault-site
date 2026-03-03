@@ -22,42 +22,42 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         campaign: Campaign
       }
 
-      interface LocationNode @nodeInterface {
+      interface Location implements Node {
         id: ID!
         name: String
-        parentLocation: LocationNode
+        parentLocation: Location
         campaigns: [Campaign]
       }
 
-      type World implements Node & LocationNode {
+      type World implements Node & Location {
         name: String
-        parentLocation: LocationNode
+        parentLocation: Location
         campaigns: [Campaign]
       }
 
-      type Shop implements Node & LocationNode {
+      type Shop implements Node & Location {
         name: String
-        parentLocation: LocationNode
+        parentLocation: Location
         campaigns: [Campaign]
       }
 
-      type Settlement implements Node & LocationNode {
+      type Settlement implements Node & Location {
         name: String
-        parentLocation: LocationNode
+        parentLocation: Location
         campaigns: [Campaign]
         population: Int
         government: String
       }
 
-      type PointOfInterest implements Node & LocationNode {
+      type PointOfInterest implements Node & Location {
         name: String
-        parentLocation: LocationNode
+        parentLocation: Location
         campaigns: [Campaign]
       }
 
-      type Region implements Node & LocationNode {
+      type Region implements Node & Location {
         name: String
-        parentLocation: LocationNode
+        parentLocation: Location
         campaigns: [Campaign]
         terrain: String
         climate: String
@@ -70,7 +70,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
 
       type Npc implements Node {
         name: String
-        location: LocationNode
+        location: Location
         partyRelationships: [PartyRelationship]
         parties: [Party]
         campaigns: [Campaign]

@@ -25,7 +25,7 @@ function createLocationCampaignsResolver() {
 
 function createParentLocationResolver() {
   return {
-    type: "LocationNode",
+    type: "Location",
     resolve: async (source: any, args: any, context: any) => {
       const allLocationNodes = await getAllLocationNodes(context)
       const mdxParent = await getParentNode(context, source)
@@ -101,7 +101,7 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
         }
       },
       location: {
-        type: "LocationNode",
+        type: "Location",
         resolve: async (source: any, args: any, context: any) => {
           const allLocationNodes = await getAllLocationNodes(context)
           const mdxParent = await getParentNode(context, source)
