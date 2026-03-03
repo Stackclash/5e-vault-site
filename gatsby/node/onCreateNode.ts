@@ -2,6 +2,8 @@ import type { GatsbyNode } from "gatsby";
 import { extractWikilinkName, matchesEntity, getFileName } from "../utils"
 import { entities } from "../../src/entity-config";
 
+const locationTypes = new Set(["shop", "settlement", "pointOfInterest", "region", "world"]);
+
 const onCreateNode: GatsbyNode["onCreateNode"] = ({
   node,
   actions,
@@ -35,8 +37,15 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       const partyRefs = typeof fm?.partyRelationships === 'object' ? Object.keys(fm.partyRelationships ?? {}) : []
       entityData.partyRelationships = fm?.partyRelationships ? partyRefs : null
       entityData.partyRefs = partyRefs
-    } else if (entityType === "location") {
+    } else if (locationTypes.has(entityType)) {
       entityData.parentLocation = typeof fm?.location === "string" ? extractWikilinkName(fm?.location) : null
+      if (entityType === "settlement") {
+        entityData.population = typeof fm?.population === "number" ? fm.population : null
+        entityData.government = typeof fm?.government === "string" ? fm.government : null
+      } else if (entityType === "region") {
+        entityData.terrain = typeof fm?.terrain === "string" ? fm.terrain : null
+        entityData.climate = typeof fm?.climate === "string" ? fm.climate : null
+      }
     } else if (entityType === "quest") {
       entityData.world = typeof fm?.world === "string" ? extractWikilinkName(fm?.world) : null
       entityData.activeMap = typeof fm?.active === "string" ? extractWikilinkName(fm?.active) : null

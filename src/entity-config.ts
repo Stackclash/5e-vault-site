@@ -27,14 +27,21 @@ export const entities: Record<string, EntityConfig> = {
     includeTag: ["npc"],
     includePath: ["4. World Almanac/NPCs/"],
   },
-  location: {
-    includeTag: ["location"],
-    excludeTag: ["world"],
-    includePath: [
-      "4. World Almanac/Settlements/",
-      "4. World Almanac/Places of Interest/",
-      "4. World Almanac/Regions/",
-    ],
+  shop: {
+    includeTag: ["location", "shop"],
+    includePath: ["4. World Almanac/Shops/"],
+  },
+  settlement: {
+    includeTag: ["location", "settlement"],
+    includePath: ["4. World Almanac/Settlements/"],
+  },
+  pointOfInterest: {
+    includeTag: ["location", "point-of-interest"],
+    includePath: ["4. World Almanac/Places of Interest/"],
+  },
+  region: {
+    includeTag: ["location", "region"],
+    includePath: ["4. World Almanac/Regions/"],
   },
   quest: {
     includeTag: ["quest"],

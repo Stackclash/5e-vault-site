@@ -1,6 +1,39 @@
 import type { GatsbyNode } from "gatsby";
 import { extractWikilinkName, getAllNodes, getCampaignFromParty, getCampaignFromWorld, getParentNode, getWorldFromLocation } from "../utils"
 
+const locationNodeTypes = ["Shop", "Settlement", "PointOfInterest", "Region", "World"];
+
+async function getAllLocationNodes(context: any): Promise<any[]> {
+  const results = await Promise.all(
+    locationNodeTypes.map(type => getAllNodes(context, type))
+  );
+  return results.flat();
+}
+
+function createLocationCampaignsResolver() {
+  return {
+    type: "[Campaign]",
+    resolve: async (source: any, args: any, context: any) => {
+      const allCampaigns = await getAllNodes(context, "Campaign")
+      const allLocationNodes = await getAllLocationNodes(context)
+      const world = await getWorldFromLocation(context, source, allLocationNodes)
+      if (!world) return []
+      return await getCampaignFromWorld(context, world.name, allCampaigns)
+    }
+  };
+}
+
+function createParentLocationResolver() {
+  return {
+    type: "Location",
+    resolve: async (source: any, args: any, context: any) => {
+      const allLocationNodes = await getAllLocationNodes(context)
+      const mdxParent = await getParentNode(context, source)
+      return allLocationNodes.find((loc: any) => loc.name === extractWikilinkName(mdxParent?.frontmatter?.location)) || null
+    }
+  };
+}
+
 const createResolvers: GatsbyNode["createResolvers"] = ({
   createResolvers,
 }) => {
@@ -50,7 +83,8 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
           const allCampaigns = await getAllNodes(context, "Campaign")
           return await getCampaignFromWorld(context, source.name, allCampaigns)
         }
-      }
+      },
+      parentLocation: createParentLocationResolver()
     },
     Npc: {
       campaigns: {
@@ -58,9 +92,8 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
         resolve: async (source: any, args: any, context: any) => {
           // FIXME: Not Working
           const allCampaigns = await getAllNodes(context, "Campaign")
-          const allWorlds = await getAllNodes(context, "World")
-          const allLocations = await getAllNodes(context, "Location")
-          const world = await getWorldFromLocation(context, source, [...allWorlds, ...allLocations])
+          const allLocationNodes = await getAllLocationNodes(context)
+          const world = await getWorldFromLocation(context, source, allLocationNodes)
           const foundCampaign = await getCampaignFromWorld(context, world?.name, allCampaigns)
           const partyRefs: string[] = source.partyRefs || []
           if (!world && partyRefs.length === 0) return []
@@ -70,32 +103,27 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
       location: {
         type: "Location",
         resolve: async (source: any, args: any, context: any) => {
-          const allLocations = await getAllNodes(context, "Location")
+          const allLocationNodes = await getAllLocationNodes(context)
           const mdxParent = await getParentNode(context, source)
-          return allLocations.find((location: any) => location.name === extractWikilinkName(mdxParent?.frontmatter?.location)) || null
+          return allLocationNodes.find((loc: any) => loc.name === extractWikilinkName(mdxParent?.frontmatter?.location)) || null
         }
       }
     },
-    Location: {
-      campaigns: {
-        type: "[Campaign]",
-        resolve: async (source: any, args: any, context: any) => {
-          const allCampaigns = await getAllNodes(context, "Campaign")
-          const allWorlds = await getAllNodes(context, "World")
-          const allLocations = await getAllNodes(context, "Location")
-          const world = await getWorldFromLocation(context, source, [...allWorlds, ...allLocations])
-          if (!world) return []
-          return await getCampaignFromWorld(context, world.name, allCampaigns)
-        }
-      },
-      parentLocation: {
-        type: "Location",
-        resolve: async (source: any, args: any, context: any) => {
-          const allLocations = await getAllNodes(context, "Location")
-          const mdxParent = await getParentNode(context, source)
-          return allLocations.find((location: any) => location.name === extractWikilinkName(mdxParent?.frontmatter?.location)) || null
-        }
-      }
+    Shop: {
+      campaigns: createLocationCampaignsResolver(),
+      parentLocation: createParentLocationResolver()
+    },
+    Settlement: {
+      campaigns: createLocationCampaignsResolver(),
+      parentLocation: createParentLocationResolver()
+    },
+    PointOfInterest: {
+      campaigns: createLocationCampaignsResolver(),
+      parentLocation: createParentLocationResolver()
+    },
+    Region: {
+      campaigns: createLocationCampaignsResolver(),
+      parentLocation: createParentLocationResolver()
     },
     Quest: {
       campaigns: {
