@@ -1,13 +1,25 @@
-import { Scroll, Users, MapPin, Swords } from "lucide-react";
+import { Scroll, Users, MapPin, Swords, User } from "lucide-react";
+
+interface HeroSectionProps {
+  title: string;
+  counts?: {
+    sessions?: number;
+    players?: number;
+    locations?: number;
+    npcs?: number;
+    quests?: number;
+  }
+}
 
 const stats = [
-  { icon: Scroll, label: "Sessions Played", value: "24" },
-  { icon: Users, label: "Active Players", value: "5" },
-  { icon: MapPin, label: "Locations Explored", value: "12" },
-  { icon: Swords, label: "Quests Completed", value: "8" },
+  { icon: Scroll, label: "Sessions Played", key: "sessions"},
+  { icon: Users, label: "Active Players", value: "5", key: "players" },
+  { icon: MapPin, label: "Locations Explored", key: "locations" },
+  { icon: User, label: "NPCs Encountered", key: "npcs" },
+  { icon: Swords, label: "Quests Completed", key: "quests" },
 ];
 
-export function HeroSection() {
+export function HeroSection({ title, counts }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* Background image */}
@@ -27,7 +39,7 @@ export function HeroSection() {
           A Dungeons & Dragons Campaign
         </p>
         <h1 className="mb-6 max-w-4xl font-serif text-5xl font-bold leading-tight tracking-wide text-foreground md:text-7xl lg:text-8xl text-balance">
-          Chronicles of the Shattered Realm
+          {title}
         </h1>
         <p className="mb-12 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl text-pretty">
           The ancient seals are breaking. Darkness stirs beneath the Sunken
@@ -43,7 +55,7 @@ export function HeroSection() {
         </div>
 
         {/* Stats row */}
-        <div className="grid w-full max-w-3xl grid-cols-2 gap-6 md:grid-cols-4">
+        <div className="grid w-full max-w-3xl grid-cols-2 gap-6 md:grid-cols-5">
           {stats.map((stat) => (
             <div
               key={stat.label}
@@ -51,7 +63,7 @@ export function HeroSection() {
             >
               <stat.icon className="h-5 w-5 text-primary" />
               <span className="font-serif text-2xl font-bold text-foreground">
-                {stat.value}
+                {stat.value || (counts?.[stat.key as keyof typeof counts] ?? 0)}
               </span>
               <span className="text-xs tracking-wider uppercase text-muted-foreground">
                 {stat.label}

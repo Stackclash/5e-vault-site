@@ -7,14 +7,23 @@ import { CampaignOverview } from "../components/campaign-overview";
 import { HomePreviewSections } from "../components/home-preview-sections";
 
 export default function IndexPage({ data }: PageProps<Queries.CampaignDetailQuery>) {
+  const campaign = data.campaign;
   const locations = (data.locations?.nodes ?? []) as any[];
   const npcs = (data.npcs?.nodes ?? []) as any[];
   const sessions = (data.sessions?.nodes ?? []) as any[];
   const quests = (data.quests?.nodes ?? []) as any[];
 
   return (
-    <Layout>
-      <HeroSection />
+    <Layout title={campaign?.name ?? ""} baseSlug={campaign?.slug ?? ""}>
+      <HeroSection
+        title={campaign?.name ?? ""}
+        counts={{
+          sessions: sessions.length,
+          locations: locations.length,
+          npcs: npcs.length,
+          quests: quests.length,
+        }}
+      />
       <CampaignOverview />
       <div className="mx-auto max-w-7xl px-6">
         <div className="h-px bg-border/30" />
@@ -35,31 +44,35 @@ export function Head() {
 
 export const query = graphql`
 query CampaignDetail($id: String!) {
-  locations: allLocation(
-    filter: {campaigns: {elemMatch: {id: {eq: $id}}}}
-    limit: 3
-  ) {
+  campaign: campaign(id: {eq: $id}) {
+    name
+    slug
+  }
+  locations: allLocation(filter: {campaigns: {elemMatch: {id: {eq: $id}}}}) {
+    nodes {
+      name
+      internal {
+        type
+      }
+    }
+  }
+  npcs: allNpc(filter: {campaigns: {elemMatch: {id: {eq: $id}}}}) {
     nodes {
       name
     }
   }
-  npcs: allNpc(filter: {campaigns: {elemMatch: {id: {eq: $id}}}}, limit: 4) {
+  sessions: allSession(filter: {campaign: {id: {eq: $id}}} sort: {sessionDate: DESC}) {
     nodes {
       name
+      summary
+      sessionDate
+      sessionNumber
     }
   }
-  sessions: allSession(
-    filter: {campaign: {id: {eq: $id}}}
-    limit: 3
-    sort: {sessionDate: DESC}
-  ) {
+  quests: allQuest(filter: {campaigns: {elemMatch: {id: {eq: $id}}}}) {
     nodes {
       name
-    }
-  }
-  quests: allQuest(limit: 3, filter: {campaigns: {elemMatch: {id: {eq: $id}}}}) {
-    nodes {
-      name
+      description
     }
   }
 }

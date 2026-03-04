@@ -1,5 +1,11 @@
 import { Link } from "gatsby";
 import { Shield, Swords } from "lucide-react";
+import path from "path";
+
+interface CampaignFooterProps {
+  title: string;
+  baseSlug: string;
+}
 
 const footerLinks = [
   { label: "Locations", href: "/locations" },
@@ -9,7 +15,7 @@ const footerLinks = [
   { label: "Lore", href: "/lore" },
 ];
 
-export function CampaignFooter() {
+export function CampaignFooter({ title, baseSlug }: CampaignFooterProps) {
   return (
     <footer className="border-t border-border/50 py-16">
       <div className="mx-auto max-w-7xl px-6">
@@ -21,7 +27,7 @@ export function CampaignFooter() {
           >
             <Shield className="h-5 w-5" />
             <span className="font-serif text-lg font-semibold tracking-wider uppercase">
-              Shattered Realm
+              {title}
             </span>
           </Link>
 
@@ -30,7 +36,7 @@ export function CampaignFooter() {
             {footerLinks.map((link) => (
               <Link
                 key={link.href}
-                to={link.href}
+                to={path.join(baseSlug, link.href)}
                 className="font-serif text-xs tracking-widest uppercase text-muted-foreground transition-colors hover:text-primary"
               >
                 {link.label}

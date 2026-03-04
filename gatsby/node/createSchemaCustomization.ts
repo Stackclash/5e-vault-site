@@ -21,6 +21,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
       type Session implements Node {
         name: String!
         slug: String!
+        summary: String
         party: Party
         sessionDate: Date @dateformat
         sessionNumber: Int
@@ -104,6 +105,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         name: String!
         slug: String!
         world: World
+        description: String
         campaigns: [Campaign]
         parties: [QuestParties]
       }

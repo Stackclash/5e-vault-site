@@ -3,16 +3,17 @@ import { CampaignNav } from "./campaign-nav";
 import { CampaignFooter } from "./campaign-footer";
 
 interface LayoutProps {
+  title: string;
+  baseSlug: string;
   children: React.ReactNode;
-  campaignSlug?: string;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ title, baseSlug, children }: LayoutProps) {
   return (
     <div className="bg-background font-sans antialiased">
-      <CampaignNav />
+      <CampaignNav title={title} baseSlug={baseSlug} />
       <main>{children}</main>
-      <CampaignFooter />
+      <CampaignFooter title={title} baseSlug={baseSlug} />
     </div>
   );
 }

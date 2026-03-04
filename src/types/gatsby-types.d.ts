@@ -2483,6 +2483,7 @@ type Query_pointOfInterestArgs = {
 type Query_questArgs = {
   campaigns: InputMaybe<CampaignFilterListInput>;
   children: InputMaybe<NodeFilterListInput>;
+  description: InputMaybe<StringQueryOperatorInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
   name: InputMaybe<StringQueryOperatorInput>;
@@ -2520,6 +2521,7 @@ type Query_sessionArgs = {
   sessionDate: InputMaybe<DateQueryOperatorInput>;
   sessionNumber: InputMaybe<IntQueryOperatorInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
+  summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 
@@ -2639,6 +2641,7 @@ type Query_worldArgs = {
 type Quest = Node & {
   readonly campaigns: Maybe<ReadonlyArray<Maybe<Campaign>>>;
   readonly children: ReadonlyArray<Node>;
+  readonly description: Maybe<Scalars['String']>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
   readonly name: Scalars['String'];
@@ -2696,6 +2699,7 @@ type QuestEdge = {
 type QuestFieldSelector = {
   readonly campaigns: InputMaybe<CampaignFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
+  readonly description: InputMaybe<FieldSelectorEnum>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
@@ -2708,6 +2712,7 @@ type QuestFieldSelector = {
 type QuestFilterInput = {
   readonly campaigns: InputMaybe<CampaignFilterListInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
+  readonly description: InputMaybe<StringQueryOperatorInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
@@ -2793,6 +2798,7 @@ type QuestPartiesSortInput = {
 type QuestSortInput = {
   readonly campaigns: InputMaybe<CampaignSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
+  readonly description: InputMaybe<SortOrderEnum>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
@@ -2960,6 +2966,7 @@ type Session = Node & {
   readonly sessionDate: Maybe<Scalars['Date']>;
   readonly sessionNumber: Maybe<Scalars['Int']>;
   readonly slug: Scalars['String'];
+  readonly summary: Maybe<Scalars['String']>;
 };
 
 
@@ -3027,6 +3034,7 @@ type SessionFieldSelector = {
   readonly sessionDate: InputMaybe<FieldSelectorEnum>;
   readonly sessionNumber: InputMaybe<FieldSelectorEnum>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly summary: InputMaybe<FieldSelectorEnum>;
 };
 
 type SessionFilterInput = {
@@ -3041,6 +3049,7 @@ type SessionFilterInput = {
   readonly sessionDate: InputMaybe<DateQueryOperatorInput>;
   readonly sessionNumber: InputMaybe<IntQueryOperatorInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 type SessionFilterListInput = {
@@ -3100,6 +3109,7 @@ type SessionSortInput = {
   readonly sessionDate: InputMaybe<SortOrderEnum>;
   readonly sessionNumber: InputMaybe<SortOrderEnum>;
   readonly slug: InputMaybe<SortOrderEnum>;
+  readonly summary: InputMaybe<SortOrderEnum>;
 };
 
 type Settlement = Location & Node & {
@@ -4396,7 +4406,7 @@ type CampaignDetailQueryVariables = Exact<{
 }>;
 
 
-type CampaignDetailQuery = { readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string } | { readonly name: string } | { readonly name: string } | { readonly name: string } | { readonly name: string }> }, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string }> }, readonly sessions: { readonly nodes: ReadonlyArray<{ readonly name: string }> }, readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string }> } };
+type CampaignDetailQuery = { readonly campaign: { readonly name: string, readonly slug: string } | null, readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly internal: { readonly type: string } }> }, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string }> }, readonly sessions: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly summary: string | null, readonly sessionDate: string | null, readonly sessionNumber: number | null }> }, readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly description: string | null }> } };
 
 
 }

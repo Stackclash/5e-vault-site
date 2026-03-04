@@ -28,6 +28,7 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
 
     if (entityType === "session") {
       entityData.sessionDate = fm?.date || null
+      entityData.summary = typeof fm?.summary === "string" ? fm.summary : null
       const match = /S(\d+) ([\w\s]+)/.exec(fileName)
       if (match) {
         entityData.sessionNumber = parseInt(match[1], 10)
@@ -41,6 +42,8 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
         entityData.terrain = typeof fm?.terrain === "string" ? fm.terrain : null
         entityData.climate = typeof fm?.climate === "string" ? fm.climate : null
       }
+    } else if (entityType === "quest") {
+      entityData.description = typeof fm?.description === "string" ? fm.description : null
     }
 
     const newNode = {
