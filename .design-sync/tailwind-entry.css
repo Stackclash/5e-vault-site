@@ -1,0 +1,4 @@
+/* Compile entry for the design-sync bundle: the site's real theme plus a
+   source scan over authored preview files so their utility classes compile in. */
+@import '../src/styles/globals.css';
+@source './previews/**/*.tsx';
