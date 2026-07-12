@@ -1,6 +1,6 @@
 import { Link } from "gatsby";
 import { Shield, Swords } from "lucide-react";
-import path from "path";
+import { joinPath } from "../lib/utils";
 
 interface CampaignFooterProps {
   title: string;
@@ -36,7 +36,7 @@ export function CampaignFooter({ title, baseSlug }: CampaignFooterProps) {
             {footerLinks.map((link) => (
               <Link
                 key={link.href}
-                to={path.join(baseSlug, link.href)}
+                to={joinPath(baseSlug, link.href)}
                 className="font-serif text-xs tracking-widest uppercase text-muted-foreground transition-colors hover:text-primary"
               >
                 {link.label}

@@ -9,7 +9,7 @@ export interface EntityConfig {
 export const entities: Record<string, EntityConfig> = {
   campaign: {
     includeTag: ["campaign"],
-    includePath: ["1. DM Stuff/Campaigns/"],
+    includePath: ["1. DM Toolkit/Campaigns/"],
   },
   party: {
     includeTag: ["party"],
@@ -17,7 +17,7 @@ export const entities: Record<string, EntityConfig> = {
   },
   session: {
     includeTag: ["session-journal"],
-    includePath: ["1. DM Stuff/Session Journals/"],
+    includePath: ["1. DM Toolkit/Session Journals/"],
   },
   world: {
     includeTag: ["world"],
@@ -26,6 +26,14 @@ export const entities: Record<string, EntityConfig> = {
   npc: {
     includeTag: ["npc"],
     includePath: ["4. World Almanac/NPCs/"],
+    filter: (frontmatter) => {
+      const partyRelationships = frontmatter.partyRelationships;
+      return (
+        !!partyRelationships &&
+        typeof partyRelationships === "object" &&
+        Object.keys(partyRelationships).length > 0
+      );
+    },
   },
   shop: {
     includeTag: ["location", "shop"],

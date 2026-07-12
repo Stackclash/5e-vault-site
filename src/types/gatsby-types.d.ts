@@ -1207,6 +1207,7 @@ type MdxFrontmatter = {
   readonly banner_y: Maybe<Scalars['Int']>;
   readonly bond: Maybe<Scalars['String']>;
   readonly calendar: Maybe<Scalars['String']>;
+  readonly campaign: Maybe<Scalars['String']>;
   readonly completed: Maybe<MdxFrontmatterCompleted>;
   readonly condition: Maybe<Scalars['String']>;
   readonly cost_modifier: Maybe<Scalars['Int']>;
@@ -1225,6 +1226,7 @@ type MdxFrontmatter = {
   readonly gender: Maybe<Scalars['String']>;
   readonly government: Maybe<Scalars['String']>;
   readonly groups: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
+  readonly history: Maybe<Scalars['String']>;
   readonly hours_per_day: Maybe<Scalars['Int']>;
   readonly ideal: Maybe<Scalars['String']>;
   readonly images: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
@@ -1247,6 +1249,8 @@ type MdxFrontmatter = {
   readonly relationships: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
   readonly resources: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
   readonly rulers: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
+  readonly secrets: Maybe<Scalars['String']>;
+  readonly size: Maybe<Scalars['String']>;
   readonly speed: Maybe<Scalars['String']>;
   readonly staff: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
   readonly statblock: Maybe<Scalars['String']>;
@@ -1260,6 +1264,7 @@ type MdxFrontmatter = {
   readonly travel_hours_per_day: Maybe<Scalars['Int']>;
   readonly travel_multiplier: Maybe<Scalars['Int']>;
   readonly travel_speed: Maybe<Scalars['Float']>;
+  readonly type: Maybe<Scalars['String']>;
   readonly var_mins: Maybe<Scalars['Int']>;
   readonly world: Maybe<Scalars['String']>;
 };
@@ -1313,6 +1318,7 @@ type MdxFrontmatterFieldSelector = {
   readonly banner_y: InputMaybe<FieldSelectorEnum>;
   readonly bond: InputMaybe<FieldSelectorEnum>;
   readonly calendar: InputMaybe<FieldSelectorEnum>;
+  readonly campaign: InputMaybe<FieldSelectorEnum>;
   readonly completed: InputMaybe<MdxFrontmatterCompletedFieldSelector>;
   readonly condition: InputMaybe<FieldSelectorEnum>;
   readonly cost_modifier: InputMaybe<FieldSelectorEnum>;
@@ -1331,6 +1337,7 @@ type MdxFrontmatterFieldSelector = {
   readonly gender: InputMaybe<FieldSelectorEnum>;
   readonly government: InputMaybe<FieldSelectorEnum>;
   readonly groups: InputMaybe<FieldSelectorEnum>;
+  readonly history: InputMaybe<FieldSelectorEnum>;
   readonly hours_per_day: InputMaybe<FieldSelectorEnum>;
   readonly ideal: InputMaybe<FieldSelectorEnum>;
   readonly images: InputMaybe<FieldSelectorEnum>;
@@ -1353,6 +1360,8 @@ type MdxFrontmatterFieldSelector = {
   readonly relationships: InputMaybe<FieldSelectorEnum>;
   readonly resources: InputMaybe<FieldSelectorEnum>;
   readonly rulers: InputMaybe<FieldSelectorEnum>;
+  readonly secrets: InputMaybe<FieldSelectorEnum>;
+  readonly size: InputMaybe<FieldSelectorEnum>;
   readonly speed: InputMaybe<FieldSelectorEnum>;
   readonly staff: InputMaybe<FieldSelectorEnum>;
   readonly statblock: InputMaybe<FieldSelectorEnum>;
@@ -1366,6 +1375,7 @@ type MdxFrontmatterFieldSelector = {
   readonly travel_hours_per_day: InputMaybe<FieldSelectorEnum>;
   readonly travel_multiplier: InputMaybe<FieldSelectorEnum>;
   readonly travel_speed: InputMaybe<FieldSelectorEnum>;
+  readonly type: InputMaybe<FieldSelectorEnum>;
   readonly var_mins: InputMaybe<FieldSelectorEnum>;
   readonly world: InputMaybe<FieldSelectorEnum>;
 };
@@ -1379,6 +1389,7 @@ type MdxFrontmatterFilterInput = {
   readonly banner_y: InputMaybe<IntQueryOperatorInput>;
   readonly bond: InputMaybe<StringQueryOperatorInput>;
   readonly calendar: InputMaybe<StringQueryOperatorInput>;
+  readonly campaign: InputMaybe<StringQueryOperatorInput>;
   readonly completed: InputMaybe<MdxFrontmatterCompletedFilterInput>;
   readonly condition: InputMaybe<StringQueryOperatorInput>;
   readonly cost_modifier: InputMaybe<IntQueryOperatorInput>;
@@ -1397,6 +1408,7 @@ type MdxFrontmatterFilterInput = {
   readonly gender: InputMaybe<StringQueryOperatorInput>;
   readonly government: InputMaybe<StringQueryOperatorInput>;
   readonly groups: InputMaybe<StringQueryOperatorInput>;
+  readonly history: InputMaybe<StringQueryOperatorInput>;
   readonly hours_per_day: InputMaybe<IntQueryOperatorInput>;
   readonly ideal: InputMaybe<StringQueryOperatorInput>;
   readonly images: InputMaybe<StringQueryOperatorInput>;
@@ -1419,6 +1431,8 @@ type MdxFrontmatterFilterInput = {
   readonly relationships: InputMaybe<StringQueryOperatorInput>;
   readonly resources: InputMaybe<StringQueryOperatorInput>;
   readonly rulers: InputMaybe<StringQueryOperatorInput>;
+  readonly secrets: InputMaybe<StringQueryOperatorInput>;
+  readonly size: InputMaybe<StringQueryOperatorInput>;
   readonly speed: InputMaybe<StringQueryOperatorInput>;
   readonly staff: InputMaybe<StringQueryOperatorInput>;
   readonly statblock: InputMaybe<StringQueryOperatorInput>;
@@ -1432,6 +1446,7 @@ type MdxFrontmatterFilterInput = {
   readonly travel_hours_per_day: InputMaybe<IntQueryOperatorInput>;
   readonly travel_multiplier: InputMaybe<IntQueryOperatorInput>;
   readonly travel_speed: InputMaybe<FloatQueryOperatorInput>;
+  readonly type: InputMaybe<StringQueryOperatorInput>;
   readonly var_mins: InputMaybe<IntQueryOperatorInput>;
   readonly world: InputMaybe<StringQueryOperatorInput>;
 };
@@ -1485,6 +1500,7 @@ type MdxFrontmatterSortInput = {
   readonly banner_y: InputMaybe<SortOrderEnum>;
   readonly bond: InputMaybe<SortOrderEnum>;
   readonly calendar: InputMaybe<SortOrderEnum>;
+  readonly campaign: InputMaybe<SortOrderEnum>;
   readonly completed: InputMaybe<MdxFrontmatterCompletedSortInput>;
   readonly condition: InputMaybe<SortOrderEnum>;
   readonly cost_modifier: InputMaybe<SortOrderEnum>;
@@ -1503,6 +1519,7 @@ type MdxFrontmatterSortInput = {
   readonly gender: InputMaybe<SortOrderEnum>;
   readonly government: InputMaybe<SortOrderEnum>;
   readonly groups: InputMaybe<SortOrderEnum>;
+  readonly history: InputMaybe<SortOrderEnum>;
   readonly hours_per_day: InputMaybe<SortOrderEnum>;
   readonly ideal: InputMaybe<SortOrderEnum>;
   readonly images: InputMaybe<SortOrderEnum>;
@@ -1525,6 +1542,8 @@ type MdxFrontmatterSortInput = {
   readonly relationships: InputMaybe<SortOrderEnum>;
   readonly resources: InputMaybe<SortOrderEnum>;
   readonly rulers: InputMaybe<SortOrderEnum>;
+  readonly secrets: InputMaybe<SortOrderEnum>;
+  readonly size: InputMaybe<SortOrderEnum>;
   readonly speed: InputMaybe<SortOrderEnum>;
   readonly staff: InputMaybe<SortOrderEnum>;
   readonly statblock: InputMaybe<SortOrderEnum>;
@@ -1538,19 +1557,39 @@ type MdxFrontmatterSortInput = {
   readonly travel_hours_per_day: InputMaybe<SortOrderEnum>;
   readonly travel_multiplier: InputMaybe<SortOrderEnum>;
   readonly travel_speed: InputMaybe<SortOrderEnum>;
+  readonly type: InputMaybe<SortOrderEnum>;
   readonly var_mins: InputMaybe<SortOrderEnum>;
   readonly world: InputMaybe<SortOrderEnum>;
 };
 
 type MdxFrontmatterSteps = {
+  readonly completed: Maybe<MdxFrontmatterStepsCompleted>;
   readonly text: Maybe<Scalars['String']>;
 };
 
+type MdxFrontmatterStepsCompleted = {
+  readonly Midnight_Covenant: Maybe<Scalars['Boolean']>;
+};
+
+type MdxFrontmatterStepsCompletedFieldSelector = {
+  readonly Midnight_Covenant: InputMaybe<FieldSelectorEnum>;
+};
+
+type MdxFrontmatterStepsCompletedFilterInput = {
+  readonly Midnight_Covenant: InputMaybe<BooleanQueryOperatorInput>;
+};
+
+type MdxFrontmatterStepsCompletedSortInput = {
+  readonly Midnight_Covenant: InputMaybe<SortOrderEnum>;
+};
+
 type MdxFrontmatterStepsFieldSelector = {
+  readonly completed: InputMaybe<MdxFrontmatterStepsCompletedFieldSelector>;
   readonly text: InputMaybe<FieldSelectorEnum>;
 };
 
 type MdxFrontmatterStepsFilterInput = {
+  readonly completed: InputMaybe<MdxFrontmatterStepsCompletedFilterInput>;
   readonly text: InputMaybe<StringQueryOperatorInput>;
 };
 
@@ -1559,6 +1598,7 @@ type MdxFrontmatterStepsFilterListInput = {
 };
 
 type MdxFrontmatterStepsSortInput = {
+  readonly completed: InputMaybe<MdxFrontmatterStepsCompletedSortInput>;
   readonly text: InputMaybe<SortOrderEnum>;
 };
 

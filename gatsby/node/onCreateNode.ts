@@ -29,7 +29,7 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
     if (entityType === "session") {
       entityData.sessionDate = fm?.date || null
       entityData.summary = typeof fm?.summary === "string" ? fm.summary : null
-      const match = /S(\d+) ([\w\s]+)/.exec(fileName)
+      const match = /^S(\d+)\s+(.+)$/.exec(fileName)
       if (match) {
         entityData.sessionNumber = parseInt(match[1], 10)
         entityData.name = match[2]

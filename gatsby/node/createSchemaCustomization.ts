@@ -6,8 +6,8 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
       type Campaign implements Node {
         name: String!
         slug: String!
-        world: World!
-        party: Party!
+        world: World
+        party: Party
         sessions: [Session!]
         locations: [Location!]
       }

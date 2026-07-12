@@ -32,7 +32,7 @@ const config: GatsbyConfig = {
       resolve: "gatsby-source-filesystem",
       options: {
         name: "campaign",
-        path: `${__dirname}/vault/1. DM Stuff/Campaigns`,
+        path: `${__dirname}/vault/1. DM Toolkit/Campaigns`,
         fastHash: true,
       },
     },
@@ -48,7 +48,7 @@ const config: GatsbyConfig = {
       resolve: "gatsby-source-filesystem",
       options: {
         name: "session",
-        path: `${__dirname}/vault/1. DM Stuff/Session Journals`,
+        path: `${__dirname}/vault/1. DM Toolkit/Session Journals`,
         fastHash: true,
       },
     },

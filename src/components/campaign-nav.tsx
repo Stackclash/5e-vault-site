@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "gatsby";
 import { globalHistory } from "@reach/router";
 import { Menu, X, Shield } from "lucide-react";
-import path from "path";
+import { joinPath } from "../lib/utils";
 
 interface CampaignNavProps {
   title: string;
@@ -48,7 +48,7 @@ export function CampaignNav({ title, baseSlug }: CampaignNavProps) {
         {/* Desktop nav */}
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => {
-            const href = path.join(baseSlug, link.href)
+            const href = joinPath(baseSlug, link.href)
             return (
               <Link
                 key={href}
@@ -84,7 +84,7 @@ export function CampaignNav({ title, baseSlug }: CampaignNavProps) {
         <div className="border-t border-border/50 bg-background/95 backdrop-blur-md md:hidden">
           <div className="flex flex-col gap-1 px-6 py-4">
             {navLinks.map((link) => {
-              const href = path.join(baseSlug, link.href);
+              const href = joinPath(baseSlug, link.href);
               return (
                 <Link
                   key={href}

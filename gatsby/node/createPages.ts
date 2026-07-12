@@ -8,11 +8,8 @@ interface SiteQueryResult {
       id: string
       name: string
       slug: string
-      parent: {
-        internal: {
-          contentFilePath: string
-        }
-      }
+      world: { name: string } | null
+      party: { name: string } | null
     }[]
   }
 }
@@ -31,12 +28,11 @@ const createPages: GatsbyNode["createPages"] = async ({
           id
           name
           slug
-          parent {
-            ... on Mdx {
-              internal {
-                contentFilePath
-              }
-            }
+          world {
+            name
+          }
+          party {
+            name
           }
         }
       }
@@ -53,9 +49,15 @@ const createPages: GatsbyNode["createPages"] = async ({
   campaigns.forEach((campaign) => {
     const campaignSlug = slugify(campaign.name)
 
+    if (!campaign.world || !campaign.party) {
+      reporter.warn(
+        `Campaign "${campaign.name}" is missing ${!campaign.world ? "world" : ""}${!campaign.world && !campaign.party ? " and " : ""}${!campaign.party ? "party" : ""} frontmatter — check the vault note for a typo.`
+      )
+    }
+
     createPage({
       path: `/${campaignSlug}`,
-      component: `${path.resolve(`./src/templates/campaign-detail.tsx`)}?__contentFilePath=${campaign.parent.internal.contentFilePath}`,
+      component: path.resolve(`./src/templates/campaign-detail.tsx`),
       context: {
         id: campaign.id,
       }
