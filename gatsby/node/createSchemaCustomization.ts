@@ -36,6 +36,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        overview: String
+        history: String
+        images: [String]
+        image: File
       }
 
       type World implements Node & Location {
@@ -44,6 +48,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        overview: String
+        history: String
+        images: [String]
+        image: File
       }
 
       type Shop implements Node & Location {
@@ -52,6 +60,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        overview: String
+        history: String
+        images: [String]
+        image: File
       }
 
       type Settlement implements Node & Location {
@@ -60,6 +72,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        overview: String
+        history: String
+        images: [String]
+        image: File
         population: Int
         government: String
       }
@@ -70,6 +86,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        overview: String
+        history: String
+        images: [String]
+        image: File
       }
 
       type Region implements Node & Location {
@@ -78,6 +98,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        overview: String
+        history: String
+        images: [String]
+        image: File
         terrain: String
         climate: String
       }
@@ -93,12 +117,43 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         location: Location
         partyRelationships: [PartyRelationship]
         campaigns: [Campaign]
+        race: String
+        gender: String
+        age: Int
+        alignment: String
+        condition: String
+        occupation: [String]
+        personality: String
+        ideal: String
+        bond: String
+        flaw: String
+        goals: String
+        likes: String
+        dislikes: String
+        aliases: [String]
+        images: [String]
+        image: File
       }
 
       type QuestParties {
         party: Party
         active: Boolean
         completed: Boolean
+      }
+
+      type QuestStepCompletion {
+        party: Party
+        completed: Boolean
+      }
+
+      type QuestStep {
+        text: String
+        completed: [QuestStepCompletion]
+      }
+
+      type QuestNpc {
+        name: String
+        description: String
       }
 
       type Quest implements Node {
@@ -108,6 +163,8 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         description: String
         campaigns: [Campaign]
         parties: [QuestParties]
+        steps: [QuestStep]
+        questNpcs: [QuestNpc]
       }
     `);
   };

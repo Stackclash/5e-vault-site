@@ -40,22 +40,23 @@ Tracks the work needed to make this site build against the current 5e-vault and 
 
 Frontmatter-first, plus allowlisted body sections extracted into plain string fields at `onCreateNode` time. DM safety comes from only extracting what's known safe.
 
-- [ ] **2.1 Create `gatsby/extract.ts`** with pure, testable helpers:
+- [x] **2.1 Create `gatsby/extract.ts`** with pure, testable helpers:
   - `reduceWikilinks(text)` — `[[path|alias]]` → `alias`, `[[Name]]` → `Name` (v1: reduce ALL wikilinks to plain text; cross-linking published entities is a later enhancement — this is what neutralizes Mechanics/Resources links).
   - `extractSection(body, heading)` — text between a `## Heading` and the next same-or-higher heading.
   - `extractCallout(body, calloutId)` — dedented text of a `> [!info|bg-c-purple]- Overview`-style callout.
   - `cleanProse(text)` — strip Meta Bind lines (`INPUT[...]`/`VIEW[...]`/`BUTTON[...]`), inline DQL (`` `=...` ``), code fences, `%%` comments; collapse blank lines; return `null` if empty or "TBD".
   - `normalizeImagePath(p)` — backslashes → forward slashes; `z_Assets/PlaceholderImage.png` → null.
-- [ ] **2.2 Extend `gatsby/node/onCreateNode.ts` per entity** (all plain strings/lists):
-  - **Npc** (frontmatter only — never touch NPC body; `## Secrets`/`## Stats`/`## DM Notes` live there): `race` (wikilink-reduced), `gender`, `age`, `alignment`, `condition`, `occupation`, `personality`, `ideal`, `bond`, `flaw`, `goals`, `likes`, `dislikes`, `aliases`, `images`.
-  - **Settlement/Region/PointOfInterest/Shop/World**: `overview` = `cleanProse(extractCallout(body, "Overview"))`, `history` = `cleanProse(extractSection(body, "History"))`. Nullable — many are TBD stubs.
-  - **Quest**: `steps[]` (`{text, completed}` per party) and `questNpcs[]` (`{name (reduced), description}`).
+  - `parseSessionFilename(fileName)` — pulled out of `onCreateNode.ts` so the apostrophe-title regex fix (Phase 1) has one testable source of truth.
+- [x] **2.2 Extend `gatsby/node/onCreateNode.ts` per entity** (all plain strings/lists):
+  - **Npc** (frontmatter only — never touch NPC body; `## Secrets`/`## Stats`/`## DM Notes` live there): `race` (wikilink-reduced), `gender`, `age`, `alignment`, `condition`, `occupation`, `personality`, `ideal`, `bond`, `flaw`, `goals`, `likes`, `dislikes`, `aliases`, `images`. (`goals` is inconsistent in the real vault — sometimes a folded scalar, sometimes a one-item list — normalized to a joined string.)
+  - **Settlement/Region/PointOfInterest/Shop/World**: `overview` = `cleanProse(extractCallout(body, "Overview"))`, `history` = `cleanProse(extractSection(body, "History"))`, plus normalized `images[]`. Nullable — many are TBD stubs.
+  - **Quest**: `description`, `steps[]` (`{text, completed}` per party) and `questNpcs[]` (`{name (reduced), description}`) — description/step text/npc description all run through `reduceWikilinks` (real quest notes do embed NPC wikilinks in prose).
   - **Session**: run `summary` through `reduceWikilinks`.
   - **Campaign**: structured fields only, no body extraction.
-- [ ] **2.3 Extend schema + resolvers** (`createSchemaCustomization.ts`, `createResolvers.ts`) for the new fields and types (`QuestStep`, `QuestNpc`).
-- [ ] **2.4 Image pipeline.** Add `gatsby-plugin-image` + `gatsby-plugin-sharp` + `gatsby-transformer-sharp` (install + register). Source `vault/z_Assets` (ignore `**/Music/**`, `**/Weather/**`, `**/*.json`) and `vault/4. World Almanac/NPCs/img` (COS portraits; note COS frontmatter uses backslash paths — normalize). Add `image: File` resolvers on Npc and Location types mapping the first normalized `images[]` entry to a File node by `relativePath`.
-- [ ] **2.5 (Optional) Unit tests for `gatsby/extract.ts`** — vitest devDependency, fixtures copied from real vault notes (a location with Overview/History, an NPC, an apostrophe-titled session). This is the code most likely to regress when the DM edits vault templates.
-- [ ] **2.6 GATE:** `yarn build` green; spot-check in GraphiQL that a fleshed-out location (e.g. Thornmere) has non-null `overview`, an NPC has reduced-race text (no `[[`), and no extracted field anywhere contains `INPUT[`, `[[`, or `## DM Notes` content.
+- [x] **2.3 Extend schema + resolvers** (`createSchemaCustomization.ts`, `createResolvers.ts`) for the new fields and types (`QuestStep`, `QuestStepCompletion`, `QuestNpc`); `overview`/`history`/`images`/`image` added to the `Location` interface and all five implementors.
+- [x] **2.4 Image pipeline.** Added `gatsby-plugin-image` + `gatsby-plugin-sharp` + `gatsby-transformer-sharp` (installed + registered). Sourced `vault/z_Assets` as a new `assets` filesystem instance (ignoring `**/Music/**`, `**/Weather/**`, `**/*.json`). NPC portraits under `vault/4. World Almanac/NPCs/img` needed no new source — the existing `npc` source is rooted one level up and already covers it recursively; a dedicated `npcPortraits` source was tried and found to be silently deduped by Gatsby (same absolute paths, first source wins), so it was removed. Added `image: File` resolvers on Npc and all Location types, matching the first normalized `images[]` entry to a File node by `(sourceInstanceName, relativePath)`.
+- [x] **2.5 (Optional) Unit tests for `gatsby/extract.ts`** — vitest devDependency, fixtures copied from real vault notes (Thornmere for Overview/History, The Wizard of Wines for the un-prefixed "TBD" stub quirk, Adrian Martikov for NPC wikilink fields, S32's apostrophe title). 25 tests, all passing.
+- [x] **2.6 GATE:** `yarn build` green; vitest green; GraphiQL spot-checks confirm Thornmere's `overview`/`history` are non-null real prose, NPC `race` has no `[[`, the Npc/Location `image` resolver finds real File nodes, and a full sweep across every extracted field on every Npc/Location/Quest/Session node found zero occurrences of `[[`, `INPUT[`, or `DM Notes` (one real leak was found and fixed: `Quest.description`/`steps[].text`/`questNpcs[].description` weren't wikilink-reduced).
 
 ## Phase 3 — Pages & UI: real data everywhere
 

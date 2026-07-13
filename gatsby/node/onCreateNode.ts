@@ -1,8 +1,17 @@
 import type { GatsbyNode } from "gatsby";
-import { extractWikilinkName, matchesEntity, getFileName, slugify } from "../utils"
+import { matchesEntity, getFileName, slugify } from "../utils"
+import { reduceWikilinks, extractSection, extractCallout, cleanProse, normalizeImagePath, parseSessionFilename } from "../extract"
 import { entities } from "../../src/entity-config";
 
 const locationTypes = new Set(["shop", "settlement", "pointOfInterest", "region", "world"]);
+
+function toStringOrNull(value: unknown): string | null {
+  return typeof value === "string" && value.trim().length > 0 ? value : null
+}
+
+function toStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((v): v is string => typeof v === "string") : []
+}
 
 const onCreateNode: GatsbyNode["onCreateNode"] = ({
   node,
@@ -28,22 +37,61 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
 
     if (entityType === "session") {
       entityData.sessionDate = fm?.date || null
-      entityData.summary = typeof fm?.summary === "string" ? fm.summary : null
-      const match = /^S(\d+)\s+(.+)$/.exec(fileName)
-      if (match) {
-        entityData.sessionNumber = parseInt(match[1], 10)
-        entityData.name = match[2]
+      entityData.summary = reduceWikilinks(toStringOrNull(fm?.summary))
+      const parsedSession = parseSessionFilename(fileName)
+      if (parsedSession) {
+        entityData.sessionNumber = parsedSession.sessionNumber
+        entityData.name = parsedSession.title
       }
     } else if (locationTypes.has(entityType)) {
+      const body = typeof (node as any).body === "string" ? (node as any).body as string : ""
+      entityData.overview = cleanProse(extractCallout(body, "Overview"))
+      entityData.history = cleanProse(extractSection(body, "History"))
+      entityData.images = toStringArray(fm?.images)
+        .map(normalizeImagePath)
+        .filter((img): img is string => img !== null)
+
       if (entityType === "settlement") {
         entityData.population = typeof fm?.population === "number" ? fm.population : null
-        entityData.government = typeof fm?.government === "string" ? fm.government : null
+        entityData.government = toStringOrNull(fm?.government)
       } else if (entityType === "region") {
-        entityData.terrain = typeof fm?.terrain === "string" ? fm.terrain : null
-        entityData.climate = typeof fm?.climate === "string" ? fm.climate : null
+        entityData.terrain = toStringOrNull(fm?.terrain)
+        entityData.climate = toStringOrNull(fm?.climate)
       }
+    } else if (entityType === "npc") {
+      entityData.race = reduceWikilinks(toStringOrNull(fm?.race))
+      entityData.gender = toStringOrNull(fm?.gender)
+      entityData.age = typeof fm?.age === "number" ? fm.age : null
+      entityData.alignment = toStringOrNull(fm?.alignment)
+      entityData.condition = toStringOrNull(fm?.condition)
+      entityData.occupation = toStringArray(fm?.occupation)
+      entityData.personality = toStringOrNull(fm?.personality)
+      entityData.ideal = toStringOrNull(fm?.ideal)
+      entityData.bond = toStringOrNull(fm?.bond)
+      entityData.flaw = toStringOrNull(fm?.flaw)
+      entityData.goals = Array.isArray(fm?.goals)
+        ? toStringOrNull(toStringArray(fm.goals).join("; "))
+        : toStringOrNull(fm?.goals)
+      entityData.likes = toStringOrNull(fm?.likes)
+      entityData.dislikes = toStringOrNull(fm?.dislikes)
+      entityData.aliases = toStringArray(fm?.aliases)
+      entityData.images = toStringArray(fm?.images)
+        .map(normalizeImagePath)
+        .filter((img): img is string => img !== null)
     } else if (entityType === "quest") {
-      entityData.description = typeof fm?.description === "string" ? fm.description : null
+      entityData.description = reduceWikilinks(toStringOrNull(fm?.description))
+
+      const rawSteps = Array.isArray(fm?.steps) ? fm.steps : []
+      entityData.steps = rawSteps.map((step: any) => ({
+        text: reduceWikilinks(toStringOrNull(step?.text)),
+        completed: step?.completed && typeof step.completed === "object" ? step.completed : {},
+      }))
+
+      const rawNpcs = Array.isArray(fm?.npcs) ? fm.npcs : []
+      entityData.questNpcs = rawNpcs.map((questNpc: any) => ({
+        name: reduceWikilinks(toStringOrNull(questNpc?.name)),
+        description: reduceWikilinks(toStringOrNull(questNpc?.description)),
+      }))
     }
 
     const newNode = {

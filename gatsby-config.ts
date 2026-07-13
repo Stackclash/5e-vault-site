@@ -28,6 +28,9 @@ const config: GatsbyConfig = {
   },
   plugins: [
     "gatsby-plugin-postcss",
+    "gatsby-plugin-image",
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -93,6 +96,15 @@ const config: GatsbyConfig = {
       options: {
         name: "images",
         path: `${__dirname}/static/images`,
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "assets",
+        path: `${__dirname}/vault/z_Assets`,
+        ignore: ["**/Music/**", "**/Weather/**", "**/*.json"],
+        fastHash: true,
       },
     },
     {

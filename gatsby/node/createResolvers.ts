@@ -44,6 +44,49 @@ function createChildrenLocationsResolver() {
   }
 }
 
+// Normalized images[] entries are vault-root-relative (e.g.
+// "z_Assets/Locations/Maps/thornmere.png"); each prefix here maps to the
+// gatsby-source-filesystem instance rooted at that vault folder, so the
+// remainder is the File node's relativePath within that source. NPC
+// portraits live under "4. World Almanac/NPCs/img/", which the existing
+// "npc" source (rooted one level up, at .../NPCs) already covers - there's
+// no separate source for the img/ subfolder.
+const ASSET_SOURCE_PREFIXES: Array<{ prefix: string; sourceInstanceName: string }> = [
+  { prefix: "z_Assets/", sourceInstanceName: "assets" },
+  { prefix: "4. World Almanac/NPCs/", sourceInstanceName: "npc" },
+]
+
+async function resolveImageFileNode(context: any, imagePath: string): Promise<any | null> {
+  for (const { prefix, sourceInstanceName } of ASSET_SOURCE_PREFIXES) {
+    if (!imagePath.startsWith(prefix)) continue
+    const relativePath = imagePath.slice(prefix.length)
+    const { entries } = await context.nodeModel.findAll({
+      type: "File",
+      query: {
+        filter: {
+          sourceInstanceName: { eq: sourceInstanceName },
+          relativePath: { eq: relativePath },
+        },
+      },
+    })
+    const [file] = Array.from(entries) as any[]
+    if (file) return file
+  }
+  return null
+}
+
+function createImageResolver() {
+  return {
+    type: "File",
+    resolve: async (source: any, args: any, context: any) => {
+      const images: string[] = Array.isArray(source.images) ? source.images : []
+      const [firstImage] = images
+      if (!firstImage) return null
+      return await resolveImageFileNode(context, firstImage)
+    }
+  }
+}
+
 const createResolvers: GatsbyNode["createResolvers"] = ({
   createResolvers,
 }) => {
@@ -171,9 +214,11 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
         }
       },
       parentLocation: createParentLocationResolver(),
-      childrenLocations: createChildrenLocationsResolver()
+      childrenLocations: createChildrenLocationsResolver(),
+      image: createImageResolver()
     },
     Npc: {
+      image: createImageResolver(),
       campaigns: {
         type: "[Campaign]",
         resolve: async (source: any, args: any, context: any) => {
@@ -210,22 +255,26 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
     Shop: {
       campaigns: createLocationCampaignsResolver(),
       parentLocation: createParentLocationResolver(),
-      childrenLocations: createChildrenLocationsResolver()
+      childrenLocations: createChildrenLocationsResolver(),
+      image: createImageResolver()
     },
     Settlement: {
       campaigns: createLocationCampaignsResolver(),
       parentLocation: createParentLocationResolver(),
-      childrenLocations: createChildrenLocationsResolver()
+      childrenLocations: createChildrenLocationsResolver(),
+      image: createImageResolver()
     },
     PointOfInterest: {
       campaigns: createLocationCampaignsResolver(),
       parentLocation: createParentLocationResolver(),
-      childrenLocations: createChildrenLocationsResolver()
+      childrenLocations: createChildrenLocationsResolver(),
+      image: createImageResolver()
     },
     Region: {
       campaigns: createLocationCampaignsResolver(),
       parentLocation: createParentLocationResolver(),
-      childrenLocations: createChildrenLocationsResolver()
+      childrenLocations: createChildrenLocationsResolver(),
+      image: createImageResolver()
     },
     Quest: {
       campaigns: {
@@ -260,6 +309,19 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
             active: status.active,
             completed: status.completed
           })).filter((pp: any) => pp.party !== null)
+        }
+      }
+    },
+    QuestStep: {
+      completed: {
+        type: "[QuestStepCompletion]",
+        resolve: async (source: any, args: any, context: any) => {
+          const allParties = await getAllNodes(context, "Party")
+          const completedMap: Record<string, boolean> = source.completed || {}
+          return Object.entries(completedMap).map(([partyName, completed]) => ({
+            party: allParties.find((p: any) => p.name === partyName) || null,
+            completed: !!completed
+          })).filter((c: any) => c.party !== null)
         }
       }
     }
