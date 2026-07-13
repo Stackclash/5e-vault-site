@@ -1,7 +1,7 @@
 import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
-  pathPrefix: "/5e-vault-site",
+  pathPrefix: "/",
   graphqlTypegen: {
     typesOutputPath: "src/types/gatsby-types.d.ts",
   },
