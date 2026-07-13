@@ -1,0 +1,5 @@
+{
+  "installCommand": "git submodule update --init vault && yarn install",
+  "buildCommand": "yarn build",
+  "outputDirectory": "public"
+}
