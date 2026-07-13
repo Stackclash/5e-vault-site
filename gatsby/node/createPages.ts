@@ -30,7 +30,7 @@ const createPages: GatsbyNode["createPages"] = async ({
   actions,
   reporter
 }) => {
-  const { createPage } = actions
+  const { createPage, createRedirect } = actions
 
   const result = await graphql<SiteQueryResult>(`
     query Data {
@@ -87,7 +87,7 @@ const createPages: GatsbyNode["createPages"] = async ({
   const quests = result.data?.quests?.nodes ?? []
   const sessions = result.data?.sessions?.nodes ?? []
 
-  campaigns.forEach((campaign) => {
+  campaigns.forEach((campaign, index) => {
     const campaignSlug = slugify(campaign.name)
 
     if (!campaign.world || !campaign.party) {
@@ -103,6 +103,15 @@ const createPages: GatsbyNode["createPages"] = async ({
         id: campaign.id,
       }
     })
+
+    if (index === 0) {
+      createRedirect({
+        fromPath: `/`,
+        toPath: `/${campaignSlug}`,
+        isPermanent: true,
+        redirectInBrowser: true,
+      })
+    }
   })
 
   npcs.forEach((npc) => {
