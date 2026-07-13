@@ -59,6 +59,7 @@ type Campaign = Node & {
   readonly npcs: Maybe<ReadonlyArray<Maybe<Npc>>>;
   readonly parent: Maybe<Node>;
   readonly party: Maybe<Party>;
+  readonly publicPremise: Maybe<Scalars['String']>;
   readonly quests: Maybe<ReadonlyArray<Maybe<Quest>>>;
   readonly sessions: Maybe<ReadonlyArray<Maybe<Session>>>;
   readonly slug: Scalars['String'];
@@ -118,6 +119,7 @@ type CampaignFieldSelector = {
   readonly name: InputMaybe<FieldSelectorEnum>;
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly party: InputMaybe<PartyFieldSelector>;
+  readonly publicPremise: InputMaybe<FieldSelectorEnum>;
   readonly sessions: InputMaybe<SessionFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
   readonly world: InputMaybe<WorldFieldSelector>;
@@ -131,6 +133,7 @@ type CampaignFilterInput = {
   readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly party: InputMaybe<PartyFilterInput>;
+  readonly publicPremise: InputMaybe<StringQueryOperatorInput>;
   readonly sessions: InputMaybe<SessionFilterListInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
   readonly world: InputMaybe<WorldFilterInput>;
@@ -189,6 +192,7 @@ type CampaignSortInput = {
   readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
   readonly party: InputMaybe<PartySortInput>;
+  readonly publicPremise: InputMaybe<SortOrderEnum>;
   readonly sessions: InputMaybe<SessionSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
   readonly world: InputMaybe<WorldSortInput>;
@@ -1405,6 +1409,7 @@ type Location = {
   readonly parent: Maybe<Node>;
   readonly parentLocation: Maybe<Location>;
   readonly slug: Scalars['String'];
+  readonly summary: Maybe<Scalars['String']>;
 };
 
 type LocationConnection = {
@@ -1466,6 +1471,7 @@ type LocationFieldSelector = {
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly parentLocation: InputMaybe<LocationFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly summary: InputMaybe<FieldSelectorEnum>;
 };
 
 type LocationFilterInput = {
@@ -1482,6 +1488,7 @@ type LocationFilterInput = {
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly parentLocation: InputMaybe<LocationFilterInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 type LocationFilterListInput = {
@@ -1543,6 +1550,7 @@ type LocationSortInput = {
   readonly parent: InputMaybe<NodeSortInput>;
   readonly parentLocation: InputMaybe<LocationSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
+  readonly summary: InputMaybe<SortOrderEnum>;
 };
 
 type Mdx = Node & {
@@ -2250,6 +2258,7 @@ type Npc = Node & {
   readonly parent: Maybe<Node>;
   readonly partyRelationships: Maybe<ReadonlyArray<Maybe<PartyRelationship>>>;
   readonly personality: Maybe<Scalars['String']>;
+  readonly playerImpression: Maybe<Scalars['String']>;
   readonly race: Maybe<Scalars['String']>;
   readonly slug: Scalars['String'];
 };
@@ -2323,6 +2332,7 @@ type NpcFieldSelector = {
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly partyRelationships: InputMaybe<PartyRelationshipFieldSelector>;
   readonly personality: InputMaybe<FieldSelectorEnum>;
+  readonly playerImpression: InputMaybe<FieldSelectorEnum>;
   readonly race: InputMaybe<FieldSelectorEnum>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
 };
@@ -2351,6 +2361,7 @@ type NpcFilterInput = {
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly partyRelationships: InputMaybe<PartyRelationshipFilterListInput>;
   readonly personality: InputMaybe<StringQueryOperatorInput>;
+  readonly playerImpression: InputMaybe<StringQueryOperatorInput>;
   readonly race: InputMaybe<StringQueryOperatorInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
 };
@@ -2424,6 +2435,7 @@ type NpcSortInput = {
   readonly parent: InputMaybe<NodeSortInput>;
   readonly partyRelationships: InputMaybe<PartyRelationshipSortInput>;
   readonly personality: InputMaybe<SortOrderEnum>;
+  readonly playerImpression: InputMaybe<SortOrderEnum>;
   readonly race: InputMaybe<SortOrderEnum>;
   readonly slug: InputMaybe<SortOrderEnum>;
 };
@@ -2611,6 +2623,7 @@ type PointOfInterest = Location & Node & {
   readonly parent: Maybe<Node>;
   readonly parentLocation: Maybe<Location>;
   readonly slug: Scalars['String'];
+  readonly summary: Maybe<Scalars['String']>;
 };
 
 type PointOfInterestConnection = {
@@ -2672,6 +2685,7 @@ type PointOfInterestFieldSelector = {
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly parentLocation: InputMaybe<LocationFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly summary: InputMaybe<FieldSelectorEnum>;
 };
 
 type PointOfInterestFilterInput = {
@@ -2688,6 +2702,7 @@ type PointOfInterestFilterInput = {
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly parentLocation: InputMaybe<LocationFilterInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 type PointOfInterestFilterListInput = {
@@ -2749,6 +2764,7 @@ type PointOfInterestSortInput = {
   readonly parent: InputMaybe<NodeSortInput>;
   readonly parentLocation: InputMaybe<LocationSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
+  readonly summary: InputMaybe<SortOrderEnum>;
 };
 
 type Potrace = {
@@ -2983,6 +2999,7 @@ type Query_campaignArgs = {
   name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
   party: InputMaybe<PartyFilterInput>;
+  publicPremise: InputMaybe<StringQueryOperatorInput>;
   sessions: InputMaybe<SessionFilterListInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
   world: InputMaybe<WorldFilterInput>;
@@ -3101,6 +3118,7 @@ type Query_locationArgs = {
   parent: InputMaybe<NodeFilterInput>;
   parentLocation: InputMaybe<LocationFilterInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
+  summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 
@@ -3160,6 +3178,7 @@ type Query_npcArgs = {
   parent: InputMaybe<NodeFilterInput>;
   partyRelationships: InputMaybe<PartyRelationshipFilterListInput>;
   personality: InputMaybe<StringQueryOperatorInput>;
+  playerImpression: InputMaybe<StringQueryOperatorInput>;
   race: InputMaybe<StringQueryOperatorInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
 };
@@ -3190,6 +3209,7 @@ type Query_pointOfInterestArgs = {
   parent: InputMaybe<NodeFilterInput>;
   parentLocation: InputMaybe<LocationFilterInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
+  summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 
@@ -3202,6 +3222,7 @@ type Query_questArgs = {
   name: InputMaybe<StringQueryOperatorInput>;
   parent: InputMaybe<NodeFilterInput>;
   parties: InputMaybe<QuestPartiesFilterListInput>;
+  playerSummary: InputMaybe<StringQueryOperatorInput>;
   questNpcs: InputMaybe<QuestNpcFilterListInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
   steps: InputMaybe<QuestStepFilterListInput>;
@@ -3224,6 +3245,7 @@ type Query_regionArgs = {
   parent: InputMaybe<NodeFilterInput>;
   parentLocation: InputMaybe<LocationFilterInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
+  summary: InputMaybe<StringQueryOperatorInput>;
   terrain: InputMaybe<StringQueryOperatorInput>;
 };
 
@@ -3233,10 +3255,14 @@ type Query_sessionArgs = {
   children: InputMaybe<NodeFilterListInput>;
   id: InputMaybe<StringQueryOperatorInput>;
   internal: InputMaybe<InternalFilterInput>;
+  items: InputMaybe<StringQueryOperatorInput>;
   locations: InputMaybe<LocationFilterListInput>;
   name: InputMaybe<StringQueryOperatorInput>;
+  npcs: InputMaybe<NpcFilterListInput>;
   parent: InputMaybe<NodeFilterInput>;
   party: InputMaybe<PartyFilterInput>;
+  partyPresent: InputMaybe<StringQueryOperatorInput>;
+  quests: InputMaybe<QuestFilterListInput>;
   sessionDate: InputMaybe<DateQueryOperatorInput>;
   sessionNumber: InputMaybe<IntQueryOperatorInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
@@ -3260,6 +3286,7 @@ type Query_settlementArgs = {
   parentLocation: InputMaybe<LocationFilterInput>;
   population: InputMaybe<IntQueryOperatorInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
+  summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 
@@ -3277,6 +3304,7 @@ type Query_shopArgs = {
   parent: InputMaybe<NodeFilterInput>;
   parentLocation: InputMaybe<LocationFilterInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
+  summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 
@@ -3367,6 +3395,7 @@ type Query_worldArgs = {
   parent: InputMaybe<NodeFilterInput>;
   parentLocation: InputMaybe<LocationFilterInput>;
   slug: InputMaybe<StringQueryOperatorInput>;
+  summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 type Quest = Node & {
@@ -3378,6 +3407,7 @@ type Quest = Node & {
   readonly name: Scalars['String'];
   readonly parent: Maybe<Node>;
   readonly parties: Maybe<ReadonlyArray<Maybe<QuestParties>>>;
+  readonly playerSummary: Maybe<Scalars['String']>;
   readonly questNpcs: Maybe<ReadonlyArray<Maybe<QuestNpc>>>;
   readonly slug: Scalars['String'];
   readonly steps: Maybe<ReadonlyArray<Maybe<QuestStep>>>;
@@ -3438,6 +3468,7 @@ type QuestFieldSelector = {
   readonly name: InputMaybe<FieldSelectorEnum>;
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly parties: InputMaybe<QuestPartiesFieldSelector>;
+  readonly playerSummary: InputMaybe<FieldSelectorEnum>;
   readonly questNpcs: InputMaybe<QuestNpcFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
   readonly steps: InputMaybe<QuestStepFieldSelector>;
@@ -3453,6 +3484,7 @@ type QuestFilterInput = {
   readonly name: InputMaybe<StringQueryOperatorInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly parties: InputMaybe<QuestPartiesFilterListInput>;
+  readonly playerSummary: InputMaybe<StringQueryOperatorInput>;
   readonly questNpcs: InputMaybe<QuestNpcFilterListInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
   readonly steps: InputMaybe<QuestStepFilterListInput>;
@@ -3565,6 +3597,7 @@ type QuestSortInput = {
   readonly name: InputMaybe<SortOrderEnum>;
   readonly parent: InputMaybe<NodeSortInput>;
   readonly parties: InputMaybe<QuestPartiesSortInput>;
+  readonly playerSummary: InputMaybe<SortOrderEnum>;
   readonly questNpcs: InputMaybe<QuestNpcSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
   readonly steps: InputMaybe<QuestStepSortInput>;
@@ -3634,6 +3667,7 @@ type Region = Location & Node & {
   readonly parent: Maybe<Node>;
   readonly parentLocation: Maybe<Location>;
   readonly slug: Scalars['String'];
+  readonly summary: Maybe<Scalars['String']>;
   readonly terrain: Maybe<Scalars['String']>;
 };
 
@@ -3697,6 +3731,7 @@ type RegionFieldSelector = {
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly parentLocation: InputMaybe<LocationFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly summary: InputMaybe<FieldSelectorEnum>;
   readonly terrain: InputMaybe<FieldSelectorEnum>;
 };
 
@@ -3715,6 +3750,7 @@ type RegionFilterInput = {
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly parentLocation: InputMaybe<LocationFilterInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly summary: InputMaybe<StringQueryOperatorInput>;
   readonly terrain: InputMaybe<StringQueryOperatorInput>;
 };
 
@@ -3778,6 +3814,7 @@ type RegionSortInput = {
   readonly parent: InputMaybe<NodeSortInput>;
   readonly parentLocation: InputMaybe<LocationSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
+  readonly summary: InputMaybe<SortOrderEnum>;
   readonly terrain: InputMaybe<SortOrderEnum>;
 };
 
@@ -3786,10 +3823,14 @@ type Session = Node & {
   readonly children: ReadonlyArray<Node>;
   readonly id: Scalars['ID'];
   readonly internal: Internal;
+  readonly items: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
   readonly locations: Maybe<ReadonlyArray<Maybe<Location>>>;
   readonly name: Scalars['String'];
+  readonly npcs: Maybe<ReadonlyArray<Maybe<Npc>>>;
   readonly parent: Maybe<Node>;
   readonly party: Maybe<Party>;
+  readonly partyPresent: Maybe<ReadonlyArray<Maybe<Scalars['String']>>>;
+  readonly quests: Maybe<ReadonlyArray<Maybe<Quest>>>;
   readonly sessionDate: Maybe<Scalars['Date']>;
   readonly sessionNumber: Maybe<Scalars['Int']>;
   readonly slug: Scalars['String'];
@@ -3854,10 +3895,14 @@ type SessionFieldSelector = {
   readonly children: InputMaybe<NodeFieldSelector>;
   readonly id: InputMaybe<FieldSelectorEnum>;
   readonly internal: InputMaybe<InternalFieldSelector>;
+  readonly items: InputMaybe<FieldSelectorEnum>;
   readonly locations: InputMaybe<LocationFieldSelector>;
   readonly name: InputMaybe<FieldSelectorEnum>;
+  readonly npcs: InputMaybe<NpcFieldSelector>;
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly party: InputMaybe<PartyFieldSelector>;
+  readonly partyPresent: InputMaybe<FieldSelectorEnum>;
+  readonly quests: InputMaybe<QuestFieldSelector>;
   readonly sessionDate: InputMaybe<FieldSelectorEnum>;
   readonly sessionNumber: InputMaybe<FieldSelectorEnum>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
@@ -3869,10 +3914,14 @@ type SessionFilterInput = {
   readonly children: InputMaybe<NodeFilterListInput>;
   readonly id: InputMaybe<StringQueryOperatorInput>;
   readonly internal: InputMaybe<InternalFilterInput>;
+  readonly items: InputMaybe<StringQueryOperatorInput>;
   readonly locations: InputMaybe<LocationFilterListInput>;
   readonly name: InputMaybe<StringQueryOperatorInput>;
+  readonly npcs: InputMaybe<NpcFilterListInput>;
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly party: InputMaybe<PartyFilterInput>;
+  readonly partyPresent: InputMaybe<StringQueryOperatorInput>;
+  readonly quests: InputMaybe<QuestFilterListInput>;
   readonly sessionDate: InputMaybe<DateQueryOperatorInput>;
   readonly sessionNumber: InputMaybe<IntQueryOperatorInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
@@ -3929,10 +3978,14 @@ type SessionSortInput = {
   readonly children: InputMaybe<NodeSortInput>;
   readonly id: InputMaybe<SortOrderEnum>;
   readonly internal: InputMaybe<InternalSortInput>;
+  readonly items: InputMaybe<SortOrderEnum>;
   readonly locations: InputMaybe<LocationSortInput>;
   readonly name: InputMaybe<SortOrderEnum>;
+  readonly npcs: InputMaybe<NpcSortInput>;
   readonly parent: InputMaybe<NodeSortInput>;
   readonly party: InputMaybe<PartySortInput>;
+  readonly partyPresent: InputMaybe<SortOrderEnum>;
+  readonly quests: InputMaybe<QuestSortInput>;
   readonly sessionDate: InputMaybe<SortOrderEnum>;
   readonly sessionNumber: InputMaybe<SortOrderEnum>;
   readonly slug: InputMaybe<SortOrderEnum>;
@@ -3955,6 +4008,7 @@ type Settlement = Location & Node & {
   readonly parentLocation: Maybe<Location>;
   readonly population: Maybe<Scalars['Int']>;
   readonly slug: Scalars['String'];
+  readonly summary: Maybe<Scalars['String']>;
 };
 
 type SettlementConnection = {
@@ -4018,6 +4072,7 @@ type SettlementFieldSelector = {
   readonly parentLocation: InputMaybe<LocationFieldSelector>;
   readonly population: InputMaybe<FieldSelectorEnum>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly summary: InputMaybe<FieldSelectorEnum>;
 };
 
 type SettlementFilterInput = {
@@ -4036,6 +4091,7 @@ type SettlementFilterInput = {
   readonly parentLocation: InputMaybe<LocationFilterInput>;
   readonly population: InputMaybe<IntQueryOperatorInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 type SettlementFilterListInput = {
@@ -4099,6 +4155,7 @@ type SettlementSortInput = {
   readonly parentLocation: InputMaybe<LocationSortInput>;
   readonly population: InputMaybe<SortOrderEnum>;
   readonly slug: InputMaybe<SortOrderEnum>;
+  readonly summary: InputMaybe<SortOrderEnum>;
 };
 
 type Shop = Location & Node & {
@@ -4115,6 +4172,7 @@ type Shop = Location & Node & {
   readonly parent: Maybe<Node>;
   readonly parentLocation: Maybe<Location>;
   readonly slug: Scalars['String'];
+  readonly summary: Maybe<Scalars['String']>;
 };
 
 type ShopConnection = {
@@ -4176,6 +4234,7 @@ type ShopFieldSelector = {
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly parentLocation: InputMaybe<LocationFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly summary: InputMaybe<FieldSelectorEnum>;
 };
 
 type ShopFilterInput = {
@@ -4192,6 +4251,7 @@ type ShopFilterInput = {
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly parentLocation: InputMaybe<LocationFilterInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 type ShopFilterListInput = {
@@ -4253,6 +4313,7 @@ type ShopSortInput = {
   readonly parent: InputMaybe<NodeSortInput>;
   readonly parentLocation: InputMaybe<LocationSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
+  readonly summary: InputMaybe<SortOrderEnum>;
 };
 
 type Site = Node & {
@@ -5149,6 +5210,7 @@ type World = Location & Node & {
   readonly parent: Maybe<Node>;
   readonly parentLocation: Maybe<Location>;
   readonly slug: Scalars['String'];
+  readonly summary: Maybe<Scalars['String']>;
 };
 
 type WorldConnection = {
@@ -5210,6 +5272,7 @@ type WorldFieldSelector = {
   readonly parent: InputMaybe<NodeFieldSelector>;
   readonly parentLocation: InputMaybe<LocationFieldSelector>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
+  readonly summary: InputMaybe<FieldSelectorEnum>;
 };
 
 type WorldFilterInput = {
@@ -5226,6 +5289,7 @@ type WorldFilterInput = {
   readonly parent: InputMaybe<NodeFilterInput>;
   readonly parentLocation: InputMaybe<LocationFilterInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
+  readonly summary: InputMaybe<StringQueryOperatorInput>;
 };
 
 type WorldFilterListInput = {
@@ -5287,6 +5351,7 @@ type WorldSortInput = {
   readonly parent: InputMaybe<NodeSortInput>;
   readonly parentLocation: InputMaybe<LocationSortInput>;
   readonly slug: InputMaybe<SortOrderEnum>;
+  readonly summary: InputMaybe<SortOrderEnum>;
 };
 
 type CampaignDetailQueryVariables = Exact<{
@@ -5294,7 +5359,7 @@ type CampaignDetailQueryVariables = Exact<{
 }>;
 
 
-type CampaignDetailQuery = { readonly campaign: { readonly name: string, readonly slug: string } | null, readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } }> }, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly race: string | null, readonly occupation: ReadonlyArray<string | null> | null }> }, readonly sessions: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly summary: string | null, readonly sessionDate: string | null, readonly sessionNumber: number | null }> }, readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly description: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null }> } };
+type CampaignDetailQuery = { readonly campaign: { readonly name: string, readonly slug: string, readonly publicPremise: string | null } | null, readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } }> }, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly race: string | null, readonly occupation: ReadonlyArray<string | null> | null }> }, readonly sessions: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly summary: string | null, readonly sessionDate: string | null, readonly sessionNumber: number | null }> }, readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly description: string | null, readonly playerSummary: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null }> } };
 
 type GatsbyImageSharpFixedFragment = { readonly base64: string | null, readonly width: number, readonly height: number, readonly src: string, readonly srcSet: string };
 
@@ -5325,19 +5390,19 @@ type GatsbyImageSharpFluidLimitPresentationSizeFragment = { readonly maxHeight: 
 type HomePageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type HomePageQuery = { readonly campaigns: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string }> }, readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } }> }, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly race: string | null, readonly occupation: ReadonlyArray<string | null> | null }> }, readonly sessions: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly summary: string | null, readonly sessionDate: string | null, readonly sessionNumber: number | null }> }, readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly description: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null }> } };
+type HomePageQuery = { readonly campaigns: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly publicPremise: string | null }> }, readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly internal: { readonly type: string } }> }, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly race: string | null, readonly occupation: ReadonlyArray<string | null> | null }> }, readonly sessions: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly summary: string | null, readonly sessionDate: string | null, readonly sessionNumber: number | null }> }, readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly description: string | null, readonly playerSummary: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null }> } };
 
 type LocationDetailQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-type LocationDetailQuery = { readonly location: { readonly name: string, readonly slug: string, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | null, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly location: { readonly slug: string } | { readonly slug: string } | { readonly slug: string } | { readonly slug: string } | { readonly slug: string } | null }> } };
+type LocationDetailQuery = { readonly location: { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly history: string | null, readonly internal: { readonly type: string }, readonly parentLocation: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly childrenLocations: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | { readonly name: string, readonly slug: string, readonly internal: { readonly type: string } } | null> | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | null, readonly npcs: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly location: { readonly slug: string } | { readonly slug: string } | { readonly slug: string } | { readonly slug: string } | { readonly slug: string } | null }> } };
 
 type LocationsListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type LocationsListQuery = { readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null }> } };
+type LocationsListQuery = { readonly locations: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | { readonly name: string, readonly slug: string, readonly summary: string | null, readonly overview: string | null, readonly internal: { readonly type: string }, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null }> } };
 
 type NotFoundQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5349,7 +5414,7 @@ type NpcDetailQueryVariables = Exact<{
 }>;
 
 
-type NpcDetailQuery = { readonly npc: { readonly name: string, readonly race: string | null, readonly gender: string | null, readonly age: number | null, readonly alignment: string | null, readonly condition: string | null, readonly occupation: ReadonlyArray<string | null> | null, readonly personality: string | null, readonly ideal: string | null, readonly bond: string | null, readonly flaw: string | null, readonly goals: string | null, readonly likes: string | null, readonly dislikes: string | null, readonly aliases: ReadonlyArray<string | null> | null, readonly partyRelationships: ReadonlyArray<{ readonly relationship: string | null } | null> | null, readonly location: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | null };
+type NpcDetailQuery = { readonly npc: { readonly name: string, readonly race: string | null, readonly gender: string | null, readonly age: number | null, readonly alignment: string | null, readonly condition: string | null, readonly occupation: ReadonlyArray<string | null> | null, readonly personality: string | null, readonly ideal: string | null, readonly bond: string | null, readonly flaw: string | null, readonly goals: string | null, readonly likes: string | null, readonly dislikes: string | null, readonly aliases: ReadonlyArray<string | null> | null, readonly playerImpression: string | null, readonly partyRelationships: ReadonlyArray<{ readonly relationship: string | null } | null> | null, readonly location: { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null, readonly image: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | null };
 
 type NpcsListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -5361,19 +5426,19 @@ type QuestDetailQueryVariables = Exact<{
 }>;
 
 
-type QuestDetailQuery = { readonly quest: { readonly name: string, readonly description: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null, readonly steps: ReadonlyArray<{ readonly text: string | null, readonly completed: ReadonlyArray<{ readonly completed: boolean | null } | null> | null } | null> | null, readonly questNpcs: ReadonlyArray<{ readonly name: string | null, readonly description: string | null } | null> | null } | null };
+type QuestDetailQuery = { readonly quest: { readonly name: string, readonly description: string | null, readonly playerSummary: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null, readonly steps: ReadonlyArray<{ readonly text: string | null, readonly completed: ReadonlyArray<{ readonly completed: boolean | null } | null> | null } | null> | null, readonly questNpcs: ReadonlyArray<{ readonly name: string | null, readonly description: string | null } | null> | null } | null };
 
 type QuestsListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type QuestsListQuery = { readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly description: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null }> } };
+type QuestsListQuery = { readonly quests: { readonly nodes: ReadonlyArray<{ readonly name: string, readonly slug: string, readonly description: string | null, readonly playerSummary: string | null, readonly parties: ReadonlyArray<{ readonly active: boolean | null, readonly completed: boolean | null } | null> | null }> } };
 
 type SessionDetailQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-type SessionDetailQuery = { readonly session: { readonly name: string, readonly summary: string | null, readonly sessionDate: string | null, readonly sessionNumber: number | null, readonly locations: ReadonlyArray<{ readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null> | null } | null };
+type SessionDetailQuery = { readonly session: { readonly name: string, readonly summary: string | null, readonly sessionDate: string | null, readonly sessionNumber: number | null, readonly partyPresent: ReadonlyArray<string | null> | null, readonly items: ReadonlyArray<string | null> | null, readonly locations: ReadonlyArray<{ readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | { readonly name: string, readonly slug: string } | null> | null, readonly npcs: ReadonlyArray<{ readonly name: string, readonly slug: string } | null> | null, readonly quests: ReadonlyArray<{ readonly name: string, readonly slug: string } | null> | null } | null };
 
 type SessionsListQueryVariables = Exact<{ [key: string]: never; }>;
 

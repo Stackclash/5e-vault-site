@@ -79,8 +79,8 @@ Frontmatter-first, plus allowlisted body sections extracted into plain string fi
 
 ## Phase 4 — Deploy (GitHub Pages)
 
-- [ ] **4.1 `.github/workflows/deploy.yaml`:** add `submodules: true` to the checkout step, then `git -C vault fetch origin && git -C vault checkout origin/main` so builds track the vault tip. Comment: a PAT/deploy key becomes required if the vault repo ever goes private.
-- [ ] **4.2 `gatsby-config.ts`:** add `pathPrefix: "/5e-vault-site"` — required for the workflow's `PREFIX_PATHS=true` to work; without it every asset 404s under `stackclash.github.io/5e-vault-site/`.
-- [ ] **4.3 Triggers:** `workflow_dispatch` + `push: branches: [main]` + weekly `schedule` (picks up vault-content drift without site commits).
+- [x] **4.1 `.github/workflows/deploy.yaml`:** add `submodules: true` to the checkout step, then `git -C vault fetch origin && git -C vault checkout origin/main` so builds track the vault tip. Comment: a PAT/deploy key becomes required if the vault repo ever goes private.
+- [x] **4.2 `gatsby-config.ts`:** add `pathPrefix: "/5e-vault-site"` — required for the workflow's `PREFIX_PATHS=true` to work; without it every asset 404s under `stackclash.github.io/5e-vault-site/`.
+- [x] **4.3 Triggers:** `workflow_dispatch` + `push: branches: [main]` + weekly `schedule` (picks up vault-content drift without site commits).
 - [ ] **4.4 First deploy + smoke test:** confirm repo Pages source = "GitHub Actions"; run the workflow; verify under the `/5e-vault-site/` prefix: home, one NPC, one location, one session, one quest page, images loading, 404 page.
-- [ ] **4.5 README.md:** replace the stub with build/dev/deploy instructions, submodule notes, and the entity/extraction architecture summary (fix the `src/entity.config.ts` → `src/entity-config.ts` reference).
+- [x] **4.5 README.md:** replace the stub with build/dev/deploy instructions, submodule notes, and the entity/extraction architecture summary (fix the `src/entity.config.ts` → `src/entity-config.ts` reference).
