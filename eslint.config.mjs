@@ -19,6 +19,9 @@ export default [
       'babel.config.js',
       'postcss.config.js',
       'vault/**',
+      '.ds-sync/**',
+      'ds-bundle/**',
+      '.design-sync/**',
     ],
   },
 
@@ -53,6 +56,11 @@ export default [
     },
     rules: {
       // TypeScript rules
+      // Base no-unused-vars/no-undef don't understand TS-only syntax (type-only
+      // params, ambient globals like Gatsby's typegen `Queries` namespace), so
+      // they're disabled in favor of the TS-aware equivalent / tsc itself.
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
