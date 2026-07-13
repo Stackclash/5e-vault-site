@@ -203,6 +203,28 @@ const createResolvers: GatsbyNode["createResolvers"] = ({
             : mdxParent?.frontmatter?.location ? [extractWikilinkName(mdxParent.frontmatter.location)] : []
           return allLocationNodes.filter((loc: any) => locationRefs.includes(loc.name))
         }
+      },
+      npcs: {
+        type: "[Npc]",
+        resolve: async (source: any, args: any, context: any) => {
+          const allNpcs = await getAllNodes(context, "Npc")
+          const mdxParent = await getParentNode(context, source)
+          const npcRefs: string[] = Array.isArray(mdxParent?.frontmatter?.npcs)
+            ? mdxParent.frontmatter.npcs.map((npc: any) => extractWikilinkName(npc))
+            : []
+          return allNpcs.filter((npc: any) => npcRefs.includes(npc.name))
+        }
+      },
+      quests: {
+        type: "[Quest]",
+        resolve: async (source: any, args: any, context: any) => {
+          const allQuests = await getAllNodes(context, "Quest")
+          const mdxParent = await getParentNode(context, source)
+          const questRefs: string[] = Array.isArray(mdxParent?.frontmatter?.quests)
+            ? mdxParent.frontmatter.quests.map((quest: any) => extractWikilinkName(quest))
+            : []
+          return allQuests.filter((quest: any) => questRefs.includes(quest.name))
+        }
       }
     },
     World: {

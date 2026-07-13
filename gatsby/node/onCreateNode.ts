@@ -43,8 +43,19 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
         entityData.sessionNumber = parsedSession.sessionNumber
         entityData.name = parsedSession.title
       }
+      const explicitSessionNumber = typeof fm?.session_number === "number" ? fm.session_number : null
+      if (explicitSessionNumber != null) {
+        entityData.sessionNumber = explicitSessionNumber
+      }
+      entityData.partyPresent = toStringArray(fm?.party_present)
+        .map((v) => reduceWikilinks(v))
+        .filter((v): v is string => v !== null)
+      entityData.items = toStringArray(fm?.items)
+        .map((v) => reduceWikilinks(v))
+        .filter((v): v is string => v !== null)
     } else if (locationTypes.has(entityType)) {
       const body = typeof (node as any).body === "string" ? (node as any).body as string : ""
+      entityData.summary = reduceWikilinks(toStringOrNull(fm?.summary))
       entityData.overview = cleanProse(extractCallout(body, "Overview"))
       entityData.history = cleanProse(extractSection(body, "History"))
       entityData.images = toStringArray(fm?.images)
@@ -78,8 +89,10 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
       entityData.images = toStringArray(fm?.images)
         .map(normalizeImagePath)
         .filter((img): img is string => img !== null)
+      entityData.playerImpression = reduceWikilinks(toStringOrNull(fm?.player_impression))
     } else if (entityType === "quest") {
       entityData.description = reduceWikilinks(toStringOrNull(fm?.description))
+      entityData.playerSummary = reduceWikilinks(toStringOrNull(fm?.player_summary))
 
       const rawSteps = Array.isArray(fm?.steps) ? fm.steps : []
       entityData.steps = rawSteps.map((step: any) => ({
@@ -92,6 +105,8 @@ const onCreateNode: GatsbyNode["onCreateNode"] = ({
         name: reduceWikilinks(toStringOrNull(questNpc?.name)),
         description: reduceWikilinks(toStringOrNull(questNpc?.description)),
       }))
+    } else if (entityType === "campaign") {
+      entityData.publicPremise = cleanProse(reduceWikilinks(toStringOrNull(fm?.public_premise)))
     }
 
     const newNode = {

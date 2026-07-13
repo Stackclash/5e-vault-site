@@ -60,22 +60,22 @@ Frontmatter-first, plus allowlisted body sections extracted into plain string fi
 
 ## Phase 3 — Pages & UI: real data everywhere
 
-- [ ] **3.1 `src/pages/index.tsx`** — home page rendering the single campaign's content (hero + preview sections). Keep the generated `/{campaign-slug}` page too. **`src/pages/404.tsx`** — simple themed not-found page.
-- [ ] **3.2 Detail templates + generation loops** in `gatsby/node/createPages.ts` (no `__contentFilePath` anywhere):
+- [x] **3.1 `src/pages/index.tsx`** — home page rendering the single campaign's content (hero + preview sections). Keep the generated `/{campaign-slug}` page too. **`src/pages/404.tsx`** — simple themed not-found page.
+- [x] **3.2 Detail templates + generation loops** in `gatsby/node/createPages.ts` (no `__contentFilePath` anywhere):
   - `src/templates/npc-detail.tsx` — portrait (GatsbyImage or CSS fallback), race/age/alignment/occupation, personality/ideal/bond/flaw, party relationship badge, location link.
   - `src/templates/location-detail.tsx` — one template for all Location implementors: type badge, image, overview/history, parent breadcrumb, children grid, NPCs-at-location.
   - `src/templates/session-detail.tsx` — number, title, date, full summary, locations visited, prev/next session nav (pass ids via pageContext).
   - `src/templates/quest-detail.tsx` — description, steps checklist (per-party completion), related NPCs, active/completed badge.
-- [ ] **3.3 List pages:** `src/pages/npcs.tsx`, `src/pages/locations.tsx` (grouped by type or hierarchy), `src/pages/sessions.tsx` (newest first), `src/pages/quests.tsx` (active vs completed).
-- [ ] **3.4 Replace hardcoded demo components with real data:**
+- [x] **3.3 List pages:** `src/pages/npcs.tsx`, `src/pages/locations.tsx` (grouped by type or hierarchy), `src/pages/sessions.tsx` (newest first), `src/pages/quests.tsx` (active vs completed).
+- [x] **3.4 Replace hardcoded demo components with real data:**
   - `src/components/campaign-nav.tsx` — links → Locations / NPCs / Sessions / Quests (root-level hrefs; drop the `path.join(baseSlug, ...)` scheme); brand → real campaign title; drop Items, drop Lore.
   - `src/components/campaign-overview.tsx` — delete the fake "Vaeltharis" narrative; replace with data-driven cards (e.g. latest session summary, active quest count) or remove from the page.
   - `src/components/hero-section.tsx` — remove the hardcoded "Active Players: 5" stat; keep the generic hero art.
   - `src/components/home-preview-sections.tsx` — `/lore/{slug}` → `/quests/{slug}`; add missing `slug` to the locations/NPCs preview queries (currently links resolve to `/locations/undefined`); remove the commented-out Items preview.
   - `src/components/campaign-footer.tsx` — real links and title.
   - `gatsby-config.ts` `siteMetadata` — title → "The Hunt for Vecna | Campaign Compendium", real description.
-- [ ] **3.5 Cleanup:** remove unused demo images from `static/images` (npc-\*, location-\*, item-\*, placeholder-\*) once nothing references them.
-- [ ] **3.6 GATE:** `yarn build` green; click through home → each list page → one detail page of each type in `gatsby serve`; zero dead nav links; no raw `[[`, `INPUT[`, or DM-notes text visible anywhere.
+- [x] **3.5 Cleanup:** remove unused demo images from `static/images` (npc-\*, location-\*, item-\*, placeholder-\*) once nothing references them.
+- [x] **3.6 GATE:** `yarn build` green; click through home → each list page → one detail page of each type in `gatsby serve`; zero dead nav links; no raw `[[`, `INPUT[`, or DM-notes text visible anywhere.
 
 ## Phase 4 — Deploy (GitHub Pages)
 

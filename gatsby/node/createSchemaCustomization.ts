@@ -10,6 +10,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         party: Party
         sessions: [Session!]
         locations: [Location!]
+        publicPremise: String
       }
 
       type Party implements Node {
@@ -27,6 +28,10 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         sessionNumber: Int
         locations: [Location]
         campaign: Campaign
+        partyPresent: [String]
+        npcs: [Npc]
+        quests: [Quest]
+        items: [String]
       }
 
       interface Location implements Node {
@@ -36,6 +41,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        summary: String
         overview: String
         history: String
         images: [String]
@@ -48,6 +54,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        summary: String
         overview: String
         history: String
         images: [String]
@@ -60,6 +67,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        summary: String
         overview: String
         history: String
         images: [String]
@@ -72,6 +80,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        summary: String
         overview: String
         history: String
         images: [String]
@@ -86,6 +95,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        summary: String
         overview: String
         history: String
         images: [String]
@@ -98,6 +108,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         parentLocation: Location
         childrenLocations: [Location]
         campaigns: [Campaign]
+        summary: String
         overview: String
         history: String
         images: [String]
@@ -133,6 +144,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         aliases: [String]
         images: [String]
         image: File
+        playerImpression: String
       }
 
       type QuestParties {
@@ -161,6 +173,7 @@ const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] =
         slug: String!
         world: World
         description: String
+        playerSummary: String
         campaigns: [Campaign]
         parties: [QuestParties]
         steps: [QuestStep]

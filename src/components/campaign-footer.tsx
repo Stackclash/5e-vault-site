@@ -1,21 +1,18 @@
 import { Link } from "gatsby";
 import { Shield, Swords } from "lucide-react";
-import { joinPath } from "../lib/utils";
 
 interface CampaignFooterProps {
   title: string;
-  baseSlug: string;
 }
 
 const footerLinks = [
   { label: "Locations", href: "/locations" },
   { label: "NPCs", href: "/npcs" },
   { label: "Sessions", href: "/sessions" },
-  { label: "Items", href: "/items" },
-  { label: "Lore", href: "/lore" },
+  { label: "Quests", href: "/quests" },
 ];
 
-export function CampaignFooter({ title, baseSlug }: CampaignFooterProps) {
+export function CampaignFooter({ title }: CampaignFooterProps) {
   return (
     <footer className="border-t border-border/50 py-16">
       <div className="mx-auto max-w-7xl px-6">
@@ -36,7 +33,7 @@ export function CampaignFooter({ title, baseSlug }: CampaignFooterProps) {
             {footerLinks.map((link) => (
               <Link
                 key={link.href}
-                to={joinPath(baseSlug, link.href)}
+                to={link.href}
                 className="font-serif text-xs tracking-widest uppercase text-muted-foreground transition-colors hover:text-primary"
               >
                 {link.label}
@@ -51,23 +48,13 @@ export function CampaignFooter({ title, baseSlug }: CampaignFooterProps) {
             <div className="h-px w-8 bg-border" />
           </div>
 
-          {/* Flavor text */}
-          <p className="max-w-md text-sm italic leading-relaxed text-muted-foreground">
-            &ldquo;The road is long and the darkness deep, but those who carry
-            the light need never walk alone.&rdquo;
-          </p>
-          <p className="text-xs tracking-wider uppercase text-muted-foreground/60">
-            &mdash; Inscription on the Temple of Dawn
-          </p>
-
           {/* Meta */}
           <div className="mt-4 flex flex-col items-center gap-2 text-xs text-muted-foreground/50">
             <span>
-              Campaign managed with care. All content is fictional and created
-              for entertainment.
+              A player-facing compendium, curated from the campaign vault.
             </span>
             <span>
-              Dungeons & Dragons is a trademark of Wizards of the Coast.
+              Dungeons &amp; Dragons is a trademark of Wizards of the Coast.
             </span>
           </div>
         </div>

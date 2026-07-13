@@ -1,10 +1,10 @@
-import { Scroll, Users, MapPin, Swords, User } from "lucide-react";
+import { Scroll, MapPin, Swords, User } from "lucide-react";
 
 interface HeroSectionProps {
   title: string;
+  tagline?: string;
   counts?: {
     sessions?: number;
-    players?: number;
     locations?: number;
     npcs?: number;
     quests?: number;
@@ -13,13 +13,12 @@ interface HeroSectionProps {
 
 const stats = [
   { icon: Scroll, label: "Sessions Played", key: "sessions"},
-  { icon: Users, label: "Active Players", value: "5", key: "players" },
   { icon: MapPin, label: "Locations Explored", key: "locations" },
   { icon: User, label: "NPCs Encountered", key: "npcs" },
-  { icon: Swords, label: "Quests Completed", key: "quests" },
+  { icon: Swords, label: "Quests Tracked", key: "quests" },
 ];
 
-export function HeroSection({ title, counts }: HeroSectionProps) {
+export function HeroSection({ title, tagline, counts }: HeroSectionProps) {
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* Background image */}
@@ -41,11 +40,11 @@ export function HeroSection({ title, counts }: HeroSectionProps) {
         <h1 className="mb-6 max-w-4xl font-serif text-5xl font-bold leading-tight tracking-wide text-foreground md:text-7xl lg:text-8xl text-balance">
           {title}
         </h1>
-        <p className="mb-12 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl text-pretty">
-          The ancient seals are breaking. Darkness stirs beneath the Sunken
-          Citadel, and the fate of five unlikely heroes will determine whether
-          the realm endures or falls into shadow.
-        </p>
+        {tagline && (
+          <p className="mb-12 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl text-pretty">
+            {tagline}
+          </p>
+        )}
 
         {/* Decorative divider */}
         <div className="mb-12 flex items-center gap-4">
@@ -55,7 +54,7 @@ export function HeroSection({ title, counts }: HeroSectionProps) {
         </div>
 
         {/* Stats row */}
-        <div className="grid w-full max-w-3xl grid-cols-2 gap-6 md:grid-cols-5">
+        <div className="grid w-full max-w-3xl grid-cols-2 gap-6 md:grid-cols-4">
           {stats.map((stat) => (
             <div
               key={stat.label}
@@ -63,7 +62,7 @@ export function HeroSection({ title, counts }: HeroSectionProps) {
             >
               <stat.icon className="h-5 w-5 text-primary" />
               <span className="font-serif text-2xl font-bold text-foreground">
-                {stat.value || (counts?.[stat.key as keyof typeof counts] ?? 0)}
+                {counts?.[stat.key as keyof typeof counts] ?? 0}
               </span>
               <span className="text-xs tracking-wider uppercase text-muted-foreground">
                 {stat.label}

@@ -1,13 +1,8 @@
 import React from "react";
 import { Link } from "gatsby";
-import { MapPin, Users, Scroll, Gem, BookOpen, ArrowRight } from "lucide-react";
+import { MapPin, Users, Scroll, Swords, ArrowRight } from "lucide-react";
 import { SectionHeader } from "./section-header";
-
-function getLocationType(tags: string[]): string {
-  if (tags.includes("settlement")) return "Settlement";
-  if (tags.includes("region")) return "Region";
-  return "Place of Interest";
-}
+import { locationTypeLabel } from "../lib/labels";
 
 function ViewAllLink({ href, label }: { href: string; label: string }) {
   return (
@@ -23,6 +18,7 @@ function ViewAllLink({ href, label }: { href: string; label: string }) {
 interface LocationNode {
   name: string;
   slug: string;
+  summary?: string | null;
   internal: {
     type: string;
   }
@@ -31,6 +27,8 @@ interface LocationNode {
 interface NpcNode {
   name: string;
   slug: string;
+  race?: string | null;
+  occupation?: (string | null)[] | null;
 }
 
 interface SessionNode {
@@ -45,6 +43,7 @@ interface QuestNode {
   name: string;
   slug: string;
   description: string;
+  playerSummary?: string | null;
 }
 
 interface HomePreviewSectionsProps {
@@ -64,9 +63,11 @@ function LocationsPreview({ data }: { data: LocationNode[] }) {
             return (
               <Link key={loc.slug} to={`/locations/${loc.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">{loc.internal.type}</p>
+                  <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">{locationTypeLabel(loc.internal.type)}</p>
                   <h3 className="mb-2 font-serif text-lg font-bold tracking-wide text-foreground">{loc.name}</h3>
-                  {/* <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{loc.excerpt}</p> */}
+                  {loc.summary && (
+                    <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{loc.summary}</p>
+                  )}
                 </div>
               </Link>
             );
@@ -88,10 +89,11 @@ function NpcsPreview({ data }: { data: NpcNode[] }) {
             return (
               <Link key={npc.slug} to={`/npcs/${npc.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
                 <div className="p-5">
-                  {/* <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">
-                    {typeof race === 'string' && race.includes('|') ? race.split('|')[0].replace(/\[\[.*?\//, '').trim() : race}
-                    {alignment ? ` · ${alignment}` : ""}
-                  </p> */}
+                  {(npc.race || npc.occupation?.[0]) && (
+                    <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">
+                      {[npc.race, npc.occupation?.[0]].filter(Boolean).join(" · ")}
+                    </p>
+                  )}
                   <h3 className="mb-1 font-serif text-lg font-bold tracking-wide text-foreground">{npc.name}</h3>
                 </div>
               </Link>
@@ -130,47 +132,23 @@ function SessionsPreview({ data }: { data: SessionNode[] }) {
   );
 }
 
-// function ItemsPreview({ data }: { data: PreviewNode[] }) {
-//   return (
-//     <section className="py-24">
-//       <div className="mx-auto max-w-7xl px-6">
-//         <SectionHeader subtitle="Party Inventory" title="Notable Items" icon={Gem} />
-//         <div className="grid gap-6 md:grid-cols-3">
-//           {data.slice(0, 3).map((item) => {
-//             return (
-//               <Link key={item.slug} to={`/items/${item.slug}`} className="group flex flex-col overflow-hidden rounded-lg border border-border/50 bg-card transition-colors hover:border-primary/30">
-//                 <div className="p-5">
-//                   <p className="mb-1 text-xs tracking-wider uppercase text-muted-foreground">Item</p>
-//                   <h3 className="mb-2 font-serif text-lg font-bold tracking-wide text-foreground">{displayName}</h3>
-//                   <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{item.excerpt}</p>
-//                 </div>
-//               </Link>
-//             );
-//           })}
-//         </div>
-//         <ViewAllLink href="/items" label="View All Items" />
-//       </div>
-//     </section>
-//   );
-// }
-
 function QuestPreview({ data }: { data: QuestNode[] }) {
   return (
     <section className="py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <SectionHeader subtitle="World Knowledge" title="Lore & Quests" icon={BookOpen} />
+        <SectionHeader subtitle="Party Objectives" title="Quests" icon={Swords} />
         <div className="grid gap-6 md:grid-cols-3">
           {data.slice(0, 3).map((quest) => {
             return (
-              <Link key={quest.slug} to={`/lore/${quest.slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
+              <Link key={quest.slug} to={`/quests/${quest.slug}`} className="group flex flex-col rounded-lg border border-border/50 bg-card p-6 transition-colors hover:border-primary/30">
                 <span className="mb-3 inline-flex self-start rounded-sm border border-primary/30 bg-primary/10 px-2 py-0.5 font-serif text-xs tracking-wider uppercase text-primary">Quest</span>
                 <h3 className="mb-3 font-serif text-lg font-bold tracking-wide text-foreground">{quest.name}</h3>
-                <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">{typeof quest.description === 'string' ? quest.description : ''}</p>
+                <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">{quest.playerSummary || (typeof quest.description === 'string' ? quest.description : '')}</p>
               </Link>
             );
           })}
         </div>
-        <ViewAllLink href="/lore" label="View All Lore" />
+        <ViewAllLink href="/quests" label="View All Quests" />
       </div>
     </section>
   );

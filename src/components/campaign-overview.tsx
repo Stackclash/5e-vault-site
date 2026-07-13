@@ -1,6 +1,36 @@
-import { BookOpen, Flame, Clock, Target } from "lucide-react";
+import React from "react";
+import { Link } from "gatsby";
+import { BookOpen, Scroll, Target } from "lucide-react";
 
-export function CampaignOverview() {
+interface LatestSession {
+  name: string;
+  slug: string;
+  summary: string | null;
+  sessionDate: string | null;
+  sessionNumber: number | null;
+}
+
+interface ActiveQuest {
+  name: string;
+  slug: string;
+}
+
+interface CampaignOverviewProps {
+  latestSession?: LatestSession | null;
+  activeQuests?: ActiveQuest[];
+}
+
+export function CampaignOverview({ latestSession, activeQuests = [] }: CampaignOverviewProps) {
+  if (!latestSession && activeQuests.length === 0) return null;
+
+  const date = latestSession?.sessionDate
+    ? new Date(latestSession.sessionDate).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : null;
+
   return (
     <section id="overview" className="relative py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -19,70 +49,55 @@ export function CampaignOverview() {
           </div>
         </div>
 
-        {/* Main narrative */}
-        <div className="mx-auto mb-16 max-w-3xl">
-          <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
-            In the war-torn continent of Vaeltharis, five adventurers were drawn
-            together by fate and prophecy. What began as a simple escort mission
-            through the Eldergrove has spiraled into a desperate quest to
-            prevent the resurrection of the Dread Sovereign, an ancient lich
-            whose phylactery was shattered into five fragments scattered across
-            the realm.
-          </p>
-          <p className="text-lg leading-relaxed text-muted-foreground">
-            With two fragments recovered and dark agents closing in, the party
-            now faces their greatest challenge yet: infiltrating the fortress of
-            Ironhold, where the third fragment is guarded by a corrupted dwarven
-            king under the thrall of shadow magic.
-          </p>
-        </div>
+        {/* Latest recap */}
+        {latestSession?.summary && (
+          <div className="mx-auto mb-16 max-w-3xl">
+            <p className="whitespace-pre-line text-lg leading-relaxed text-muted-foreground">
+              {latestSession.summary}
+            </p>
+          </div>
+        )}
 
         {/* Info cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <div className="group rounded-lg border border-border/50 bg-card p-8 transition-colors hover:border-primary/30">
-            <Flame className="mb-4 h-6 w-6 text-accent" />
-            <h3 className="mb-2 font-serif text-lg font-semibold tracking-wide text-foreground">
-              Current Arc
-            </h3>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              The Siege of Ironhold. The party must find a way into the dwarven
-              fortress, break the king&apos;s enchantment, and secure the third
-              phylactery fragment before the Shadow Covenant arrives.
-            </p>
-          </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          {latestSession && (
+            <Link
+              to={`/sessions/${latestSession.slug}`}
+              className="group rounded-lg border border-border/50 bg-card p-8 transition-colors hover:border-primary/30"
+            >
+              <Scroll className="mb-4 h-6 w-6 text-accent" />
+              <h3 className="mb-2 font-serif text-lg font-semibold tracking-wide text-foreground">
+                Latest Session
+              </h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {latestSession.sessionNumber != null && `Session ${latestSession.sessionNumber}: `}
+                {latestSession.name}
+                {date && ` — ${date}`}
+              </p>
+            </Link>
+          )}
 
-          <div className="group rounded-lg border border-border/50 bg-card p-8 transition-colors hover:border-primary/30">
-            <Clock className="mb-4 h-6 w-6 text-accent" />
-            <h3 className="mb-2 font-serif text-lg font-semibold tracking-wide text-foreground">
-              Next Session
-            </h3>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Session 25 is scheduled for Saturday evening. The party stands at
-              the gates of Ironhold, having secured passage through the
-              Undermines. Prepare for combat and diplomacy.
-            </p>
-          </div>
-
-          <div className="group rounded-lg border border-border/50 bg-card p-8 transition-colors hover:border-primary/30 md:col-span-2 lg:col-span-1">
-            <Target className="mb-4 h-6 w-6 text-accent" />
-            <h3 className="mb-2 font-serif text-lg font-semibold tracking-wide text-foreground">
-              Active Quests
-            </h3>
-            <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                Retrieve the Third Fragment from Ironhold
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                Discover the identity of the Shadow Covenant leader
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
-                Return the stolen relic to the Temple of Dawn
-              </li>
-            </ul>
-          </div>
+          {activeQuests.length > 0 && (
+            <div className="rounded-lg border border-border/50 bg-card p-8">
+              <Target className="mb-4 h-6 w-6 text-accent" />
+              <h3 className="mb-3 font-serif text-lg font-semibold tracking-wide text-foreground">
+                Active Quests
+              </h3>
+              <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
+                {activeQuests.map((quest) => (
+                  <li key={quest.slug} className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    <Link
+                      to={`/quests/${quest.slug}`}
+                      className="transition-colors hover:text-primary"
+                    >
+                      {quest.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </section>

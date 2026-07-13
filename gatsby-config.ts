@@ -5,9 +5,9 @@ const config: GatsbyConfig = {
     typesOutputPath: "src/types/gatsby-types.d.ts",
   },
   siteMetadata: {
-    title: "Chronicles of the Shattered Realm | Campaign Compendium",
+    title: "The Hunt for Vecna | Campaign Compendium",
     description:
-      "A digital compendium for a D&D 5e campaign set in the Shattered Realm.",
+      "A player-facing compendium for the Hunt for Vecna — a D&D 5e campaign. NPCs, locations, session recaps, and quests the party has uncovered.",
     theme: {
       backgroundImage: "/images/hero-banner.jpg",
       fonts: {

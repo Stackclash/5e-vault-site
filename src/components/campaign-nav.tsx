@@ -2,22 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from "gatsby";
 import { globalHistory } from "@reach/router";
 import { Menu, X, Shield } from "lucide-react";
-import { joinPath } from "../lib/utils";
 
 interface CampaignNavProps {
   title: string;
-  baseSlug: string;
 }
 
 const navLinks = [
   { label: "Locations", href: "/locations" },
   { label: "NPCs", href: "/npcs" },
   { label: "Sessions", href: "/sessions" },
-  { label: "Items", href: "/items" },
-  { label: "Lore", href: "/lore" },
+  { label: "Quests", href: "/quests" },
 ];
 
-export function CampaignNav({ title, baseSlug }: CampaignNavProps) {
+export function CampaignNav({ title }: CampaignNavProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [pathname, setPathname] = useState("");
   useEffect(() => {
@@ -41,28 +38,25 @@ export function CampaignNav({ title, baseSlug }: CampaignNavProps) {
         >
           <Shield className="h-5 w-5" />
           <span className="font-serif text-lg font-semibold tracking-wider uppercase">
-            Shattered Realm
+            {title}
           </span>
         </Link>
 
         {/* Desktop nav */}
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => {
-            const href = joinPath(baseSlug, link.href)
-            return (
-              <Link
-                key={href}
-                to={href}
-                className={`font-serif text-sm tracking-widest uppercase transition-colors ${
-                  isActive(href)
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className={`font-serif text-sm tracking-widest uppercase transition-colors ${
+                isActive(link.href)
                   ? "text-primary"
                   : "text-muted-foreground hover:text-primary"
               }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
         {/* Mobile toggle */}
@@ -83,23 +77,20 @@ export function CampaignNav({ title, baseSlug }: CampaignNavProps) {
       {mobileOpen && (
         <div className="border-t border-border/50 bg-background/95 backdrop-blur-md md:hidden">
           <div className="flex flex-col gap-1 px-6 py-4">
-            {navLinks.map((link) => {
-              const href = joinPath(baseSlug, link.href);
-              return (
-                <Link
-                  key={href}
-                  to={href}
-                  onClick={() => setMobileOpen(false)}
-                  className={`rounded-md px-3 py-3 font-serif text-sm tracking-widest uppercase transition-colors ${
-                    isActive(href)
-                      ? "bg-secondary text-primary"
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={`rounded-md px-3 py-3 font-serif text-sm tracking-widest uppercase transition-colors ${
+                  isActive(link.href)
+                    ? "bg-secondary text-primary"
                     : "text-muted-foreground hover:bg-secondary hover:text-primary"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       )}

@@ -7,8 +7,8 @@ import { CampaignOverview } from "../components/campaign-overview";
 import { HomePreviewSections } from "../components/home-preview-sections";
 import { selectActiveQuests, type QuestWithParties } from "../lib/campaign";
 
-export default function CampaignPage({ data }: PageProps<Queries.CampaignDetailQuery>) {
-  const campaign = data.campaign;
+export default function IndexPage({ data }: PageProps<Queries.HomePageQuery>) {
+  const campaign = data.campaigns.nodes[0];
   const locations = (data.locations?.nodes ?? []) as any[];
   const npcs = (data.npcs?.nodes ?? []) as any[];
   const sessions = (data.sessions?.nodes ?? []) as any[];
@@ -48,50 +48,52 @@ export function Head() {
 }
 
 export const query = graphql`
-query CampaignDetail($id: String!) {
-  campaign: campaign(id: {eq: $id}) {
-    name
-    slug
-    publicPremise
-  }
-  locations: allLocation(filter: {campaigns: {elemMatch: {id: {eq: $id}}}}) {
-    nodes {
-      name
-      slug
-      summary
-      internal {
-        type
+  query HomePage {
+    campaigns: allCampaign {
+      nodes {
+        name
+        slug
+        publicPremise
+      }
+    }
+    locations: allLocation {
+      nodes {
+        name
+        slug
+        summary
+        internal {
+          type
+        }
+      }
+    }
+    npcs: allNpc {
+      nodes {
+        name
+        slug
+        race
+        occupation
+      }
+    }
+    sessions: allSession(sort: { sessionDate: DESC }) {
+      nodes {
+        name
+        slug
+        summary
+        sessionDate
+        sessionNumber
+      }
+    }
+    quests: allQuest {
+      nodes {
+        name
+        slug
+        description
+        playerSummary
+        parties {
+          active
+          completed
+        }
       }
     }
   }
-  npcs: allNpc(filter: {campaigns: {elemMatch: {id: {eq: $id}}}}) {
-    nodes {
-      name
-      slug
-      race
-      occupation
-    }
-  }
-  sessions: allSession(filter: {campaign: {id: {eq: $id}}} sort: {sessionDate: DESC}) {
-    nodes {
-      name
-      slug
-      summary
-      sessionDate
-      sessionNumber
-    }
-  }
-  quests: allQuest(filter: {campaigns: {elemMatch: {id: {eq: $id}}}}) {
-    nodes {
-      name
-      slug
-      description
-      playerSummary
-      parties {
-        active
-        completed
-      }
-    }
-  }
-}
 `;
